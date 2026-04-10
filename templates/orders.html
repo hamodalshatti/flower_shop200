@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .orders-box{
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .orders-box h1{
+            color: #c08888dc;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td{
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th{
+            background: #c08888dc;
+            color: white;
+        }
+
+        .empty{
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .top-actions{
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-area" id="logoHomeBtn">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+
+    <div class="header-link">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+</div>
+
+<div class="orders-box">
+    <h1>📦 My Orders</h1>
+
+    {% if orders %}
+    <table>
+        <tr>
+            <th>Order ID</th>
+            <th>Recipient</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Payment</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.Recipient_name }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.payment_method }}</td>
+            <td>{{ order.total }}</td>
+            <td>
+                {% if order.status == "Pending" %}
+                    🟡 Pending
+                {% elif order.status == "Preparing" %}
+                    🔵 Preparing
+                {% elif order.status == "On the way" %}
+                    🟣 On the way
+                {% elif order.status == "Delivered" %}
+                    🟢 Delivered
+                {% else %}
+                    ⚪ Unknown
+                {% endif %}
+            </td>
+            <td>{{ order.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="empty">No orders yet.</p>
+    {% endif %}
+
+    <div class="top-actions">
+        <a href="{{ url_for('index') }}" class="btn">Back to Shop</a>
+    </div>
+</div>
+
+</body>
+</html>

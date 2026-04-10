@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<title>Search Results</title>
+
+</head>
+
+<body>
+
+<h1 style="text-align:center;">
+    {{ 'نتائج البحث عن' if lang == 'ar' else 'Search Results for' }} "{{ keyword }}"
+</h1>
+
+<div class="trending-cards">
+
+{% if products %}
+
+{% for product in products %}
+
+<div class="card">
+
+    <img class="thumb" src="{{ url_for('static', filename=product.image) }}">
+
+    <div class="card-info">
+
+        <div class="card-name">
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ "%.2f"|format(product.converted_price|float) }} {{ currency }}</p>
+        </div>
+
+        <form action="{{ url_for('add_to_cart') }}" method="POST">
+            <input type="hidden" name="name" value="{{ product.name }}">
+            <input type="hidden" name="price" value="{{ product.price }}">
+            <input type="hidden" name="image" value="{{ product.image }}">
+
+            <input type="number" name="quantity" value="1" min="1" style="width:50px">
+
+            <button class="btn">Add to Cart</button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p style="text-align:center;">No products found.</p>
+
+{% endif %}
+
+</div>
+
+<br>
+
+<div style="text-align:center;">
+    <a href="{{ url_for('index') }}" class="btn">Back to Shop</a>
+</div>
+
+</body>
+</html>

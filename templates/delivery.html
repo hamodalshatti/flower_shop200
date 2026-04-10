@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Information</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#fff0f5;
+    padding:40px;
+    margin:0;
+}
+
+.container{
+    width:420px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+    color:#d63384;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    text-align:left;
+    margin-top:10px;
+    font-weight:bold;
+    color:#555;
+}
+
+input[type="text"],
+select,
+textarea{
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.checkbox-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:15px;
+    text-align:left;
+}
+
+.checkbox-row input[type="checkbox"]{
+    width:auto;
+    margin:0;
+}
+
+.checkbox-row label{
+    margin:0;
+    font-weight:normal;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#ff69b4;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+button:hover{
+    background:#ff4da6;
+}
+
+.back-link{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    text-decoration:none;
+    color:#d63384;
+    font-weight:bold;
+}
+
+.info-box{
+    margin-top:10px;
+    background:#fff8fc;
+    border:1px solid #f3c6da;
+    border-radius:8px;
+    padding:12px;
+    color:#555;
+}
+
+.phone-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.phone-code{
+    width:110px;
+    background:#f8f8f8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🌸 Delivery Information</h2>
+
+    <form action="{{ url_for('checkout') }}" method="POST">
+
+        <label>Recipient Name</label>
+        <input type="text" name="Recipient_name" required>
+
+        <label>Country</label>
+        <select id="countrySelect" onchange="updateCountryData()" required>
+            {% for country in countries %}
+            <option
+                value="{{ country.name }}"
+                data-code="{{ country.code }}"
+                data-currency="{{ country.currency }}"
+            >
+                {{ country.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="hidden" name="country_name" id="country_name">
+        <input type="hidden" name="phone_code" id="phone_code_hidden">
+        <input type="hidden" name="currency" id="currency_hidden">
+
+        <label>Phone Number</label>
+        <div class="phone-row">
+            <input type="text" id="phone_code_display" class="phone-code" readonly>
+            <input type="text" name="phone" placeholder="Enter phone number" required>
+        </div>
+
+        <div class="info-box">
+            <p><strong>Phone Code:</strong> <span id="phoneCodeText"></span></p>
+            <p><strong>Currency:</strong> <span id="currencyText"></span></p>
+        </div>
+
+        <label>Delivery Address</label>
+        <textarea name="address" required></textarea>
+
+        <label>Message for the card (optional)</label>
+        <textarea name="message"></textarea>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="gift" name="gift">
+            <label for="gift">Send as a Gift 🎁</label>
+        </div>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="anonymous" name="anonymous">
+            <label for="anonymous">Hide my name from Recipient</label>
+        </div>
+
+        <button type="submit">Continue to Payment 💳</button>
+    </form>
+
+    <a class="back-link" href="{{ url_for('cart') }}">⬅ Back to Cart</a>
+
+</div>
+
+<script>
+function updateCountryData() {
+    const select = document.getElementById("countrySelect");
+    const selectedOption = select.options[select.selectedIndex];
+
+    const countryName = selectedOption.value;
+    const phoneCode = selectedOption.getAttribute("data-code");
+    const currency = selectedOption.getAttribute("data-currency");
+
+    document.getElementById("country_name").value = countryName;
+    document.getElementById("phone_code_hidden").value = phoneCode;
+    document.getElementById("currency_hidden").value = currency;
+
+    document.getElementById("phone_code_display").value = phoneCode;
+    document.getElementById("phoneCodeText").innerText = phoneCode;
+    document.getElementById("currencyText").innerText = currency;
+}
+
+window.onload = updateCountryData;
+</script>
+
+</body>
+</html>

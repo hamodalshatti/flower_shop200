@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders | Flower Shop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdf8f5;
+            color: #2d2420;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #9e2a2f;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 35px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .top-bar h1 {
+            font-size: 32px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .section-box {
+            background: white;
+            padding: 25px;
+            border-radius: 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0dfd8;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        table th, table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        table th {
+            color: #7a4e42;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .pending {
+            background: #fff1cc;
+            color: #9a6b00;
+        }
+
+        .shipped {
+            background: #dceeff;
+            color: #1d5f99;
+        }
+
+        .completed {
+            background: #dff7e3;
+            color: #1f7a36;
+        }
+
+        .cancelled {
+            background: #ffe0e0;
+            color: #a12626;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+
+        .btn {
+            background: #9e2a2f;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #7f1f24;
+        }
+
+        @media (max-width: 900px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_products') }}">Manage Products</a>
+        <a href="{{ url_for('admin_orders') }}" class="active">Manage Orders</a>
+        <a href="{{ url_for('admin_users') }}">Manage Users</a>
+        <a href="{{ url_for('home') }}">Back to Website</a>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>Manage Orders</h1>
+        </div>
+
+        <div class="section-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Products</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Change Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+               <tbody>
+    {% for order in orders %}
+    <tr>
+        <td>#{{ order.id }}</td>
+        <td>{{ order.full_name if order.full_name else 'Unknown' }}</td>
+        <td>Order from {{ order.email if order.email else 'No Email' }}</td>
+        <td>{{ order.total }} JOD</td>
+        <td>
+            <span class="status
+                {% if order.status == 'Pending' %}pending
+                {% elif order.status == 'Shipped' %}shipped
+                {% elif order.status == 'Completed' %}completed
+                {% elif order.status == 'Cancelled' %}cancelled
+                {% endif %}">
+                {{ order.status }}
+            </span>
+        </td>
+        <td>
+            <form action="{{ url_for('update_order_status', order_id=order.id) }}" method="POST">
+                <select name="status">
+                    <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                    <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+        </td>
+        <td>
+                <button type="submit" class="btn">Save</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

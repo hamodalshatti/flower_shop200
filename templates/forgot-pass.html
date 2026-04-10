@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Forgot Password - Flower Shop</title>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="{{ url_for('static', filename='image/123.png') }}" width="200" height="100" alt="Flower Shop Logo">
+
+        <div class="header-link">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Our shop</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('login') }}" class="btn">Sign in</a>
+        </div>
+    </div>
+
+    <div class="signin-container">
+        <div class="signin-card" style="max-width: 500px;">
+            <div class="signin-header">
+                <h2>Forgot Password?</h2>
+                <p>Don't worry! Enter your email and we'll send you reset instructions.</p>
+            </div>
+
+            <form class="signin-form" action="{{ url_for('forgot_pass') }}" method="POST">
+                <div class="form-group">
+                    <label for="email">
+                        <span class="label-icon">📧</span> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="Enter your registered email" required>
+                </div>
+
+                <button type="submit" class="btn signin-btn">
+                    <span class="btn-text">Send Reset Link</span>
+                    <span class="btn-icon">✉️</span>
+                </button>
+            </form>
+
+            <div class="signup-link" style="border-top: none; margin-top: 15px;">
+                <p>Remember your password? <a href="{{ url_for('login') }}">Back to Sign in</a></p>
+            </div>
+
+            <div class="signin-footer">
+                <p>🌺 We'll send you a link to reset your password</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Flower Shop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fefaf7;
+            font-family: 'Inter', sans-serif;
+            color: #2c241f;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            margin: 20px 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0e4dc;
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: #9e2a2f;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            color: #3e2a27;
+        }
+
+        .logo-text span {
+            color: #9e2a2f;
+            font-weight: 700;
+        }
+
+        .header-link {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .header-link a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3e2a27;
+            font-size: 1rem;
+        }
+
+        .header-link a:hover {
+            color: #9e2a2f;
+        }
+
+        .lang-cart {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-icon, .cart-icon {
+            position: relative;
+            cursor: pointer;
+            background: #fff0eb;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #9e2a2f;
+            text-decoration: none;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #9e2a2f;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-wrapper {
+            min-height: calc(100vh - 120px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 28px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+
+        .success-top {
+            background: linear-gradient(135deg, #e6a8a8, #c98f8f);
+            color: white;
+            text-align: center;
+            padding: 40px 25px 30px;
+        }
+
+        .success-icon {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 18px;
+            background: white;
+            color: #67b85f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        .success-top h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .success-top p {
+            font-size: 1.05rem;
+        }
+
+        .success-body {
+            padding: 28px;
+        }
+
+        .order-summary {
+            background: #fff8f5;
+            border: 1px solid #f0e4dc;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 22px;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 14px;
+            color: #9e2a2f;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .total-line {
+            margin-top: 14px;
+            font-weight: 700;
+            color: #9e2a2f;
+            text-align: right;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons a,
+        .action-buttons button {
+            min-width: 180px;
+            border: none;
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-main {
+            background: #d99a9a;
+            color: white;
+        }
+
+        .btn-main:hover {
+            background: #c88888;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #9e2a2f;
+            border: 1px solid #d9b4b4;
+        }
+
+        .btn-outline:hover {
+            background: #fff3f3;
+        }
+
+        .redirect-note {
+            margin-top: 20px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media print {
+            .header,
+            .action-buttons,
+            .redirect-note {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .success-wrapper {
+                padding: 0;
+                min-height: auto;
+            }
+
+            .success-card {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+
+    <div class="header-link">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('index') }}#contact-section">Contact</a>
+
+        <div class="lang-cart">
+            <a href="{{ url_for('profile') }}" class="profile-icon">
+                <i class="fas fa-user"></i>
+            </a>
+
+            <a href="{{ url_for('cart') }}" class="cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">{{ session.get('cart', [])|length }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="success-wrapper">
+    <div class="success-card">
+
+        <div class="success-top">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h1>Payment Successful!</h1>
+            <p>Your order has been confirmed.</p>
+        </div>
+
+        <div class="success-body">
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+
+                {% if order_items %}
+                    {% for item in order_items %}
+                    <div class="order-item">
+                        <span>{{ item.name }} x {{ item.quantity }}</span>
+                        <span>{{ item.price * item.quantity }} {{ currency }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No order items found.</p>
+                {% endif %}
+
+                <div class="total-line">
+                    Total: {{ total }} {{ currency }}
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ url_for('index') }}" class="btn-main">
+                    <i class="fas fa-store"></i> Add more items
+                </a>
+
+                <a href="{{ url_for('order_status', order_id=order_id) }}" class="btn-outline">
+                    <i class="fas fa-box"></i> Track Order
+                </a>
+
+                <button onclick="window.print()" class="btn-outline">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+            </div>
+
+            <div class="redirect-note">
+                Redirecting to homepage in <span id="countdown">60</span> seconds...
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let seconds = 60;
+    const countdown = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (countdown) {
+            countdown.textContent = seconds;
+        }
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "{{ url_for('index') }}";
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .profile-box{
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-box h1{
+            color: #c08888dc;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-info{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-info p{
+            font-size: 18px;
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 10px;
+            color: #444;
+        }
+
+        .actions{
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .actions a{
+            margin: 5px;
+        }
+
+        .logout-btn{
+            background: #d9534f;
+        }
+
+        .logout-btn:hover{
+            background: #c9302c;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-area" id="logoHomeBtn">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+    <div class="header-link">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="#contact-section">Contact</a>
+        <a href="{{ url_for('orders') }}">My Orders</a>
+        
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div class="profile-box">
+
+    <h1>👤 My Profile</h1>
+
+    <div class="profile-info">
+        <p><strong>👤 Name:</strong> {{ user.name }}</p>
+        <p><strong>📧 Email:</strong> {{ user.email }}</p>
+        <p><strong>🔐 Role:</strong> {{ user.role }}</p>
+    </div>
+
+    <div class="actions">
+        <a href="{{ url_for('orders') }}" class="btn">📦 My Orders</a>
+        <a href="{{ url_for('index') }}" class="btn">🛍 Back to Shop</a>
+
+        <!-- زر تسجيل الخروج -->
+        <a href="{{ url_for('logout') }}" class="btn logout-btn">🚪 Logout</a>
+    </div>
+
+</div>
+
+</body>
+</html>

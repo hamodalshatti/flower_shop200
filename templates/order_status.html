@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status - Flower Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #c0888810, #c0888830); min-height: 100vh; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fefaf7;
+            font-family: 'Inter', sans-serif;
+            color: #2c241f;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            margin: 20px 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0e4dc;
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: #9e2a2f;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            color: #3e2a27;
+        }
+
+        .logo-text span {
+            color: #9e2a2f;
+            font-weight: 700;
+        }
+
+        .header-link {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .header-link a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3e2a27;
+            font-size: 1rem;
+        }
+
+        .header-link a:hover {
+            color: #9e2a2f;
+        }
+
+        .lang-cart {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-icon, .cart-icon {
+            position: relative;
+            cursor: pointer;
+            background: #fff0eb;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #9e2a2f;
+            text-decoration: none;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #9e2a2f;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-page {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .status-container {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-header {
+            background: linear-gradient(135deg, #c08888dc, #a06e6edc);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .status-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .order-id {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .status-body {
+            padding: 30px;
+        }
+
+        .progress-tracker {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.3rem;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .step.completed .step-icon {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+
+        .step.completed .step-label {
+            color: #4CAF50;
+        }
+
+        .step.active .step-icon {
+            border-color: #c08888dc;
+            background: #c08888dc;
+            color: white;
+        }
+
+        .step.active .step-label {
+            color: #c08888dc;
+            font-weight: bold;
+        }
+
+        .step.pending .step-icon {
+            border-color: #e0e0e0;
+            background: #f5f5f5;
+            color: #aaa;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #c08888dc);
+            border-radius: 3px;
+        }
+
+        .order-info {
+            background: #f9f9f9;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .order-info h3 {
+            color: #494646;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c08888dc;
+            font-size: 1.1rem;
+        }
+
+        .order-info p {
+            margin: 8px 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .order-info strong {
+            color: #494646;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: #494646;
+        }
+
+        .product-info p {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 0;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: #c08888dc;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: #c08888dc;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            text-align: center;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #a06e6edc;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            flex: 1;
+            background: transparent;
+            border: 2px solid #c08888dc;
+            color: #c08888dc;
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: #c08888dc;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .step-label {
+                font-size: 0.65rem;
+            }
+
+            .progress-line {
+                top: 20px;
+            }
+
+            .status-body {
+                padding: 20px;
+            }
+
+            .product-item {
+                flex-wrap: wrap;
+            }
+
+            .product-price {
+                width: 100%;
+                text-align: left;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+
+    <div class="header-link">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('index') }}#contact-section">Contact</a>
+
+        <div class="lang-cart">
+            <a href="{{ url_for('profile') }}" class="profile-icon">
+                <i class="fas fa-user"></i>
+            </a>
+
+            <a href="{{ url_for('cart') }}" class="cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">{{ session.get('cart', [])|length }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="status-page">
+    <div class="status-container">
+        <div class="status-header">
+            <h1>📦 Order Status</h1>
+            <div class="order-id">Order #{{ order.id }}</div>
+        </div>
+
+        <div class="status-body">
+            {% set status_steps = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered'] %}
+            {% set current_index = status_steps.index(order.status) if order.status in status_steps else 0 %}
+            {% set fill_percent = (current_index / 4 * 100) %}
+
+            <div class="progress-tracker">
+                <div class="progress-line">
+                 <div class="progress-fill" data-width="{{ fill_percent }}"></div>
+                </div>
+
+                <div class="progress-steps">
+                    {% for step in status_steps %}
+                    {% set step_index = loop.index0 %}
+                    <div class="step {% if step_index < current_index %}completed{% elif step_index == current_index %}active{% else %}pending{% endif %}">
+                        <div class="step-icon">
+                            {% if step == 'Pending' %}📦
+                            {% elif step == 'Confirmed' %}✅
+                            {% elif step == 'Processing' %}⚙️
+                            {% elif step == 'Shipped' %}🚚
+                            {% elif step == 'Delivered' %}🏠
+                            {% endif %}
+                        </div>
+                        <div class="step-label">{{ step }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="order-info">
+                <h3>📋 Order Details</h3>
+                <p><strong>Customer:</strong> {{ order.name }}</p>
+                <p><strong>Email:</strong> {{ order.email }}</p>
+                <p><strong>Recipient:</strong> {{ order.Recipient_name }}</p>
+                <p><strong>Phone:</strong> {{ order.phone }}</p>
+                <p><strong>Address:</strong> {{ order.address }}</p>
+                <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+                <p><strong>Order Status:</strong> <span style="color: #c08888dc; font-weight: bold;">{{ order.status }}</span></p>
+                <p><strong>Created At:</strong> {{ order.created_at }}</p>
+            </div>
+
+            <div class="order-info">
+                <h3>🌸 Items in Order</h3>
+
+                {% for item in order_items %}
+                <div class="product-item">
+                    <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}">
+                    <div class="product-info">
+                        <h4>{{ item.name }}</h4>
+                        <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+                    <div class="product-price">{{ item.price * item.quantity }} JOD</div>
+                </div>
+                {% endfor %}
+
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-top: 10px;">
+                        <span>Total:</span>
+                        <span style="color: #c08888dc;">{{ order.total }} JOD</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ url_for('index') }}" class="btn-primary">Add more items</a>
+                <button class="btn-outline" onclick="window.print()">🖨️ Continue Payment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        progressFill.style.width = progressFill.dataset.width + '%';
+    }
+</script>
+
+
+
+</body>
+</html>
