@@ -3,6 +3,8 @@ import mysql.connector
 from flask import jsonify
 from decimal import Decimal
 
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
+app.secret_key = "A126109a@@"
 
 def convert_price(price_jod, currency):
     rates = {
@@ -15,8 +17,8 @@ def convert_price(price_jod, currency):
     }
 
     rate = rates.get(currency, 1)
+    return round(float(price_jod) * float(rate))
 
-    return round (float(price_jod) * float(rate))
 def get_country_from_currency(currency):
     countries = {
         "JOD": "Jordan",
@@ -28,27 +30,6 @@ def get_country_from_currency(currency):
     }
     return countries.get(currency, "Jordan")
 
-app = Flask(__name__, template_folder="../templates", static_folder="../static")
-app.secret_key = "A126109a@@"
-
-print("starting app...")
-print("trying to connect database...")
-
-try:
-    db = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        password="A126109a@@",
-        database="flower_shop",
-        connection_timeout=5,
-        use_pure=True
-    )
-    print("database connected successfully")
-except Exception as e:
-    print("database connection error:", e)
-    raise
-
-print("app started")
 def get_db_connection():
     return mysql.connector.connect(
         host="127.0.0.1",
@@ -58,11 +39,14 @@ def get_db_connection():
         connection_timeout=5,
         use_pure=True
     )
+def clear_coupon():
+    session.pop("discount", None)
+    session.pop("coupon_code", None)
+    session.pop("coupon_message", None)
+    session.pop("coupon_used", None)
 
-
-    # إضافة المنتجات للطلب
-    order["items"] = items
-    return order
+print("starting app...")
+print("app started")
 # --------------------------------
 # الصفحة الرئيسية
 
@@ -76,7 +60,8 @@ def index():
     currency = session.get('currency', 'JOD')
     lang = session.get('lang', 'en')
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("SELECT * FROM products WHERE category_id = 1")
     flower_products = cursor.fetchall()
@@ -87,7 +72,17 @@ def index():
     cursor.execute("SELECT * FROM products WHERE category_id = 3")
     perfume_products = cursor.fetchall()
 
+    # ✅ جيب المنتجات المفضلة للمستخدم
+    favorite_ids = []
+    if "user_id" in session:
+        cursor.execute(
+            "SELECT product_id FROM favorites WHERE user_id = %s",
+            (session["user_id"],)
+        )
+        favorite_ids = [row["product_id"] for row in cursor.fetchall()]
+
     cursor.close()
+    db.close()
 
     def convert(products):
         for p in products:
@@ -103,10 +98,14 @@ def index():
         flower_products=flower_products,
         chocolate_products=chocolate_products,
         perfume_products=perfume_products,
+        favorite_ids=favorite_ids,
         currency=currency,
         lang=lang
     )
 
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
 # --------------------------------
 # تغيير العملة
 # --------------------------------
@@ -125,7 +124,8 @@ def set_currency():
 #products
 @app.route("/products")
 def products():
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("SELECT * FROM products WHERE category_id = 1")
     flower_products = cursor.fetchall()
@@ -137,6 +137,7 @@ def products():
     perfume_products = cursor.fetchall()
 
     cursor.close()
+    db.close()
 
     currency = session.get("currency", "JOD")
 
@@ -147,7 +148,6 @@ def products():
         perfume_products=perfume_products,
         currency=currency
     )
-
 
 
 # --------------------------------
@@ -167,11 +167,15 @@ def products():
 def search():
     keyword = request.args.get("q", "").strip()
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     query = "SELECT * FROM products WHERE name LIKE %s"
     cursor.execute(query, ("%" + keyword + "%",))
     products = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     currency = session.get("currency", "JOD")
 
@@ -185,7 +189,97 @@ def search():
         currency=currency
     )
 
+@app.route('/add_order', methods=['POST'])
+def add_order():
+    user_id = session.get('user_id')
 
+    name = request.form.get("name")
+    price = request.form.get("price")
+    phone = request.form.get("phone") or ""
+    address = request.form.get("address") or ""
+    payment = request.form.get("payment_method") or "cash"
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute("""
+        INSERT INTO orders 
+        (user_id, total, Recipient_name, phone, address, payment_method, status)
+        VALUES (%s, %s, %s, %s, %s, %s, 'Pending')
+    """, (user_id, price, name, phone, address, payment))
+
+    db.commit()   # 🔥 مهم
+    cursor.close()
+    db.close()    # 🔥 مهم
+
+    return redirect(url_for('profile'))
+
+@app.route('/delete_order/<int:order_id>')
+def delete_order(order_id):
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect(url_for('login'))
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    # أولاً احذف المنتجات/العناصر المرتبطة بهذا الطلب
+    cursor.execute(
+        "DELETE FROM order_items WHERE order_id=%s",
+        (order_id,)
+    )
+
+    # بعدين احذف الطلب نفسه
+    cursor.execute(
+        "DELETE FROM orders WHERE id=%s AND user_id=%s",
+        (order_id, user_id)
+    )
+
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for('profile'))
+
+
+@app.route('/add_address', methods=['POST'])
+def add_address():
+    user_id = session.get('user_id')
+
+    label = request.form.get("label")
+    details = request.form.get("details")
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute("""
+        INSERT INTO addresses (user_id, label, details)
+        VALUES (%s, %s, %s)
+    """, (user_id, label, details))
+
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for('profile'))
+
+@app.route('/delete_address/<int:addr_id>')
+def delete_address(addr_id):
+    user_id = session.get('user_id')
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute("DELETE FROM addresses WHERE id=%s AND user_id=%s", (addr_id, user_id))
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for('profile'))
 # --------------------------------
 # صفحة السلة
 # --------------------------------
@@ -205,12 +299,53 @@ def cart():
 
         converted_total += item["converted_subtotal"]
 
+    # الخصم يشتغل فقط إذا في coupon_code
+    coupon_code = session.get("coupon_code")
+
+    if coupon_code:
+        discount = session.get("discount", 0)
+    else:
+        discount = 0
+
+    discount_amount = converted_total * (discount / 100)
+    final_total = converted_total - discount_amount
+
     return render_template(
         "cart.html",
         cart_items=cart_items,
         converted_total=round(converted_total, 2),
+        discount=discount,
+        discount_amount=round(discount_amount, 2),
+        final_total=round(final_total, 2),
+        coupon_code=coupon_code,
         currency=currency
     )
+
+@app.route("/apply_coupon", methods=["POST"])
+def apply_coupon():
+    code = request.form.get("coupon", "").strip().lower()
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM coupons WHERE LOWER(code) = %s", (code,))
+    coupon = cursor.fetchone()
+
+    cursor.close()
+    db.close()
+
+    if coupon:
+        session["discount"] = coupon["discount"]
+        session["coupon_code"] = code
+        session["coupon_used"] = True
+        session["coupon_message"] = f"{coupon['discount']}% discount applied"
+    else:
+        session["discount"] = 0
+        session.pop("coupon_code", None)
+        session.pop("coupon_used", None)
+        session["coupon_message"] = "Invalid coupon"
+
+    return redirect(url_for("cart"))
 
 # --------------------------------
 # إضافة منتج للسلة
@@ -245,6 +380,7 @@ def add_to_cart():
         })
 
     session.modified = True
+    clear_coupon()
     return redirect(url_for("cart"))
 # --------------------------------تعديل على الكارت عشان تزيد وتنقص
 @app.route("/update_cart_quantity", methods=["POST"])
@@ -267,6 +403,67 @@ def update_cart_quantity():
                 break
 
     return redirect(url_for("cart"))
+
+@app.route("/admin/update-order-status/<int:order_id>", methods=["POST"])
+def update_order_status(order_id):
+    if "admin_id" not in session:
+        return redirect(url_for("admin_login"))
+
+    status = request.form.get("status")
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute("UPDATE orders SET status=%s WHERE id=%s", (status, order_id))
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for("admin_orders"))
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    user_id = session.get('user_id')
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    if request.form.get("name") or request.form.get("email") or request.form.get("phone"):
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+
+        cursor.execute("""
+            UPDATE users 
+            SET name=%s, email=%s, Phone=%s 
+            WHERE id=%s
+        """, (name, email, phone, user_id))
+
+    else:
+        field = request.form.get("field")
+        value = request.form.get("value")
+
+        if field == "name":
+            query = "UPDATE users SET name=%s WHERE id=%s"
+        elif field == "email":
+            query = "UPDATE users SET email=%s WHERE id=%s"
+        elif field == "phone":
+            query = "UPDATE users SET Phone=%s WHERE id=%s"
+        elif field == "country":
+            query = "UPDATE users SET country=%s WHERE id=%s"
+        else:
+            cursor.close()
+            db.close()
+            return "Invalid field"
+
+        cursor.execute(query, (value, user_id))
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return redirect(url_for('profile'))
 # --------------------------------
 # حذف منتج من السلة
 # --------------------------------
@@ -278,6 +475,7 @@ def remove_from_cart():
         session["cart"] = [item for item in session["cart"] if item["name"] != name]
         session.modified = True
 
+    clear_coupon()
     return redirect(url_for("cart"))
 
 
@@ -290,10 +488,14 @@ def delivery():
     if not cart_items:
         return redirect(url_for("index"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     cursor.execute("SELECT * FROM countries")
     countries = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("delivery.html", countries=countries)
 
@@ -306,27 +508,32 @@ def checkout():
 
     # إذا جاي من صفحة delivery (POST)
     if request.method == "POST":
-        session["Recipient_name"] = request.form.get("Recipient_name")
-        session["country_name"] = request.form.get("country_name")
-        session["phone_code"] = request.form.get("phone_code")
-        session["currency"] = request.form.get("currency")
-        session["phone"] = request.form.get("phone")
-        session["address"] = request.form.get("address")
-        session["message"] = request.form.get("message")
-        session["gift"] = "gift" in request.form
-        session["anonymous"] = "anonymous" in request.form
+        session["Recipient_name"] = request.form.get("Recipient_name") or ""
+        session["country"] = request.form.get("country") or ""
+        session["country_name"] = request.form.get("country_name") or ""
 
-    # دايماً نجيب الكارت
+        # 🔥 المهم هون (ما نخرب العملة)
+        session["currency"] = request.form.get("currency") or session.get("currency", "JOD")
+
+        session["phone"] = request.form.get("phone") or ""
+        session["address"] = request.form.get("address") or ""
+        session["card_message"] = request.form.get("card_message") or ""
+        session["gift"] = request.form.get("gift") or "0"
+        session["anonymous"] = request.form.get("anonymous") or "0"
+        session["notify"] = request.form.get("notify") or "0"
+
+    # السلة
     cart_items = session.get("cart", [])
 
-    # إذا السلة فاضية
     if not cart_items:
         return redirect(url_for("index"))
 
+    # العملة
     currency = session.get("currency", "JOD")
 
     converted_total = 0
 
+    # حساب الأسعار
     for item in cart_items:
         price = float(item["price"])
         quantity = int(item["quantity"])
@@ -336,13 +543,85 @@ def checkout():
 
         converted_total += item["converted_subtotal"]
 
+    # 🔥 الخصم (مربوط بالكوبون)
+    coupon_code = session.get("coupon_code")
+
+    if coupon_code:
+        discount = session.get("discount", 0)
+    else:
+        discount = 0
+
+    discount_amount = converted_total * (discount / 100)
+    final_total = converted_total - discount_amount
+
     return render_template(
         "checkout.html",
         cart_items=cart_items,
         total=round(converted_total, 2),
+        discount=discount,
+        discount_amount=round(discount_amount, 2),
+        final_total=round(final_total, 2),
         currency=currency
     )
 
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    user_id = session.get('user_id')
+
+    current = request.form.get("current_password")
+    new = request.form.get("new_password")
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
+    cursor.execute("SELECT password FROM users WHERE id=%s", (user_id,))
+    user = cursor.fetchone()
+
+    if user and user['password'] == current:
+        cursor.execute("UPDATE users SET password=%s WHERE id=%s", (new, user_id))
+        db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for('profile'))
+
+@app.route('/delete_account')
+def delete_account():
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect(url_for('login'))
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    # أولاً احذف عناصر الطلبات التابعة لطلبات هذا المستخدم
+    cursor.execute("""
+        DELETE FROM order_items
+        WHERE order_id IN (
+            SELECT id FROM orders WHERE user_id = %s
+        )
+    """, (user_id,))
+
+    # بعدين احذف الطلبات
+    cursor.execute("DELETE FROM orders WHERE user_id=%s", (user_id,))
+
+    # بعدين باقي الأشياء المرتبطة بالمستخدم
+    cursor.execute("DELETE FROM favorites WHERE user_id=%s", (user_id,))
+    cursor.execute("DELETE FROM addresses WHERE user_id=%s", (user_id,))
+
+    # آخر شيء احذف المستخدم نفسه
+    cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
+
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    session.clear()
+
+    return redirect(url_for('home'))
 
 # --------------------------------
 # تنفيذ الدفع
@@ -352,32 +631,55 @@ def checkout():
 
 @app.route("/process_payment", methods=["POST"])
 def process_payment():
-
-    #  نوع الدفع
     payment_method = request.form.get("payment_method")
-
-    #  السلة
     cart_items = session.get("cart", [])
 
-    #  حماية
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     if not cart_items:
         return redirect(url_for("cart"))
 
-    #  الحساب
-    total = sum(item["price"] * item["quantity"] for item in cart_items)
+    total = sum(float(item["price"]) * int(item["quantity"]) for item in cart_items)
 
-    #  بيانات
     user_id = session["user_id"]
-    Recipient_name = session.get("Recipient_name")
-    phone = session.get("phone")
-    address = session.get("address")
 
-    cursor = db.cursor()
+    Recipient_name = request.form.get("Recipient_name") or session.get("Recipient_name","")
+    phone = request.form.get("phone") or session.get("phone","")
+    address = request.form.get("address") or session.get("address","")
+    phone_code = request.form.get("phone_code") or session.get("phone_code","")
 
-    #  إنشاء order
+    country = request.form.get("country") 
+    country_phone_codes={
+    "Jordan": "+962",
+    "Saudi Arabia": "+966",
+    "UAE": "+971",
+    "Egypt": "+20",
+    "Kuwait": "+965",
+    "Lebanon": "+961"
+    }
+    phone_code = country_phone_codes.get(country,"")
+    country_name = request.form.get("country_name")
+    card_message = request.form.get("card_message")
+    gift = request.form.get("gift")
+    anonymous = request.form.get("anonymous")
+    notify = request.form.get("notify")
+    currency = request.form.get("currency")
+
+    session["Recipient_name"] = Recipient_name
+    session["phone"] = phone
+    session["address"] = address
+    session["country"] = country
+    session["country_name"] = country_name
+    session["card_message"] = card_message
+    session["gift"] = gift
+    session["anonymous"] = anonymous
+    session["notify"] = notify
+    session["currency"] = currency or session.get("currency", "JOD")
+
+    db = get_db_connection()
+    cursor = db.cursor(buffered=True)
+
     cursor.execute("""
         INSERT INTO orders (
             user_id,
@@ -399,12 +701,9 @@ def process_payment():
         "Pending"
     ))
 
-    #  رقم الطلب
     order_id = cursor.lastrowid
 
-    #  إدخال المنتجات
     for item in cart_items:
-
         cursor.execute("SELECT id FROM products WHERE name=%s LIMIT 1", (item["name"],))
         product = cursor.fetchone()
 
@@ -416,23 +715,24 @@ def process_payment():
                 VALUES (%s, %s, %s)
             """, (order_id, product_id, item["quantity"]))
 
-    #  حفظ
     db.commit()
     cursor.close()
+    db.close()
 
-    #  حذف السلة
     session.pop("cart", None)
 
-    # 1 تحويل
     return redirect(url_for("payment_success", order_id=order_id))
+
 @app.route("/payment_success/<int:order_id>")
 def payment_success(order_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     currency = session.get("currency", "JOD")
+    discount = session.get("discount", 0)
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("""
         SELECT orders.*, users.name, users.email
@@ -444,6 +744,7 @@ def payment_success(order_id):
 
     if not order:
         cursor.close()
+        db.close()
         return "Order not found"
 
     cursor.execute("""
@@ -458,10 +759,17 @@ def payment_success(order_id):
     order_items = cursor.fetchall()
 
     cursor.close()
+    db.close()
 
     total = 0
     for item in order_items:
-        total += float(item["price"]) * int(item["quantity"])
+        item_price = convert_price(float(item["price"]), currency)
+        item["converted_price"] = item_price
+        item["converted_subtotal"] = round(item_price * int(item["quantity"]), 2)
+        total += item["converted_subtotal"]
+
+    discount_amount = total * (discount / 100)
+    final_total = total - discount_amount
 
     return render_template(
         "payment_success.html",
@@ -469,6 +777,9 @@ def payment_success(order_id):
         order=order,
         order_items=order_items,
         total=round(total, 2),
+        discount=discount,
+        discount_amount=round(discount_amount, 2),
+        final_total=round(final_total, 2),
         currency=currency
     )
 @app.route("/order-status/<int:order_id>")
@@ -476,7 +787,11 @@ def order_status(order_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    cursor = db.cursor(dictionary=True)
+    currency = session.get("currency", "JOD")
+    discount = session.get("discount", 0)
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("""
         SELECT orders.*, users.name, users.email
@@ -488,6 +803,7 @@ def order_status(order_id):
 
     if not order:
         cursor.close()
+        db.close()
         return "Order not found"
 
     cursor.execute("""
@@ -502,16 +818,28 @@ def order_status(order_id):
     order_items = cursor.fetchall()
 
     cursor.close()
+    db.close()
+
+    total = 0
+    for item in order_items:
+        item_price = convert_price(float(item["price"]), currency)
+        item["converted_price"] = item_price
+        item["converted_subtotal"] = round(item_price * int(item["quantity"]), 2)
+        total += item["converted_subtotal"]
+
+    discount_amount = total * (discount / 100)
+    final_total = total - discount_amount
 
     return render_template(
         "order_status.html",
         order=order,
-        order_items=order_items
+        order_items=order_items,
+        total=round(total, 2),
+        discount=discount,
+        discount_amount=round(discount_amount, 2),
+        final_total=round(final_total, 2),
+        currency=currency
     )
-
- 
-
-
 @app.route('/set_lang', methods=['POST'])
 def set_lang():
     lang = request.form.get('lang', 'en')
@@ -524,26 +852,59 @@ def profile():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    cursor = db.cursor(dictionary=True)
-    query = "SELECT * FROM users WHERE id = %s"
-    cursor.execute(query, (session["user_id"],))
+    user_id = session["user_id"]
+    lang = session.get("lang", "en")
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
+    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
     user = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT id, Recipient_name, total, status, created_at
+        FROM orders
+        WHERE user_id = %s
+    """, (user_id,))
+    orders = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT p.id, p.name, p.price, p.image
+        FROM favorites f
+        JOIN products p ON f.product_id = p.id
+        WHERE f.user_id = %s
+    """, (user_id,))
+    favorites = cursor.fetchall()
+
+    cursor.execute("SELECT id, label, details FROM addresses WHERE user_id = %s", (user_id,))
+    addresses = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
-    return render_template("profile.html", user=user)
-
-
+    return render_template(
+        "profile.html",
+        user=user,
+        orders=orders,
+        favorites=favorites,
+        addresses=addresses,
+        lang=lang
+    )
 
 @app.route("/orders")
 def orders():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     query = "SELECT * FROM orders WHERE user_id = %s ORDER BY created_at DESC"
     cursor.execute(query, (session["user_id"],))
     user_orders = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("orders.html", orders=user_orders)
 
@@ -556,11 +917,15 @@ def admin_login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        cursor = db.cursor(dictionary=True)
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True, buffered=True)
+
         query = "SELECT * FROM admins WHERE email=%s AND password=%s"
         cursor.execute(query, (email, password))
         admin = cursor.fetchone()
+
         cursor.close()
+        db.close()
 
         if admin:
             session["admin_id"] = admin["id"]
@@ -584,7 +949,8 @@ def admin_dashboard():
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("SELECT COUNT(*) AS total_products FROM products")
     total_products = cursor.fetchone()["total_products"]
@@ -608,6 +974,7 @@ def admin_dashboard():
     recent_orders = cursor.fetchall()
 
     cursor.close()
+    db.close()
 
     return render_template(
         "admin_dashboard.html",
@@ -619,13 +986,14 @@ def admin_dashboard():
     )
 
 
-
 @app.route("/admin/products")
 def admin_products():
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     cursor.execute("""
         SELECT products.*, categories.name AS category_name
         FROM products
@@ -633,7 +1001,9 @@ def admin_products():
         ORDER BY products.id DESC
     """)
     products = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("admin_products.html", products=products)
 
@@ -643,7 +1013,8 @@ def admin_add_product():
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     if request.method == "POST":
         name = request.form.get("name")
@@ -659,22 +1030,34 @@ def admin_add_product():
         """
         cursor.execute(query, (name, price, image, description, stock, category_id))
         db.commit()
+
         cursor.close()
+        db.close()
 
         return redirect(url_for("admin_products"))
 
     cursor.execute("SELECT * FROM categories")
     categories = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("admin_add_product.html", categories=categories)
 
 @app.route("/admin/delete-product/<int:product_id>", methods=["POST"])
 def delete_product(product_id):
+    if "admin_id" not in session:
+        return redirect(url_for("admin_login"))
+
+    db = get_db_connection()
     cursor = db.cursor()
+
     cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
     db.commit()
+
     cursor.close()
+    db.close()
+
     return redirect(url_for("admin_products"))
 
 @app.route("/admin/orders")
@@ -682,7 +1065,9 @@ def admin_orders():
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     cursor.execute("""
         SELECT orders.*, users.name
         FROM orders
@@ -690,11 +1075,11 @@ def admin_orders():
         ORDER BY orders.id DESC
     """)
     orders = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("admin_orders.html", orders=orders)
-
-    return redirect(request.referrer or url_for('index'))
 
 
 
@@ -704,7 +1089,9 @@ def admin_users():
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
     cursor.execute("""
         SELECT users.*,
                (SELECT COUNT(*) FROM orders WHERE orders.user_id = users.id) AS orders_count
@@ -712,20 +1099,44 @@ def admin_users():
         ORDER BY users.id DESC
     """)
     users = cursor.fetchall()
+
     cursor.close()
+    db.close()
 
     return render_template("admin_users.html", users=users)
 
 
 @app.route("/admin/delete-user/<int:user_id>", methods=["POST"])
 def delete_user(user_id):
+    if "admin_id" not in session:
+        return redirect(url_for("admin_login"))
+
+    db = get_db_connection()
     cursor = db.cursor()
+
     cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
     db.commit()
+
     cursor.close()
+    db.close()
+
     return redirect(url_for("admin_users"))
 
+@app.route("/admin/messages")
+def admin_messages():
+    if "admin_id" not in session:
+        return redirect(url_for("admin_login"))
 
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
+    cursor.execute("SELECT * FROM messages ORDER BY id DESC")
+    messages = cursor.fetchall()
+
+    cursor.close()
+    db.close()
+
+    return render_template("admin_messages.html", messages=messages)
 
 @app.route("/logout")
 def logout():
@@ -745,7 +1156,8 @@ def check_login():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute(
         "SELECT * FROM users WHERE email=%s AND password=%s",
@@ -753,18 +1165,15 @@ def check_login():
     )
 
     user = cursor.fetchone()
+
     cursor.close()
+    db.close()
 
     if user:
         session["user_id"] = user["id"]
         return redirect(url_for("index"))
-
     else:
         return "Wrong email or password"
-
-@app.route("/signup")
-def signup():
-    return render_template("signup.html")
 
 
 # --------------------------------
@@ -773,37 +1182,54 @@ def signup():
 @app.route("/create_user", methods=["POST"])
 def create_user():
 
-    name = request.form.get("name")
+    name = request.form.get("firstName") + " " + request.form.get("lastName")
     email = request.form.get("email")
+    Phone = request.form.get("Phone")
     password = request.form.get("password")
 
+    db = get_db_connection()
     cursor = db.cursor()
 
-    query = "INSERT INTO users (name, email, password) VALUES (%s,%s,%s)"
-    cursor.execute(query,(name,email,password))
+    query = "INSERT INTO users (name, email, password, Phone) VALUES (%s, %s, %s, %s)"
+    cursor.execute(query, (name, email, password, Phone))
 
     db.commit()
+
     cursor.close()
+    db.close()
 
     return redirect(url_for("login"))
 
 
 @app.route("/contact")
 def contact():
-    return render_template("contact.html")
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+    
+    cursor.execute("SELECT * FROM messages")
+    messages = cursor.fetchall()
 
+    cursor.close()
+    db.close()
+
+    return render_template("contact.html", messages=messages)
 #روت لصفحه المسجات
 @app.route("/send_message", methods=["POST"])
 def send_message():
     name = request.form.get("name")
     email = request.form.get("email")
+    subject= request.form.get("subject") 
     message = request.form.get("message")
 
+    db = get_db_connection()
     cursor = db.cursor()
-    query = "INSERT INTO messages (name, email, message) VALUES (%s, %s, %s)"
-    cursor.execute(query, (name, email, message))
+
+    query = "INSERT INTO messages (name, email,subject, message) VALUES (%s, %s, %s, %s)"
+    cursor.execute(query, (name, email, subject, message))
     db.commit()
+
     cursor.close()
+    db.close()
 
     return render_template("message_sent.html", name=name)
 
@@ -815,7 +1241,172 @@ def forgot_pass():
 
     return render_template("forgot-pass.html")
 
+@app.route("/invoice/<int:order_id>")
+def invoice(order_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
+    currency = session.get("currency", "JOD")
+    discount = session.get("discount", 0)
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+
+    cursor.execute("""
+        SELECT orders.*, users.name, users.email
+        FROM orders
+        LEFT JOIN users ON orders.user_id = users.id
+        WHERE orders.id = %s AND orders.user_id = %s
+    """, (order_id, session["user_id"]))
+    order = cursor.fetchone()
+
+    if not order:
+        cursor.close()
+        db.close()
+        return "Order not found"
+
+    cursor.execute("""
+        SELECT order_items.quantity,
+               products.name,
+               products.price,
+               products.image
+        FROM order_items
+        JOIN products ON order_items.product_id = products.id
+        WHERE order_items.order_id = %s
+    """, (order_id,))
+    order_items = cursor.fetchall()
+
+    cursor.close()
+    db.close()
+
+    total = 0
+    for item in order_items:
+        item_price = convert_price(float(item["price"]), currency)
+        item["converted_price"] = item_price
+        item["converted_subtotal"] = round(item_price * int(item["quantity"]), 2)
+        total += item["converted_subtotal"]
+
+    discount_amount = total * (discount / 100)
+    final_total = total - discount_amount
+
+    return render_template(
+        "invoice.html",
+        order=order,
+        order_items=order_items,
+        total=round(total, 2),
+        discount=discount,
+        discount_amount=round(discount_amount, 2),
+        final_total=round(final_total, 2),
+        currency=currency
+    )
+
+@app.route("/toggle_favorite/<int:product_id>", methods=["POST"])
+def toggle_favorite(product_id):
+    if "user_id" not in session:
+        return {"success": False, "message": "Please login first"}
+
+    user_id = session["user_id"]
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute(
+        "SELECT * FROM favorites WHERE user_id=%s AND product_id=%s",
+        (user_id, product_id)
+    )
+    fav = cursor.fetchone()
+
+    if fav:
+        cursor.execute(
+            "DELETE FROM favorites WHERE user_id=%s AND product_id=%s",
+            (user_id, product_id)
+        )
+        is_favorite = False
+
+    else:
+        cursor.execute(
+            "SELECT name, price, image FROM products WHERE id=%s",
+            (product_id,)
+        )
+        product = cursor.fetchone()
+
+        if not product:
+            cursor.close()
+            db.close()
+            return {"success": False, "message": "Product not found"}
+
+        cursor.execute(
+            """
+            INSERT INTO favorites (user_id, product_id, name, price, image)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (
+                user_id,
+                product_id,
+                product["name"],
+                product["price"],
+                product["image"]
+            )
+        )
+        is_favorite = True
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return {"success": True, "is_favorite": is_favorite}
+
+@app.route("/delete_favorite/<int:product_id>", methods=["POST"])
+def delete_favorite(product_id):
+    if "user_id" not in session:
+        return {"success": False, "message": "Please login first"}
+
+    user_id = session["user_id"]
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute(
+        "DELETE FROM favorites WHERE user_id=%s AND product_id=%s",
+        (user_id, product_id)
+    )
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return {"success": True}
+
+@app.route("/add_favorite_to_cart/<int:product_id>", methods=["POST"])
+def add_favorite_to_cart(product_id):
+    if "user_id" not in session:
+        return {"success": False, "message": "Please login first"}
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT name, price, image FROM products WHERE id=%s", (product_id,))
+    product = cursor.fetchone()
+
+    cursor.close()
+    db.close()
+
+    if not product:
+        return {"success": False, "message": "Product not found"}
+
+    cart = session.get("cart", [])
+
+    cart.append({
+        "name": product["name"],
+        "price": float(product["price"]),
+        "image": product["image"],
+        "quantity": 1
+    })
+
+    session["cart"] = cart
+    session.modified = True
+
+    return {"success": True, "cart_count": len(cart)}
 # --------------------------------
 # تشغيل السيرفر
 # --------------------------------

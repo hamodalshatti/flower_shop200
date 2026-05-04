@@ -345,7 +345,7 @@
 
     <div class="header-link">
         <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="#contact-section">{{ 'تواصل معنا' if lang == 'ar' else 'Contact' }}</a>
         <a href="{{ url_for('cart') }}" class="cart-icon">
             <i class="fas fa-shopping-bag"></i>
             <span class="cart-count">{{ cart_items|length }}</span>
@@ -413,25 +413,64 @@
         </div>
 
         <div class="cart-summary">
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <span>{{ "%.2f"|format(converted_total|float) }} {{ currency }}</span>
-            </div>
 
-            <div class="summary-row">
-                <span>Delivery Fee</span>
-                <span>Included</span>
-            </div>
+    <!-- 🔥 الكوبون هون -->
+    <form id="couponForm" style="margin-bottom:10px; display:flex; gap:8px;">
+    <input 
+        type="text" 
+        name="coupon" 
+        id="couponInput"
+        placeholder="Coupon" 
+        style="padding:6px 10px; width:150px; border-radius:8px; border:1px solid #ddd;">
+    
+    <button type="submit" class="btn" style="padding:6px 10px;">
+        Apply
+    </button>
+</form>
 
-            <div class="summary-row total">
-                <span>Total</span>
-                <span>{{ "%.2f"|format(converted_total|float) }} {{ currency }}</span>
-            </div>
+<p id="couponMessage" style="color:green;"></p>
 
-            <a href="{{ url_for('delivery') }}" class="btn checkout-btn">
-                <i class="fas fa-lock"></i> Proceed to Delivery
-            </a>
-        </div>
+    <!-- رسالة الكوبون -->
+    {% if session.get('coupon_message') %}
+        <p style="color: green; margin-bottom:10px;">
+            {{ session.get('coupon_message') }}
+        </p>
+    {% endif %}
+
+    <div class="summary-row">
+        <span>Subtotal</span>
+        <span>{{ "%.2f"|format(converted_total|float) }} {{ currency }}</span>
+    </div>
+
+    <div class="summary-row">
+        <span>Delivery Fee</span>
+        <span>Included</span>
+    </div>
+
+    {% if discount %}
+    <div class="summary-row" style="color: green;">
+        <span>Discount ({{ discount }}%)</span>
+        <span>- {{ "%.2f"|format((converted_total * discount / 100)|float) }} {{ currency }}</span>
+    </div>
+    {% endif %}
+
+    <div class="summary-row total">
+        <span>Total</span>
+       <span id="finalTotal">
+    {% if final_total %}
+        {{ "%.2f"|format(final_total|float) }}
+    {% else %}
+        {{ "%.2f"|format(converted_total|float) }}
+    {% endif %}
+</span>
+<span>{{ currency }}</span>
+    </div>
+
+    <a href="{{ url_for('delivery') }}" class="btn checkout-btn">
+        <i class="fas fa-lock"></i> Proceed to Delivery
+    </a>
+
+</div>
 
         {% else %}
         <div class="empty-cart">
@@ -447,6 +486,23 @@
 <footer>
     <p>Flower & Shop — Luxury blooms delivered across Middle East</p>
 </footer>
+<script>
+document.getElementById("couponForm").addEventListener("submit", function(e){
+    e.preventDefault();
 
+    let code = document.getElementById("couponInput").value;
+
+    fetch("/apply_coupon", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "coupon=" + encodeURIComponent(code)
+    })
+    .then(() => {
+        window.location.reload();
+    });
+});
+</script>
 </body>
 </html>

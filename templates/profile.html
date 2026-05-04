@@ -1,97 +1,1074 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flower&Shop | My Profile</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        .profile-box{
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-        .profile-box h1{
-            color: #c08888dc;
-            text-align: center;
-            margin-bottom: 25px;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .profile-info{
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f4f1;
+      color: #3a2a24;
+      padding: 20px;
+    }
 
-        .profile-info p{
-            font-size: 18px;
-            background: #f8f8f8;
-            padding: 12px;
-            border-radius: 10px;
-            color: #444;
-        }
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+    }
 
-        .actions{
-            margin-top: 25px;
-            text-align: center;
-        }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .actions a{
-            margin: 5px;
-        }
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
 
-        .logout-btn{
-            background: #d9534f;
-        }
+    /* Navbar */
+    .navbar {
+      background: #fff;
+      border: 1px solid #e7ddd8;
+      border-radius: 50px;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+      flex-wrap: wrap;
+    }
 
-        .logout-btn:hover{
-            background: #c9302c;
-        }
-    </style>
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #5b2c2c;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #b63a3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .lang-btn,
+    .icon-btn {
+      color: #5d4a45;
+      font-size: 0.95rem;
+      background: none;
+    }
+
+    .nav-links a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: #f5e8e3;
+      color: #b63a3a;
+    }
+
+    .lang-btn {
+      padding: 8px 14px;
+      border: 1px solid #eadfda;
+      border-radius: 999px;
+      background: #fff8f5;
+      transition: 0.2s;
+    }
+
+    .lang-btn:hover {
+      background: #f5e8e3;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #fff8f5;
+      border: 1px solid #eadfda;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: #f5e8e3;
+      color: #b63a3a;
+    }
+
+    .icon-btn.active {
+      background: #f5e8e3;
+      color: #b63a3a;
+      border-color: #dcc9c0;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -4px;
+      background: #b63a3a;
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hero */
+    .profile-hero {
+      background: #f3e6e1;
+      border-radius: 28px;
+      padding: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .hero-left {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .section-tag {
+      color: #b63a3a;
+      letter-spacing: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .hero-left h1 {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      color: #2f1f1a;
+    }
+
+    .hero-text {
+      color: #5f4c47;
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 620px;
+    }
+
+    .hero-right img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    /* Main Profile */
+    .profile-container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .profile-sidebar,
+    .profile-content {
+      background: #fff;
+      border-radius: 28px;
+      padding: 25px;
+      border: 1px solid #eee2dc;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+    }
+
+    /* Sidebar */
+    .profile-card {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .profile-avatar {
+      width: 95px;
+      height: 95px;
+      margin: 0 auto 14px;
+      background: linear-gradient(135deg, #f3e6e1, #e8d5ce);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #f2dfd8;
+    }
+
+    .profile-avatar i {
+      font-size: 3rem;
+      color: #b63a3a;
+    }
+
+    .profile-card h2 {
+      font-size: 1.8rem;
+      color: #3b2722;
+      margin-bottom: 6px;
+    }
+
+    .profile-card p {
+      color: #7b6761;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+    }
+
+    .member-badge {
+      display: inline-block;
+      background: #f8e7e2;
+      color: #a23838;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .side-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-item {
+      background: #fcf8f6;
+      border: 1px solid #efe2dc;
+      padding: 14px 18px;
+      border-radius: 18px;
+      text-align: left;
+      font-size: 0.96rem;
+      color: #4f3b36;
+      transition: 0.3s ease;
+      width: 100%;
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+      color: #b63a3a;
+      width: 22px;
+    }
+
+    .menu-item:hover,
+    .menu-item.active {
+      background: #f5e5df;
+      color: #b63a3a;
+      transform: translateX(3px);
+    }
+
+    /* Content */
+    .content-section {
+      display: none;
+    }
+
+    .active-section {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-header h2 {
+      font-size: 2.2rem;
+      color: #32201c;
+    }
+
+    .primary-btn,
+    .small-btn,
+    .danger-btn {
+      background: #b63a3a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      transition: 0.3s ease;
+      border: none;
+    }
+
+    .danger-btn {
+      background: #c96060;
+    }
+
+    .danger-btn:hover {
+      background: #a33b3b;
+    }
+
+    .primary-btn:hover,
+    .small-btn:hover {
+      background: #962d2d;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .info-box,
+    .order-card,
+    .address-card,
+    .settings-box,
+    .wishlist-item {
+      background: #fcf8f6;
+      border: 1px solid #efe2dc;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .info-box label {
+      display: block;
+      color: #a78d85;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .info-box p {
+      color: #3a2925;
+      font-size: 1rem;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .edit-field-btn {
+      background: none;
+      border: none;
+      color: #b63a3a;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .order-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .order-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .order-card p {
+      color: #7a6660;
+    }
+
+    .price {
+      font-weight: 700;
+      color: #b63a3a !important;
+      text-align: right;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .delivered {
+      background: #dff3e5;
+      color: #237447;
+    }
+
+    .pending {
+      background: #fff1d8;
+      color: #a86d00;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .wishlist-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+
+    .wishlist-item h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .wishlist-item p {
+      color: #b63a3a;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .address-card {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .address-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .small-outline {
+      background: transparent;
+      border: 1px solid #d4bfb7;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .small-outline:hover {
+      background: #f5e8e3;
+    }
+
+    .settings-box {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .setting-row span {
+      font-size: 1rem;
+      color: #43312c;
+      font-weight: 500;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #b63a3a;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 40px;
+      color: #b69b92;
+      font-style: italic;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 28px;
+      padding: 28px;
+      max-width: 450px;
+      width: 90%;
+    }
+
+    .modal-content input, .modal-content select {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #e0cfc8;
+      border-radius: 20px;
+      font-family: inherit;
+    }
+
+    .warning-text {
+      color: #c96060;
+      font-size: 0.9rem;
+      margin: 10px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+      .wishlist-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-left h1 {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 28px;
+      }
+      .nav-links {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="header">
-    <div class="logo-area" id="logoHomeBtn">
-        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
-        <div class="logo-text">Flower<span>&</span>Shop</div>
+<!-- Navbar -->
+<header class="navbar">
+  <div class="logo" id="logoHome">
+    <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+    <span>Flower&Shop</span>
+  </div>
+  <nav class="nav-links">
+    <a href="{{ url_for('index') }}" id="homeNav">Home</a>
+    <a href="{{ url_for('index') }}#contact" id="contactNav">Contact</a>
+
+    <!-- 🔥 زر اللغة الجديد -->
+    <form action="{{ url_for('set_lang') }}" method="POST" style="display:inline;">
+      <button class="lang-btn" type="submit" name="lang" value="{{ 'ar' if lang == 'en' else 'en' }}">
+        <i class="fa-solid fa-globe"></i> {{ lang.upper() }}
+      </button>
+    </form>
+
+    <a href="{{ url_for('profile') }}" class="icon-btn active" id="profileNav"><i class="fa-solid fa-user"></i></a>
+    <a href="{{ url_for('cart') }}" class="icon-btn cart-btn" id="cartNav">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+  </nav>
+</header>
+<!-- Hero -->
+<section class="profile-hero">
+  <div class="hero-left">
+    <p class="section-tag">MY ACCOUNT</p>
+    <h1 id="welcomeName">Welcome, {{user.name}}</h1>
+    <p class="hero-text">Manage your personal information, orders, favorites, and saved addresses in one beautiful place.</p>
+  </div>
+  <div class="hero-right">
+    <img src="{{url_for('static',filename='image/123.png')}}" alt="flowers">
+  </div>
+</section>
+
+<!-- Main Profile -->
+<main class="profile-container">
+  <aside class="profile-sidebar">
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <i class="fa-solid fa-seedling"></i>
+      </div>
+      <h2 id="sidebarName">{{ user.name }}</h2>
+      <p id="sidebarEmail">{{ user.email }}</p>
+      <span class="member-badge" id="memberBadge">🌱 </span>
     </div>
-    <div class="header-link">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="#contact-section">Contact</a>
-        <a href="{{ url_for('orders') }}">My Orders</a>
-        
+    <div class="side-menu">
+      <button class="menu-item active" data-section="account"><i class="fa-solid fa-user"></i> Account Info</button>
+      <button class="menu-item" data-section="orders"><i class="fa-solid fa-box"></i> My Orders</button>
+      <button class="menu-item" data-section="favorites"><i class="fa-solid fa-heart"></i> Favorites</button>
+      <button class="menu-item" data-section="address"><i class="fa-solid fa-location-dot"></i> Addresses</button>
+      <button class="menu-item" data-section="settings"><i class="fa-solid fa-gear"></i> Settings</button>
     </div>
+  </aside>
+
+  <section class="profile-content">
+    <!-- Account -->
+    <div class="content-section active-section" id="account">
+      <div class="section-header"><h2>Account Information</h2><button class="primary-btn" id="editProfileBtn">Edit Profile</button></div>
+
+      <div class="info-grid" id="accountInfoGrid">
+        <div class="info-card">
+          <h3>Full Name</h3>
+          <p>{{ user.name }}</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Email</h3>
+          <p>{{ user.email }}</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Phone</h3>
+          <p>{{ user.Phone }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div class="content-section" id="orders">
+      <div class="section-header"><h2>My Orders</h2><button class="primary-btn" id="addOrderBtn">+ New Order</button></div>
+      <div id="ordersList"></div>
+    </div>
+
+    <!-- Favorites -->
+    <div class="content-section" id="favorites">
+      <div class="section-header"><h2>Favorites</h2><button class="primary-btn" id="addFavoriteBtn">+ Add Favorite</button></div>
+      <div id="favoritesList" class="wishlist-grid">
+  {% for fav in favorites %}
+    <div class="wishlist-card">
+      <img src="{{ url_for('static', filename=fav.image) }}" alt="{{ fav.name }}">
+
+      <h3>{{ fav.name }}</h3>
+      <p>{{ "%.2f"|format(fav.price|float) }} JOD</p>
+
+      <form action="{{ url_for('add_to_cart') }}" method="POST">
+        <input type="hidden" name="name" value="{{ fav.name }}">
+        <input type="hidden" name="price" value="{{ fav.price }}">
+        <input type="hidden" name="image" value="{{ fav.image }}">
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="primary-btn">Add to Cart</button>
+      </form>
+    </div>
+  {% else %}
+    <p>No favorites yet.</p>
+  {% endfor %}
 </div>
-
-<!-- PROFILE -->
-<div class="profile-box">
-
-    <h1>👤 My Profile</h1>
-
-    <div class="profile-info">
-        <p><strong>👤 Name:</strong> {{ user.name }}</p>
-        <p><strong>📧 Email:</strong> {{ user.email }}</p>
-        <p><strong>🔐 Role:</strong> {{ user.role }}</p>
     </div>
 
-    <div class="actions">
-        <a href="{{ url_for('orders') }}" class="btn">📦 My Orders</a>
-        <a href="{{ url_for('index') }}" class="btn">🛍 Back to Shop</a>
-
-        <!-- زر تسجيل الخروج -->
-        <a href="{{ url_for('logout') }}" class="btn logout-btn">🚪 Logout</a>
+    <!-- Addresses -->
+    <div class="content-section" id="address">
+      <div class="section-header"><h2>Saved Addresses</h2><button class="primary-btn" id="addAddressBtn">+ Add New</button></div>
+      <div id="addressesList"></div>
     </div>
 
-</div>
+    <!-- Settings -->
+    <div class="content-section" id="settings">
+      <div class="section-header"><h2>Account Settings</h2></div>
+      <div class="settings-box">
+        <div class="setting-row"><span>Change Password</span><button class="small-btn" id="changePwdBtn">Update</button></div>
+        <div class="setting-row"><span>Enable Notifications</span><input type="checkbox" id="notifCheckbox"></div>
+        <div class="setting-row"><span>Delete Account</span><button class="danger-btn" id="deleteAccountBtn">🗑️ Delete Account</button></div>
+      </div>
+    </div>
+  </section>
+</main>
 
+<!-- Modal -->
+<div id="genericModal" class="modal"><div class="modal-content" id="modalContent"></div></div>
+
+<script>
+let userData = {
+  name: "{{ user.name }}",
+  email: "{{ user.email }}",
+  phone: "{{ user.Phone }}",
+  country: "Jordan",
+  orders: {{ orders|tojson }},
+  favorites: {{ favorites|tojson }},
+  addresses: {{ addresses|tojson }},
+  notifications: true
+};
+
+function getImageSrc(image) {
+  if (!image) return "/static/image/default.png";
+  if (image.startsWith("http")) return image;
+  if (image.startsWith("/static/")) return image;
+  return "/static/" + image;
+}
+
+function loadFromStorage() {
+  userData = {
+    name: "{{ user.name }}",
+    email: "{{ user.email }}",
+    phone: "{{ user.Phone }}",
+    country: "Jordan",
+    orders: {{ orders|tojson }},
+    favorites: {{ favorites|tojson }},
+    addresses: {{ addresses|tojson }},
+    notifications: true
+  };
+
+  renderAll();
+}
+
+function renderAll() {
+  const displayName = userData.name || "Flower Lover";
+  document.getElementById("sidebarName").innerText = displayName;
+  document.getElementById("welcomeName").innerText = `Welcome, ${displayName.split(' ')[0] || "Guest"}`;
+  document.getElementById("sidebarEmail").innerText = userData.email || "not set";
+
+  document.getElementById("memberBadge").innerText = userData.name ? "💐 Premium Member" : "🌱 Fresh Member";
+
+  const accountGrid = document.getElementById("accountInfoGrid");
+  accountGrid.innerHTML = `
+    <div class="info-box"><label>Full Name</label><p>${escapeHtml(userData.name || "—")}</p><button class="edit-field-btn" data-field="name">✏️ Edit</button></div>
+    <div class="info-box"><label>Email Address</label><p>${escapeHtml(userData.email || "—")}</p><button class="edit-field-btn" data-field="email">✏️ Edit</button></div>
+    <div class="info-box"><label>Phone Number</label><p>${escapeHtml(userData.phone || "—")}</p><button class="edit-field-btn" data-field="phone">✏️ Edit</button></div>
+    <div class="info-box"><label>Country</label><p>${escapeHtml(userData.country || "Jordan")}</p><button class="edit-field-btn" data-field="country">✏️ Edit</button></div>
+  `;
+
+  document.querySelectorAll(".edit-field-btn").forEach(btn => {
+    btn.addEventListener("click", () => openEditField(btn.dataset.field));
+  });
+
+  const ordersContainer = document.getElementById("ordersList");
+  if (!userData.orders || userData.orders.length === 0) {
+    ordersContainer.innerHTML = `<div class="empty-message"><i class="fa-solid fa-box-open"></i> No orders yet.</div>`;
+  } else {
+    ordersContainer.innerHTML = userData.orders.map((ord) => `
+      <div class="order-card">
+        <div>
+          <h3>${escapeHtml(ord.Recipient_name || "Recipient")}</h3>
+          <p>Order ID: ${ord.id}</p>
+        </div>
+        <div>
+          <span class="status ${ord.status === 'Delivered' ? 'delivered' : 'pending'}">${ord.status}</span>
+          <p class="price">${ord.total} JOD</p>
+          <button class="small-outline remove-order" data-id="${ord.id}">Remove</button>
+        </div>
+      </div>
+    `).join('');
+
+    document.querySelectorAll(".remove-order").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const orderId = btn.dataset.id;
+        if (confirm("Are you sure you want to remove this order?")) {
+          window.location.href = `/delete_order/${orderId}`;
+        }
+      });
+    });
+  }
+
+  const favContainer = document.getElementById("favoritesList");
+  if (!userData.favorites || userData.favorites.length === 0) {
+    favContainer.innerHTML = `<div class="empty-message" style="grid-column:1/-1"><i class="fa-regular fa-heart"></i> No favorites yet. Add some beautiful flowers.</div>`;
+  } else {
+    favContainer.innerHTML = userData.favorites.map((fav) => `
+      <div class="wishlist-item">
+        <img src="${getImageSrc(fav.image)}" alt="${escapeHtml(fav.name || '')}">
+        <h3>${escapeHtml(fav.name || '')}</h3>
+        <p>${fav.price} JOD</p>
+        <button class="small-btn add-fav-cart" data-id="${fav.id}">Add to Cart</button>
+        <button class="small-outline remove-fav" data-id="${fav.id}" style="margin-left:8px;">Remove</button>
+      </div>
+    `).join('');
+document.querySelectorAll(".remove-fav").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const productId = btn.dataset.id;
+
+    if (confirm("Are you sure you want to remove this favorite?")) {
+      fetch(`/delete_favorite/${productId}`, {
+        method: "POST"
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          btn.closest(".wishlist-item").remove();
+        } else {
+          alert(data.message || "Error removing favorite");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Remove failed");
+      });
+    }
+  });
+});
+
+document.querySelectorAll(".add-fav-cart").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const productId = btn.dataset.id;
+
+    fetch(`/add_favorite_to_cart/${productId}`, {
+      method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("cartBadge").innerText = data.cart_count;
+        alert("Added to cart");
+      } else {
+        alert(data.message || "Error adding to cart");
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Add to cart failed");
+    });
+  });
+});
+  }
+
+  const addrContainer = document.getElementById("addressesList");
+  if (!userData.addresses || userData.addresses.length === 0) {
+    addrContainer.innerHTML = `<div class="empty-message"><i class="fa-solid fa-location-dot"></i> No saved addresses. Add your shipping address.</div>`;
+  } else {
+    addrContainer.innerHTML = userData.addresses.map((addr) => `
+      <div class="address-card">
+        <h3>${escapeHtml(addr.label)}</h3>
+        <p>${escapeHtml(addr.details)}</p>
+        <div class="address-actions">
+          <button class="small-outline remove-addr" data-id="${addr.id}">Delete</button>
+        </div>
+      </div>
+    `).join('');
+
+    document.querySelectorAll(".remove-addr").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const addressId = btn.dataset.id;
+        if (confirm("Are you sure you want to delete this address?")) {
+          window.location.href = `/delete_address/${addressId}`;
+        }
+      });
+    });
+  }
+
+  document.getElementById("notifCheckbox").checked = userData.notifications;
+  updateCartBadge();
+}
+
+function updateCartBadge() {
+  document.getElementById("cartBadge").innerText = "{{ session.get('cart', [])|length }}";
+}
+
+function openEditField(field) {
+  let currentVal = userData[field] || "";
+  const modal = document.getElementById("genericModal");
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <h3>Edit ${field}</h3>
+    <form method="POST" action="/update_profile">
+      <input type="hidden" name="field" value="${field}">
+      <input type="text" name="value" value="${escapeHtml(currentVal)}" placeholder="Enter new ${field}">
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button type="submit" class="primary-btn">Save</button>
+        <button type="button" class="small-outline" id="closeModalBtn">Cancel</button>
+      </div>
+    </form>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("closeModalBtn").onclick = () => modal.style.display = "none";
+}
+
+function deleteAccount() {
+  const modal = document.getElementById("genericModal");
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <h3>⚠️ Delete Account</h3>
+    <p class="warning-text">Are you sure you want to permanently delete your account?</p>
+    <p class="warning-text">This action cannot be undone. All your data will be lost forever.</p>
+    <div style="display:flex; gap:12px; margin-top:20px;">
+      <button class="danger-btn" id="confirmDeleteBtn">Yes, Delete My Account</button>
+      <button class="small-outline" id="cancelDeleteBtn">Cancel</button>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("confirmDeleteBtn").onclick = () => window.location.href = "/delete_account";
+  document.getElementById("cancelDeleteBtn").onclick = () => modal.style.display = "none";
+}
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+document.getElementById("editProfileBtn").onclick = () => {
+  const modal = document.getElementById("genericModal");
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <h3>Edit Profile</h3>
+    <form method="POST" action="/update_profile">
+      <input type="hidden" name="mode" value="full_profile">
+
+      <label>Full Name</label>
+      <input type="text" name="name" value="${escapeHtml(userData.name || "")}" placeholder="Your name">
+
+      <label>Email</label>
+      <input type="email" name="email" value="${escapeHtml(userData.email || "")}" placeholder="email@example.com">
+
+      <label>Phone</label>
+      <input type="tel" name="phone" value="${escapeHtml(userData.phone || "")}" placeholder="+962...">
+
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button type="submit" class="primary-btn">Save</button>
+        <button type="button" class="small-outline" id="modalCloseBtn">Cancel</button>
+      </div>
+    </form>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("modalCloseBtn").onclick = () => modal.style.display = "none";
+};
+
+document.getElementById("addOrderBtn").onclick = () => {
+  window.location.href = "{{ url_for('index') }}";
+};
+
+document.getElementById("addFavoriteBtn").onclick = () => {
+  window.location.href = "{{ url_for('index') }}";
+};
+
+document.getElementById("addAddressBtn").onclick = () => {
+  const modal = document.getElementById("genericModal");
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <h3>Add Address</h3>
+    <form method="POST" action="/add_address">
+      <label>Label (Home/Work)</label>
+      <input type="text" name="label" placeholder="Home">
+
+      <label>Address</label>
+      <input type="text" name="details" placeholder="Street, City">
+
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button type="submit" class="primary-btn">Save</button>
+        <button type="button" class="small-outline" id="modalCloseBtn">Cancel</button>
+      </div>
+    </form>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("modalCloseBtn").onclick = () => modal.style.display = "none";
+};
+
+document.getElementById("changePwdBtn").onclick = () => {
+  const modal = document.getElementById("genericModal");
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <h3>Change Password</h3>
+    <form method="POST" action="/change_password">
+      <label>Current Password</label>
+      <input type="password" name="current_password" required>
+
+      <label>New Password</label>
+      <input type="password" name="new_password" required>
+
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button type="submit" class="primary-btn">Update</button>
+        <button type="button" class="small-outline" id="modalCloseBtn">Cancel</button>
+      </div>
+    </form>
+  `;
+
+  modal.style.display = "flex";
+  document.getElementById("modalCloseBtn").onclick = () => modal.style.display = "none";
+};
+
+document.getElementById("deleteAccountBtn").onclick = () => deleteAccount();
+
+document.getElementById("notifCheckbox").addEventListener("change", (e) => {
+  userData.notifications = e.target.checked;
+});
+
+document.querySelectorAll(".menu-item").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".menu-item").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const sectionId = btn.dataset.section;
+    document.querySelectorAll(".content-section").forEach(sec => sec.classList.remove("active-section"));
+    document.getElementById(sectionId).classList.add("active-section");
+  });
+});
+
+document.getElementById("homeNav").onclick = () => {
+  window.location.href = "{{ url_for('index') }}";
+};
+
+document.getElementById("contactNav").onclick = () => {
+  window.location.href = "{{ url_for('index') }}#contact";
+};
+
+document.getElementById("cartNav").onclick = () => {
+  window.location.href = "{{ url_for('cart') }}";
+};
+
+document.getElementById("logoHome").onclick = () => {
+  window.location.href = "{{ url_for('index') }}";
+};
+
+loadFromStorage();
+
+// 🔥 يفتح السيكشن حسب الرابط (#favorites)
+window.addEventListener("load", () => {
+  const hash = window.location.hash;
+
+  if (hash) {
+    document.querySelectorAll(".menu-item").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".content-section").forEach(sec => sec.classList.remove("active-section"));
+
+    const targetBtn = document.querySelector(`[data-section="${hash.replace('#', '')}"]`);
+    const targetSection = document.getElementById(hash.replace('#', ''));
+
+    if (targetBtn && targetSection) {
+      targetBtn.classList.add("active");
+      targetSection.classList.add("active-section");
+    }
+  }
+});
+</script>
 </body>
 </html>

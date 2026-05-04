@@ -16,30 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `messages`
+-- Table structure for table `countries`
 --
 
-DROP TABLE IF EXISTS `messages`;
+DROP TABLE IF EXISTS `countries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `messages` (
+CREATE TABLE `countries` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `message` text,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(50) DEFAULT NULL,
+  `code` varchar(10) DEFAULT NULL,
+  `currency` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `messages`
+-- Dumping data for table `countries`
 --
 
-LOCK TABLES `messages` WRITE;
-/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-INSERT INTO `messages` VALUES (1,'ةحمد','ssmk2060@gmail.com','السلم عليكم ','2026-03-16 02:58:54'),(2,'4s_mk Senior','ssmk2060@gmail.com','مصعب محترم جداؤؤؤؤ','2026-03-25 19:25:50'),(3,'4s_mk Senior','ssmk2060@gmail.com','ggggggggggggggg','2026-04-06 07:25:59'),(4,'4s_mk Senior','ssmk2060@gmail.com','asxsad','2026-04-06 15:06:05'),(5,'4s_mk Senior','ssmk2060@gmail.com','ggggggggg','2026-04-07 08:11:32');
-/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+LOCK TABLES `countries` WRITE;
+/*!40000 ALTER TABLE `countries` DISABLE KEYS */;
+INSERT INTO `countries` VALUES (1,'Jordan','+962','JOD'),(2,'Saudi Arabia','+966','SAR'),(3,'UAE','+971','AED'),(4,'Kuwait','+965','KWD'),(5,'Qatar','+974','QAR'),(6,'Bahrain','+973','BHD');
+/*!40000 ALTER TABLE `countries` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-10 17:39:00
+-- Dump completed on 2026-05-04 18:59:21

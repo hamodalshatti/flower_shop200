@@ -169,7 +169,8 @@
         <a href="{{ url_for('admin_add_product') }}">Add Product</a>
         <a href="{{ url_for('admin_orders') }}">Manage Orders</a>
         <a href="{{ url_for('admin_users') }}">Manage Users</a>
-        <a href="{{ url_for('home') }}">Back to Website</a>
+        <a href="{{ url_for('admin_messages') }}">Manage Messages</a>
+        <a href="{{ url_for('index') }}">Back to Website</a>
     </div>
 
     <div class="main-content">
@@ -196,14 +197,21 @@
     <tr>
         <td>{{ product.id }}</td>
         <td>
+            {% if product.image %}
             <img src="{{ url_for('static', filename=product.image) }}" class="product-img">
+            {% else %}
+            <img src="{{ url_for('static', filename='image/default.png') }}" class="product-img">
+            {% endif %}
         </td>
         <td>{{ product.name }}</td>
         <td>{{ product.category }}</td>
         <td>{{ product.price }} JOD</td>
         <td>{{ product.stock }}</td>
         <td>
-            <a href="{{ url_for('delete_product', product_id=product.id) }}" class="btn-delete" style="text-decoration:none; display:inline-block;">Delete</a>
+            <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST" style="display:inline;" 
+      onsubmit="return confirm('Are you sure you want to delete this product?');">
+    <button type="submit" class="btn-delete">Delete</button>
+</form>
         </td>
     </tr>
     {% endfor %}
