@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Flower Shop | Luxury Flower Boutique</title>
+<!-- Google Fonts: Elegant and Modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fefaf7;
+            font-family: 'Inter', sans-serif;
+            color: #2c241f;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-link {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-tools form {
+  margin: 0;
+}
+
+.nav-pill,
+.currency-pill {
+  height: 40px;
+  border: none;
+  background: #fff4f2;
+  color: #3b251f;
+  border-radius: 24px;
+  padding: 0 14px;
+  font-weight: 700;
+  font-size: 14px;
+  outline: none;
+}
+
+.lang-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.currency-pill {
+  width: 82px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.icon-capsule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(120, 60, 50, 0.08);
+}
+
+.nav-icon {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff0ee;
+  color: #9e2a2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.nav-icon:hover {
+  background: #f6d8d2;
+}
+
+.nav-badge {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #9e2a2f;
+  color: white;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            margin: 20px 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0e4dc;
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: #9e2a2f;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 6px 14px rgba(158, 42, 47, 0.2);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: -0.5px;
+            color: #3e2a27;
+        }
+
+        .logo-text span {
+            color: #9e2a2f;
+            font-weight: 700;
+        }
+
+        .header-link {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .header-link a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3e2a27;
+            transition: 0.2s;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .header-link a:hover {
+            color: #9e2a2f;
+        }
+
+        .lang-cart {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .lang-btn {
+            background: #f3edea;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            color: #3e2a27;
+        }
+
+        .lang-btn:hover {
+            background: #e6dbd5;
+        }
+
+        .cart-icon, .profile-icon {
+            position: relative;
+            cursor: pointer;
+            background: #fff0eb;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #9e2a2f;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .cart-icon:hover, .profile-icon:hover {
+            background: #fbe6df;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #9e2a2f;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #9e2a2f;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #9e2a2f;
+            color: #9e2a2f;
+        }
+
+        .btn-outline:hover {
+            background: #9e2a2f;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #7b2125;
+            transform: scale(0.97);
+        }
+
+        .landing-page {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #fff6f2 0%, #ffece5 100%);
+            border-radius: 48px;
+            margin: 20px 40px 40px 40px;
+            padding: 40px 48px;
+            gap: 30px;
+        }
+
+        .landing-page-left-section {
+            flex: 1.2;
+        }
+
+        .landing-page-left-section span {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #9e2a2f;
+            font-weight: 600;
+        }
+
+        .landing-page-left-section h1 {
+            font-size: 3.2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            margin: 12px 0 16px;
+            color: #2c241f;
+            line-height: 1.2;
+        }
+
+        .landing-page-search {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .landing-page-search input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid #eedfd7;
+            background: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .landing-page-image-container img {
+            max-width: 260px;
+            filter: drop-shadow(8px 12px 18px rgba(0, 0, 0, 0.1));
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 28px;
+            margin: 24px 0 50px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 32px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f0e2db;
+        }
+
+        .product:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
+            border-color: #f3cfc2;
+        }
+
+        .product img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+
+        .info {
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        .info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #9e2a2f;
+            margin: 8px 0 6px;
+        }
+
+        .add-cart-quick {
+            background: #faf0ec;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .add-cart-quick:hover {
+            background: #9e2a2f;
+            color: white;
+        }
+
+      .modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 320px;              /* 🔥 صغّر العرض */
+    max-width: 90%;
+    overflow: hidden;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content img {
+    width: 100%;
+    height: 200px;            /* 🔥 تحكم بحجم الصورة */
+    object-fit: cover;        /* مهم جداً */
+}
+
+.modal-info {
+    padding: 15px;
+}
+
+.modal-info h2 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.modal-info .price {
+    color: #c0392b;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.modal-info p {
+    font-size: 12px;
+    color: #777;
+}
+
+.close-x {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #333;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            max-width: 85vw;
+            height: 100%;
+            background: white;
+            box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 1200;
+            transition: 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1e2db;
+            padding-bottom: 16px;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid #f1e2db;
+            padding-bottom: 12px;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-total {
+            border-top: 2px solid #e9d9d1;
+            padding-top: 18px;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .region-selector {
+            background: #f9f2ef;
+            padding: 10px;
+            border-radius: 36px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .region-selector select {
+            background: white;
+            border: 1px solid #e0cdc2;
+            padding: 8px 14px;
+            border-radius: 60px;
+            font-weight: 500;
+            outline: none;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 40px 0 20px;
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+        }
+
+        .currency-form {
+            margin: 0;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #fff6f2 0%, #ffece5 100%);
+            padding: 60px 0;
+            margin-top: 40px;
+            border-radius: 48px;
+            margin: 40px;
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: #2c241f;
+            margin-bottom: 20px;
+        }
+
+        .contact-info > p {
+            color: #6b4e44;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .contact-details {
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: flex-start;
+        }
+
+        .contact-item i {
+            width: 45px;
+            height: 45px;
+            background: #9e2a2f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c241f;
+            margin-bottom: 5px;
+        }
+
+        .contact-item p {
+            color: #6b4e44;
+            line-height: 1.5;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9e2a2f;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .social-links a:hover {
+            background: #9e2a2f;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .contact-form {
+            background: white;
+            padding: 35px;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #2c241f;
+            margin-bottom: 25px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            border: 1px solid #f0e2db;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #fefaf7;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #9e2a2f;
+            box-shadow: 0 0 0 3px rgba(158, 42, 47, 0.1);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+
+        .contact-submit {
+            width: 100%;
+            background: #9e2a2f;
+            margin-top: 5px;
+        }
+
+        .contact-submit:hover {
+            background: #7b2125;
+        }
+
+        footer {
+            text-align: center;
+            padding: 32px;
+            color: #6b4e44;
+            border-top: 1px solid #f0e2db;
+            margin-top: 40px;
+        }
+
+        @media (max-width: px) {
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .contact-section {
+                margin: 20px;
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 750px) {
+            .header {
+                margin: 16px;
+                padding: 12px 20px;
+            }
+
+            .landing-page {
+                margin: 16px;
+                padding: 28px;
+            }
+
+            .landing-page-left-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .lang-cart {
+                gap: 10px;
+            }
+
+            .region-selector select {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+        .product {
+    position: relative;
+}
+
+.fav-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    color: #c45a48;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 20;
+}
+
+.fav-btn.active {
+    background: #c45a48;
+    color: white;
+}
+.actions-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.fav-text-btn {
+    border: none;
+    background: #9e2a2f;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.fav-text-btn.active {
+    background: #c45a48;
+}
+    </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area" id="logoHomeBtn">
+    <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+    <div class="logo-text">Flower<span>&</span>Shop</div>
+  </div>
+
+  <div class="header-link">
+    <a href="{{ url_for('index') }}">{{ 'الرئيسية' if lang == 'ar' else 'Home' }}</a>
+    <a href="#contact-section">{{ 'تواصل معنا' if lang == 'ar' else 'Contact' }}</a>
+
+    <div class="nav-tools">
+
+      <form action="{{ url_for('set_lang') }}" method="POST">
+        <button class="nav-pill lang-pill" type="submit" name="lang" value="{% if lang == 'en' %}ar{% else %}en{% endif %}">
+          <i class="fas fa-globe"></i>
+          <span id="langText">{% if lang == 'en' %}EN{% else %}AR{% endif %}</span>
+        </button>
+      </form>
+
+      <form action="{{ url_for('set_currency') }}" method="POST">
+        <select class="currency-pill" name="currency" onchange="this.form.submit()">
+          <option value="JOD" {% if currency == 'JOD' %}selected{% endif %}>JOD</option>
+          <option value="SAR" {% if currency == 'SAR' %}selected{% endif %}>SAR</option>
+          <option value="AED" {% if currency == 'AED' %}selected{% endif %}>AED</option>
+          <option value="KWD" {% if currency == 'KWD' %}selected{% endif %}>KWD</option>
+          <option value="QAR" {% if currency == 'QAR' %}selected{% endif %}>QAR</option>
+          <option value="BHD" {% if currency == 'BHD' %}selected{% endif %}>BHD</option>
+        </select>
+      </form>
+
+      <div class="icon-capsule">
+        <a href="{{ url_for('profile') }}#favorites" class="nav-icon fav-icon">
+          <i class="fas fa-heart"></i>
+          <span class="nav-badge">{{ favorite_ids|length if favorite_ids is defined else 0 }}</span>
+        </a>
+
+        <a href="{{ url_for('cart') }}" class="nav-icon">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="nav-badge">{{ session.get('cart', [])|length }}</span>
+        </a>
+
+        <a href="{{ url_for('profile') }}" class="nav-icon">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="landing-page" id="homeSection">
+    <div class="landing-page-left-section">
+        <span id="heroTag">
+    {% if lang == 'ar' %}
+        من الحديقة مباشرة
+    {% else %}
+        FRESH FROM THE GARDEN
+    {% endif %}
+</span>
+
+<h1 id="heroTitle">
+    {% if lang == 'ar' %}
+        أرسل الحب،<br>أرسل الزهور
+    {% else %}
+        Send love,<br>send flowers
+    {% endif %}
+</h1>
+
+<p id="heroDesc">
+    {% if lang == 'ar' %}
+        عبّر عن مشاعرك بأجمل الزهور والهدايا الفاخرة، 
+        مع توصيل مباشر إلى باب المنزل في جميع أنحاء الشرق الأوسط.
+    {% else %}
+       Express your feelings with the most beautiful fresh flowers and luxurious gifts,
+        delivered directly to their door across Middle East.
+    {% endif %}
+</p>
+
+      <form class="landing-page-search" action="{{ url_for('search') }}" method="GET">
+
+    <input type="text"
+           name="q"
+           id="searchInput"
+           placeholder="{{ 'ابحث عن الورود والباقات...' if lang == 'ar' else 'Search roses, bouquets...' }}">
+
+    <button class="btn" type="submit" id="searchBtn">
+        {{ 'بحث' if lang == 'ar' else 'Search' }}
+    </button>
+
+</form>
+    </div>
+
+    <div class="landing-page-image-container">
+        <img src="{{ url_for('static', filename='image/123.png') }}" alt="Hero flower">
+    </div>
+</div>
+
+<div class="container">
+    <div class="section-header">
+        <h2 id="flowersTitle">
+            <i class="fas fa-seedling" style="color: #9e2a2f;"></i>
+            Fresh Flowers
+        </h2>
+    </div>
+
+<div class="products">
+{% for product in flower_products %}
+
+<div class="product"
+     data-name="{{ ((product.name_ar or product.name) if lang == 'ar' else product.name)|escape }}"
+     data-desc="{{ ((product.description_ar or product.description) if lang == 'ar' else product.description)|escape }}"
+     data-price="{{ '%.2f'|format(product.converted_price|float) }} {{ currency }}"
+     data-img="{{ url_for('static', filename=product.image) }}"
+     data-original-name="{{ product.name|escape }}"
+     data-original-price="{{ product.price }}"
+     data-image-path="{{ product.image|escape }}"
+     onclick="openModalFromElement(this)">
+
+    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+
+    <div class="info">
+        <h3>{{ (product.name_ar or product.name) if lang == 'ar' else product.name }}</h3>
+
+        <div class="price">
+            {{ "%.2f"|format(product.converted_price|float) }} {{ currency }}
+        </div>
+
+        <div class="actions-row">
+
+            <form action="{{ url_for('add_to_cart') }}" method="POST"
+                  onclick="event.stopPropagation();">
+                <input type="hidden" name="name" value="{{ product.name }}">
+                <input type="hidden" name="price" value="{{ product.price }}">
+                <input type="hidden" name="image" value="{{ product.image }}">
+                <input type="hidden" name="quantity" value="1">
+
+                <button class="add-cart-quick" type="submit">
+                    <i class="fas fa-cart-plus"></i>
+                    {{ 'أضف' if lang == 'ar' else 'Add' }}
+                </button>
+            </form>
+
+          <button type="button"
+        class="fav-text-btn {% if product.id in favorite_ids %}active{% endif %}"
+        data-id="{{ product.id }}"
+        onclick="toggleFavorite(event, this)">
+    <i class="{% if product.id in favorite_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+    {{ 'المفضلة' if lang == 'ar' else 'Favorite' }}
+</button>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+</div>
+</div>
+
+<div class="container">
+    <div class="section-header">
+        <h2 id="cakesTitle">
+            <i class="fas fa-candy-cane" style="color: #9e2a2f;"></i>
+            Cakes Gifts
+        </h2>
+    </div>
+
+  <div class="products">
+{% for product in chocolate_products %}
+
+<div class="product"
+     data-name="{{ ((product.name_ar or product.name) if lang == 'ar' else product.name)|escape }}"
+     data-desc="{{ ((product.description_ar or product.description) if lang == 'ar' else product.description)|escape }}"
+     data-price="{{ '%.2f'|format(product.converted_price|float) }} {{ currency }}"
+     data-img="{{ url_for('static', filename=product.image) }}"
+     data-original-name="{{ product.name|escape }}"
+     data-original-price="{{ product.price }}"
+     data-image-path="{{ product.image|escape }}"
+     onclick="openModalFromElement(this)">
+
+    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+
+    <div class="info">
+        <h3>{{ (product.name_ar or product.name) if lang == 'ar' else product.name }}</h3>
+
+        <div class="price">
+            {{ "%.2f"|format(product.converted_price|float) }} {{ currency }}
+        </div>
+
+        <form action="{{ url_for('add_to_cart') }}" method="POST"
+              onclick="event.stopPropagation();">
+            <input type="hidden" name="name" value="{{ product.name }}">
+            <input type="hidden" name="price" value="{{ product.price }}">
+            <input type="hidden" name="image" value="{{ product.image }}">
+            <input type="hidden" name="quantity" value="1">
+
+            <button class="add-cart-quick" type="submit">
+                {{ 'أضف' if lang == 'ar' else 'Add' }}
+            </button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+</div>
+</div>
+
+<div class="container">
+    <div class="section-header">
+        <h2 id="perfumeTitle">
+            <i class="fas fa-spray-can-sparkles" style="color: #9e2a2f;"></i>
+            Perfumes & Candles
+        </h2>
+    </div>
+
+    <div class="products">
+{% for product in perfume_products %}
+
+<div class="product"
+     data-name="{{ ((product.name_ar or product.name) if lang == 'ar' else product.name)|escape }}"
+     data-desc="{{ ((product.description_ar or product.description) if lang == 'ar' else product.description)|escape }}"
+     data-price="{{ '%.2f'|format(product.converted_price|float) }} {{ currency }}"
+     data-img="{{ url_for('static', filename=product.image) }}"
+     data-original-name="{{ product.name|escape }}"
+     data-original-price="{{ product.price }}"
+     data-image-path="{{ product.image|escape }}"
+     onclick="openModalFromElement(this)">
+
+    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+
+    <div class="info">
+        <h3>{{ (product.name_ar or product.name) if lang == 'ar' else product.name }}</h3>
+
+        <div class="price">
+            {{ "%.2f"|format(product.converted_price|float) }} {{ currency }}
+        </div>
+
+        <form action="{{ url_for('add_to_cart') }}" method="POST"
+              onclick="event.stopPropagation();">
+            <input type="hidden" name="name" value="{{ product.name }}">
+            <input type="hidden" name="price" value="{{ product.price }}">
+            <input type="hidden" name="image" value="{{ product.image }}">
+            <input type="hidden" name="quantity" value="1">
+
+            <button class="add-cart-quick" type="submit">
+                {{ 'أضف' if lang == 'ar' else 'Add' }}
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endfor %}
+</div>
+</div>
+
+<div id="contact-section" class="contact-section">
+    <div class="container">
+        <div class="contact-wrapper">
+
+            <div class="contact-info">
+                <h2>
+                    {{ 'تواصل معنا' if lang == 'ar' else 'Get In Touch' }}
+                </h2>
+
+                <p>
+                    {{ 'يسعدنا تواصلك معنا! سواء كان لديك سؤال عن منتجاتنا، أو تحتاج مساعدة في طلب، أو ترغب بباقة مخصصة، فريقنا جاهز لخدمتك.' 
+                    if lang == 'ar' 
+                    else "We'd love to hear from you! Whether you have a question about our flowers, need help with an order, or want to create a custom arrangement, our team is here to help." }}
+                </p>
+
+                <div class="contact-details">
+
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>{{ 'زورنا' if lang == 'ar' else 'Visit Us' }}</h4>
+                            <p>
+                                {{ 'عمان، الأردن' if lang == 'ar' else 'Amman, Jordan' }}<br>
+                                {{ 'شارع الرينبو، مبنى 42' if lang == 'ar' else 'Al-Rainbow Street, Building 42' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>{{ 'اتصل بنا' if lang == 'ar' else 'Call Us' }}</h4>
+                            <p>+962 7 76114062<br>+962 7 85663488</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>{{ 'راسلنا' if lang == 'ar' else 'Email Us' }}</h4>
+                            <p>info@flowershop.com<br>support@flowershop.com</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>
+                    {{ 'أرسل رسالة' if lang == 'ar' else 'Send a Message' }}
+                </h3>
+
+                <form action="{{ url_for('send_message') }}" method="POST">
+
+                    <input type="text"
+                           name="name"
+                           placeholder="{{ 'الاسم' if lang == 'ar' else 'Your Name' }}"
+                           required>
+
+                    <input type="email"
+                           name="email"
+                           placeholder="{{ 'البريد الإلكتروني' if lang == 'ar' else 'Your Email' }}"
+                           required>
+
+                    <input type="text"
+                           name="subject"
+                           placeholder="{{ 'الموضوع' if lang == 'ar' else 'subject' }}"
+                           required>
+
+                    <textarea name="message"
+                              rows="5"
+                              placeholder="{{ 'اكتب رسالتك هنا...' if lang == 'ar' else 'Your Message' }}"
+                              required></textarea>
+
+                    <button type="submit" class="btn contact-submit">
+                        {{ 'إرسال' if lang == 'ar' else 'Send Message' }}
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+
+        <span class="close-x" onclick="closeModal()">&times;</span>
+
+        <img id="modalImg" src="" alt="Product">
+
+        <div class="modal-info">
+            <h2 id="modalName"></h2>
+            <div class="price" id="modalPrice"></div>
+            <p id="modalDesc"></p>
+
+            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <input type="hidden" name="name" id="modalProductName">
+                <input type="hidden" name="price" id="modalProductOriginalPrice">
+                <input type="hidden" name="image" id="modalProductImage">
+
+<input type="hidden" name="quantity" value="1">
+                <button class="btn modal-cart-btn" type="submit">
+                    {{ 'أضف إلى السلة' if lang == 'ar' else 'Add to Cart' }}
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<footer>
+    <p id="footerText">Flower & Shop — Luxury blooms delivered across Middle East</p>
+</footer>
+
+<script>
+let currentLang = "en";
+
+function applyLanguage() {
+    if (currentLang === "ar") {
+        document.documentElement.lang = "ar";
+        document.documentElement.dir = "rtl";
+
+        document.getElementById("langText").innerText = "AR";
+        document.getElementById("heroTag").innerText = "طازج من الحديقة";
+        document.getElementById("heroTitle").innerHTML = "أرسل الحب،<br>أرسل الزهور";
+        document.getElementById("heroDesc").innerText = "عبّر عن مشاعرك بأجمل الزهور الطازجة والهدايا الفاخرة، نوصلها مباشرة إلى الباب في الشرق الأوسط.";
+        document.getElementById("searchInput").placeholder = "ابحث عن الورود، الباقات...";
+        document.getElementById("searchBtn").innerText = "بحث";
+
+        document.getElementById("flowersTitle").innerHTML = '<i class="fas fa-seedling" style="color: #9e2a2f;"></i> زهور طازجة';
+        document.getElementById("cakesTitle").innerHTML = '<i class="fas fa-candy-cane" style="color: #9e2a2f;"></i> كيك وهدايا';
+        document.getElementById("perfumeTitle").innerHTML = '<i class="fas fa-spray-can-sparkles" style="color: #9e2a2f;"></i> عطور وشموع';
+
+        document.querySelectorAll(".add-cart-quick").forEach(btn => {
+            btn.innerText = btn.getAttribute("data-ar") || "أضف";
+        });
+
+        document.getElementById("contactTitle").innerText = "تواصل معنا";
+        document.getElementById("contactDesc").innerText = "يسعدنا سماعك! سواء كان لديك سؤال عن زهورنا أو تحتاج مساعدة بطلبك أو تريد تنسيقًا مخصصًا، فريقنا هنا لمساعدتك.";
+        document.getElementById("visitUsTitle").innerText = "زورونا";
+        document.getElementById("visitUsText").innerHTML = "عمان، الأردن<br>شارع الرينبو، مبنى 42";
+        document.getElementById("callUsTitle").innerText = "اتصل بنا";
+        document.getElementById("emailUsTitle").innerText = "راسلنا";
+        document.getElementById("sendMessageTitle").innerText = "أرسل رسالة";
+        document.getElementById("contactName").placeholder = "اسمك";
+        document.getElementById("contactEmail").placeholder = "بريدك الإلكتروني";
+        document.getElementById("contactsubject").placeholder = "الموضوع";
+        document.getElementById("contactMessage").placeholder = "رسالتك";
+        document.getElementById("sendMessageBtn").innerText = "إرسال الرسالة";
+        document.getElementById("footerText").innerText = "Flower & Shop — أزهار فاخرة يتم توصيلها عبر الشرق الأوسط";
+
+    } else {
+        document.documentElement.lang = "en";
+        document.documentElement.dir = "ltr";
+
+        document.getElementById("langText").innerText = "EN";
+        document.getElementById("heroTag").innerText = "FRESH FROM THE GARDEN";
+        document.getElementById("heroTitle").innerHTML = "Send love,<br>send flowers";
+        document.getElementById("heroDesc").innerText = "Express your feelings with the most beautiful fresh flowers and luxurious gifts, delivered directly to their door across Middle East.";
+        document.getElementById("searchInput").placeholder = "Search roses, bouquets...";
+        document.getElementById("searchBtn").innerText = "Search";
+
+        document.getElementById("flowersTitle").innerHTML = '<i class="fas fa-seedling" style="color: #9e2a2f;"></i> Fresh Flowers';
+        document.getElementById("cakesTitle").innerHTML = '<i class="fas fa-candy-cane" style="color: #9e2a2f;"></i> Cakes Gifts';
+        document.getElementById("perfumeTitle").innerHTML = '<i class="fas fa-spray-can-sparkles" style="color: #9e2a2f;"></i> Perfumes & Candles';
+
+        document.querySelectorAll(".add-cart-quick").forEach(btn => {
+            btn.innerText = btn.getAttribute("data-en") || "Add";
+        });
+
+        document.getElementById("contactTitle").innerText = "Get In Touch";
+        document.getElementById("contactDesc").innerText = "We'd love to hear from you! Whether you have a question about our flowers, need help with an order, or want to create a custom arrangement, our team is here to help.";
+        document.getElementById("visitUsTitle").innerText = "Visit Us";
+        document.getElementById("visitUsText").innerHTML = "Amman, Jordan<br>Al-Rainbow Street, Building 42";
+        document.getElementById("callUsTitle").innerText = "Call Us";
+        document.getElementById("emailUsTitle").innerText = "Email Us";
+        document.getElementById("sendMessageTitle").innerText = "Send a Message";
+        document.getElementById("contactName").placeholder = "Your Name";
+        document.getElementById("contactEmail").placeholder = "Your Email";
+        document.getElementById("contactsubject").placeholder = "subject";
+        document.getElementById("contactMessage").placeholder = "Your Message";
+        document.getElementById("sendMessageBtn").innerText = "Send Message";
+        document.getElementById("footerText").innerText = "Flower & Shop — Luxury blooms delivered across Middle East";
+    }
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function openModalFromElement(el) {
+    openModal(
+        el.dataset.name,
+        el.dataset.price,
+        el.dataset.desc,
+        el.dataset.img,
+        el.dataset.originalName,
+        el.dataset.originalPrice,
+        el.dataset.imagePath
+    );
+}
+
+function openModal(name, price, desc, img, originalName, originalPrice, imagePath) {
+    document.getElementById("modalName").innerText = name;
+    document.getElementById("modalPrice").innerText = price;
+    document.getElementById("modalDesc").innerText = desc;
+    document.getElementById("modalImg").src = "/static/" + imagePath;
+
+    document.getElementById("modalProductName").value = originalName;
+    document.getElementById("modalProductOriginalPrice").value = originalPrice;
+    document.getElementById("modalProductImage").value = imagePath;
+
+    document.getElementById("modal").style.display = "flex";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const langToggleBtn = document.getElementById("langToggleBtn");
+    if (langToggleBtn) {
+        langToggleBtn.addEventListener("click", function () {
+            currentLang = currentLang === "en" ? "ar" : "en";
+            applyLanguage();
+        });
+    }
+
+    const logoHomeBtn = document.getElementById("logoHomeBtn");
+    if (logoHomeBtn) {
+        logoHomeBtn.addEventListener("click", function () {
+            window.location.href = "{{ url_for('index') }}";
+        });
+    }
+
+    document.addEventListener("click", function(e) {
+        const btn = e.target.closest(".fav-text-btn");
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const productId = btn.getAttribute("data-id");
+
+        fetch(`/toggle_favorite/${productId}`, {
+            method: "POST"
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("favorite response:", data);
+
+            if (!data.success) {
+                alert(data.message || "Please login first");
+                return;
+            }
+
+            if (data.is_favorite) {
+                btn.classList.add("active");
+                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Favorite';
+            } else {
+                btn.classList.remove("active");
+                btn.innerHTML = '<i class="fa-regular fa-heart"></i> Favorite';
+            }
+        })
+        .catch(err => {
+            console.log("favorite error:", err);
+            alert("Favorite request failed");
+        });
+    });
+
+});
+
+</script>
+<script>
+function toggleFavorite(event, btn) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const productId = btn.getAttribute("data-id");
+
+    fetch("/toggle_favorite/" + productId, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("favorite:", data);
+
+        if (!data.success) {
+            alert(data.message || "Error");
+            return;
+        }
+
+        if (data.is_favorite) {
+            btn.classList.add("active");
+            btn.innerHTML = '<i class="fa-solid fa-heart"></i> Favorite';
+        } else {
+            btn.classList.remove("active");
+            btn.innerHTML = '<i class="fa-regular fa-heart"></i> Favorite';
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        alert("Favorite request failed");
+    });
+}
+</script>
+</body>
+</html>

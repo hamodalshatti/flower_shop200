@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Flower Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* تنسيقات البتون*/
+          .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+.header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            margin: 20px 40px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid #f0e4dc;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: #9e2a2f;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 6px 14px rgba(158,42,47,0.2);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: -0.5px;
+            color: #3e2a27;
+        }
+
+        .logo-text span {
+            color: #9e2a2f;
+            font-weight: 700;
+        }
+      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Roboto", sans-serif;
+            background: linear-gradient(135deg, #c0888810 0%, #c0888830 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== الهيدر ===== */
+        .header {
+            background-color: #c08888dc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+ .header-link {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .header-link a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3e2a27;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .header-link a:hover {
+            color: #9e2a2f;
+        }
+
+        .lang-cart {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .lang-btn {
+            background: #f3edea;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            color: #3e2a27;
+        }
+
+        .lang-btn i {
+            font-size: 14px;
+        }
+
+        .lang-btn:hover {
+            background: #e6dbd5;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            background: #fff0eb;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #9e2a2f;
+            transition: 0.2s;
+        }
+
+        .cart-icon:hover {
+            background: #fbe6df;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #9e2a2f;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #9e2a2f;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #9e2a2f;
+            color: #9e2a2f;
+        }
+
+        .btn-outline:hover {
+            background: #9e2a2f;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #7b2125;
+            transform: scale(0.97);
+        }
+
+        .landing-page {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #fff6f2 0%, #ffece5 100%);
+            border-radius: 48px;
+            margin: 20px 40px 40px 40px;
+            padding: 40px 48px;
+            gap: 30px;
+        }
+
+        .landing-page-left-section {
+            flex: 1.2;
+        }
+
+        .landing-page-left-section span {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #9e2a2f;
+            font-weight: 600;
+        }
+
+        .landing-page-left-section h1 {
+            font-size: 3.2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            margin: 12px 0 16px;
+            color: #2c241f;
+            line-height: 1.2;
+        }
+
+        .landing-page-left-section p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #5b4a43;
+            max-width: 600px;
+        }
+
+        .landing-page-search {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .landing-page-search input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid #eedfd7;
+            background: white;
+            font-size: 1rem;
+            outline: none;
+            min-width: 240px;
+        }
+
+        .landing-page-image-container img {
+            max-width: 260px;
+            width: 100%;
+            filter: drop-shadow(8px 12px 18px rgba(0,0,0,0.1));
+        }
+
+        .trending-container {
+            margin: 20px 40px 0 40px;
+        }
+
+        .trending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            gap: 15px;
+        }
+
+        .trending-header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            color: #2c241f;
+        }
+
+        .trending-container > span {
+            color: #9e2a2f;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+        .header-link a {
+            color: white;
+            padding: 0 25px;
+            text-decoration-line: none;
+            transition: all 0.3s ease;
+        }
+
+        .header-link a:hover {
+            background-color: #dfcbcbdc;
+            border-radius: 15px;
+            padding: 10px 25px;
+        }
+
+        .btn {
+            background-color: #494646dc;
+            border-radius: 15px;
+            padding: 10px 25px;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #c08888dc;
+            transform: translateY(-2px);
+        }
+
+        /* ===== صفحة Sign Up ===== */
+        .signup-page {
+            min-height: calc(100vh - 120px);
+            padding: 40px 20px;
+        }
+
+        .signup-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(192, 136, 136, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signup-left {
+            flex: 1;
+            padding: 50px;
+        }
+
+        .signup-right {
+            flex: 0.8;
+            background: linear-gradient(135deg, #c08888dc, #a06e6edc);
+            padding: 50px;
+            color: white;
+        }
+
+        .signup-header {
+            margin-bottom: 30px;
+        }
+
+        .signup-header h1 {
+            color: #494646;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .signup-header p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row-2 {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-row-2 .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #494646;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: "Roboto", sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c08888dc;
+            box-shadow: 0 0 0 3px #c0888820;
+        }
+
+        /* زر إظهار كلمة المرور */
+        .password-toggle-signup {
+            position: absolute;
+            right: 15px;
+            bottom: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-toggle-signup:hover {
+            opacity: 1;
+        }
+
+        /* قوة كلمة المرور */
+        .password-strength {
+            margin: -5px 0 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .strength-text {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .strength-bars .bar {
+            width: 30px;
+            height: 4px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        /* الشروط والأحكام */
+        .terms-checkbox {
+            margin: 10px 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .checkbox-label input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #c08888dc;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-label input:checked + .checkmark {
+            background-color: #c08888dc;
+        }
+
+        .checkbox-label input:checked + .checkmark::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 11px;
+        }
+
+        .checkbox-label a {
+            color: #c08888dc;
+            text-decoration: none;
+        }
+
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+
+        /* زر إنشاء الحساب */
+        .signup-btn {
+            width: 100%;
+            background-color: #c08888dc !important;
+            color: white !important;
+            padding: 14px !important;
+            font-size: 1.1rem !important;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .signup-btn:hover {
+            background-color: #a06e6edc !important;
+            transform: translateY(-2px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .login-link p {
+            color: #666;
+        }
+
+        .login-link a {
+            color: #c08888dc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .signup-divider {
+            position: relative;
+            text-align: center;
+            margin: 25px 0 20px;
+        }
+
+        .signup-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #c08888dc, transparent);
+        }
+
+        .signup-divider span {
+            background-color: white;
+            padding: 0 15px;
+            color: #888;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .signup-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #494646;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: #c08888dc;
+            color: white;
+            box-shadow: 0 10px 20px rgba(192, 136, 136, 0.3);
+        }
+
+        /* الجانب الأيمن - الفوائد */
+        .signup-benefits {
+            text-align: center;
+        }
+
+        .benefit-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .signup-benefits h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .benefits-list {
+            text-align: left;
+            margin: 25px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 8px 0;
+        }
+
+        .benefit-item span {
+            font-size: 1.3rem;
+            min-width: 35px;
+        }
+
+        .benefit-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .benefit-quote {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .benefit-quote p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* للشاشات المتوسطة */
+        @media (max-width: 900px) {
+            .header {
+                padding: 10px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .signup-container {
+                flex-direction: column;
+            }
+            
+            .signup-right {
+                display: none;
+            }
+            
+            .signup-left {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .signup-left {
+                padding: 20px;
+            }
+            
+            .form-row-2 {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .signup-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .strength-bars .bar {
+                width: 20px;
+            }
+        }
+    </style>
+
+        
+    </style>
+</head>
+
+<body>
+    <!-- الهيدر -->
+    <div class="header">
+        
+          <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+       <!-- <div class="header-link">
+          
+            <button class="btn" onclick="window.location.href='signin.html'">Sign in</button>
+        </div>
+        -->
+    </div>
+
+    <!-- قسم إنشاء حساب جديد -->
+    <div class="signup-page">
+        <div class="signup-container">
+            <div class="signup-left">
+                <div class="signup-header">
+                    <h1>Create Account 🌸</h1>
+                    <p>Join us and start your flower journey</p>
+                </div>
+
+                <!-- الفورم مربوط بالباك اند -->
+                <form class="signup-form" id="signupForm" action="{{ url_for('create_user') }}" method="POST">
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>👤 First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📧 Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📱 Phone Number</label>
+                        <input type="text" id="Phone" name="Phone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>🔒 Password</label>
+                            <input type="password" id="password" name="password" placeholder="Create a password" required>
+                            <span class="password-toggle-signup" onclick="togglePassword()">👁️</span>
+                        </div>
+                        <div class="form-group">
+                            <label>✅ Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                    </div>
+
+                    <!-- الشروط والأحكام -->
+                    <div class="terms-checkbox">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="termsCheckbox" name="terms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- زر إنشاء الحساب -->
+                    <button type="submit" class="btn signup-btn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-icon">🌸</span>
+                    </button>
+                </form>
+
+                <div class="login-link">
+                    <p>Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+                </div>
+            </div>
+
+            <div class="signup-right">
+                <!-- نفس محتوى الفوائد كما هو -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // إظهار/إخفاء كلمة المرور
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle-signup');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🔓';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+.body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+}
+
+.header {
+    background-color: #c08888dc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+}
+
+.logo {
+    width: 100px;
+}
+
+.header-link a {
+    color: white;
+    padding: 0 25px;
+    text-decoration-line: none;
+}
+
+.header-link a:hover {
+    background-color: #dfcbcbdc;
+    border-radius: 15px;
+    padding: 10px 25px;
+}
+
+.btn {
+    background-color: #494646dc;
+    border-radius: 15px;
+    padding: 10px 25px;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #c08888dc;
+}
+
+.landing-page {
+    background-color: #c08888dc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    color: white;
+    border-radius: 0 0 50px 50px;
+    margin-bottom: 30px;
+}
+
+.landing-page-left-section {
+    width: 450px;
+}
+
+.landing-page-left-section span {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.landing-page-left-section h1 {
+    font-size: 3rem;
+    margin: 10px 0;
+}
+
+.landing-page-left-section p {
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.landing-page-search {
+    display: flex;
+    gap: 10px;
+}
+
+.landing-page-search input {
+    flex-grow: 1;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    height: 45px;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.landing-page-search button {
+    height: 45px;
+}
+
+.landing-page-imge-container img {
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.trending-container {
+    padding: 25px 50px;
+}
+
+.trending-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trending-container span {
+    color: #c08888dc;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.trending-header h1 {
+    margin-top: 0;
+}
+
+.card {
+    width: 300px;
+    background-color: #dfcbcbdc;
+    border-radius: 20px;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+}
+
+.card-info img {
+    width: 50px;
+}
+
+.card .thumb {
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+}
+
+.trending-cards {
+    display: flex;
+    gap: 12px;
+}
+
+/* ===== صفحة Sign In ===== */
+
+.signin-container {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #c0888810 0%, #c0888830 100%);
+}
+
+.signin-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(192, 136, 136, 0.2);
+    padding: 50px;
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid #c0888830;
+}
+
+.signin-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.signin-header h2 {
+    color: #494646;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.signin-header p {
+    color: #888;
+    font-size: 1rem;
+}
+
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #494646;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #c08888dc;
+    box-shadow: 0 0 0 4px #c0888820;
+}
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.remember-me {
+    color: #494646;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.remember-me input {
+    width: 16px;
+    height: 16px;
+    accent-color: #c08888dc;
+}
+
+.forgot-password {
+    color: #c08888dc;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.signin-btn {
+    background-color: #c08888dc !important;
+    color: white !important;
+    padding: 15px !important;
+    font-size: 1.1rem !important;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.signin-btn:hover {
+    background-color: #a06e6edc !important;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.signup-link p {
+    color: #666;
+}
+
+.signup-link a {
+    color: #c08888dc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.social-login {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.social-login p {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.social-login p::before,
+.social-login p::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.social-login p::before {
+    left: 0;
+}
+
+.social-login p::after {
+    right: 0;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #494646;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.social-icon:hover {
+    background-color: #c08888dc;
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 20px;
+    }
+    
+    .header-link a {
+        padding: 0 10px;
+    }
+    
+    .landing-page {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px;
+    }
+    
+    .landing-page-left-section {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .landing-page-search {
+        justify-content: center;
+    }
+    
+    .trending-container {
+        padding: 25px 20px;
+    }
+    
+    .trending-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .signin-card {
+        padding: 30px 20px;
+    }
+    
+    .signin-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .landing-page-left-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .card {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+/* ===== تحسينات إضافية ===== */
+
+/* تحسين الروابط */
+.header-link a, .btn, .forgot-password, .signup-link a {
+    cursor: pointer;
+}
+
+/* تأثيرات عند الضغط */
+.forgot-password:active, .btn:active {
+    transform: scale(0.98);
+}
+
+/* تحسين رسائل النجاح/الخطأ (للاستخدام المستقبلي) */
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: slideDown 0.3s ease;
+}
+
+.error-message {
+    background-color: #f44336;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* تحسين الأيقونات */
+.label-icon {
+    margin-right: 5px;
+    font-size: 1.1rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    user-select: none;
+}
+
+.password-toggle:hover {
+    opacity: 1;
+}
+
+/* تحسين Checkbox */
+.checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c08888dc;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+}
+
+.remember-me input[type="checkbox"] {
+    display: none;
+}
+
+.remember-me input[type="checkbox"]:checked + .checkbox-custom {
+    background-color: #c08888dc;
+}
+
+.remember-me input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+}
+
+/* تحسين زر Sign In */
+.signin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.signin-btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.signin-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-text {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-icon {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.signin-btn:hover .btn-icon {
+    transform: translateX(5px);
+}
+
+/* تحسين الخط الفاصل */
+.social-divider {
+    position: relative;
+    text-align: center;
+    margin: 25px 0 20px;
+}
+
+.social-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c08888dc, transparent);
+}
+
+.social-divider span {
+    background-color: white;
+    padding: 0 15px;
+    color: #888;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* تحسين أيقونات السوشيال ميديا */
+.social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #494646;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+    background: #c08888dc;
+    color: white;
+    box-shadow: 0 10px 20px rgba(192, 136, 136, 0.3);
+}
+
+/* إضافة تلميحات (tooltips) للأيقونات */
+.social-icon::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #494646;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.social-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: -40px;
+}
+
+/* تحسين حركات الدخول */
+.signin-card {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-options { animation: fadeIn 0.5s ease-out 0.3s forwards; opacity: 0; }
+.signin-btn { animation: fadeIn 0.5s ease-out 0.4s forwards; opacity: 0; }
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}

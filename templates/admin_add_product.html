@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product | Flower Shop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdf8f5;
+            color: #2d2420;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #9e2a2f;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 35px;
+        }
+
+        .main-content h1 {
+            font-size: 32px;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 25px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0dfd8;
+            max-width: 700px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e5d7d0;
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: #9e2a2f;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #7f1f24;
+        }
+
+        @media (max-width: 900px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_products') }}">Manage Products</a>
+        <a href="{{ url_for('admin_add_product') }}" class="active">Add Product</a>
+        <a href="{{ url_for('admin_orders') }}">Manage Orders</a>
+        <a href="{{ url_for('admin_users') }}">Manage Users</a>
+        <a href="{{ url_for('admin_messages') }}">Manage Messages</a>
+        <a href="{{ url_for('index') }}">Back to Website</a>
+    </div>
+
+    <div class="main-content">
+        <h1>Add New Product</h1>
+
+        <div class="form-box">
+            <form method="POST" action="{{ url_for('admin_add_product') }}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Flowers">Flowers</option>
+                        <option value="Gift">Gift</option>
+                        <option value="Chocolate">Chocolate</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" name="price" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="number" name="stock" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input type="file" name="image">
+                </div>
+
+                <button type="submit" class="btn">Save Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

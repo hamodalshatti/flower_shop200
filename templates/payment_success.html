@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ 'تم الدفع بنجاح' if lang == 'ar' else 'Payment Successful' }} | Flower Shop</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:linear-gradient(135deg,#fefaf7,#f8eee9);
+    color:#2c241f;
+    min-height:100vh;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 30px;
+    background:#ffffffdd;
+    backdrop-filter:blur(10px);
+    border-radius:60px;
+    margin:20px 40px;
+    border:1px solid #f0e4dc;
+    box-shadow:0 8px 24px rgba(90,50,40,.06);
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#9e2a2f;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.logo-text{
+    font-family:'Cormorant Garamond',serif;
+    font-size:28px;
+    font-weight:700;
+    color:#3e2a27;
+}
+
+.logo-text span{color:#9e2a2f}
+
+.header-link{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.header-link a{
+    text-decoration:none;
+    color:#3e2a27;
+    font-weight:500;
+}
+
+.header-link a:hover{color:#9e2a2f}
+
+.nav-icon{
+    position:relative;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#fff0ee;
+    color:#9e2a2f;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+}
+
+.cart-count{
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    min-width:18px;
+    height:18px;
+    padding:0 5px;
+    border-radius:50px;
+    background:#9e2a2f;
+    color:white;
+    font-size:11px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.success-wrapper{
+    min-height:calc(100vh - 110px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:35px 20px;
+}
+
+.success-card{
+    width:100%;
+    max-width:760px;
+    background:white;
+    border-radius:38px;
+    border:1px solid #f0e2db;
+    box-shadow:0 24px 60px rgba(80,45,35,.11);
+    overflow:hidden;
+    animation:fadeUp .45s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(25px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.success-top{
+    text-align:center;
+    padding:46px 30px 36px;
+    background:linear-gradient(135deg,#fff7f4,#f6dfd8);
+    position:relative;
+}
+
+.success-top::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:85%;
+    height:1px;
+    background:#ecd8d1;
+}
+
+.success-icon{
+    width:88px;
+    height:88px;
+    border-radius:50%;
+    margin:0 auto 20px;
+    background:linear-gradient(135deg,#9e2a2f,#c85b60);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    box-shadow:0 12px 28px rgba(158,42,47,.25);
+}
+
+.success-top h1{
+    font-family:'Cormorant Garamond',serif;
+    font-size:42px;
+    color:#3e2a27;
+    margin-bottom:8px;
+}
+
+.success-top p{
+    color:#7d6259;
+    font-size:16px;
+}
+
+.success-body{
+    padding:32px;
+}
+
+.order-summary{
+    background:#fefaf7;
+    border:1px solid #f0e2db;
+    border-radius:26px;
+    padding:24px;
+}
+
+.order-summary h3{
+    color:#3e2a27;
+    font-size:22px;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.order-item{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    padding:12px 0;
+    border-bottom:1px solid #eadbd5;
+    color:#5a4a42;
+}
+
+.order-item:last-child{border-bottom:none}
+
+.total-line{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:2px solid #eadbd5;
+}
+
+.total-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:8px;
+}
+
+.discount-row{color:#2e8b57}
+
+.final-row{
+    font-weight:800;
+    font-size:19px;
+    color:#9e2a2f;
+    margin-top:12px;
+}
+
+.action-buttons{
+    display:flex;
+    gap:14px;
+    margin-top:26px;
+    flex-wrap:wrap;
+}
+
+.action-buttons a{
+    flex:1;
+    min-width:180px;
+    padding:14px 18px;
+    border-radius:60px;
+    text-decoration:none;
+    text-align:center;
+    font-weight:700;
+    transition:.2s;
+}
+
+.btn-main{
+    background:#9e2a2f;
+    color:white;
+}
+
+.btn-main:hover{
+    background:#7b2125;
+    transform:translateY(-2px);
+}
+
+.btn-outline{
+    background:white;
+    color:#9e2a2f;
+    border:2px solid #9e2a2f;
+}
+
+.btn-outline:hover{
+    background:#9e2a2f;
+    color:white;
+}
+
+.redirect-note{
+    margin-top:22px;
+    text-align:center;
+    color:#8a7569;
+    font-size:14px;
+}
+
+@media(max-width:700px){
+    .header{
+        margin:15px;
+        flex-direction:column;
+        gap:14px;
+    }
+
+    .success-top h1{font-size:34px}
+
+    .success-body{padding:22px}
+
+    .order-item{
+        flex-direction:column;
+        gap:5px;
+    }
+}
+
+@media print{
+    .header,.action-buttons,.redirect-note{display:none!important}
+    body{background:white}
+    .success-wrapper{padding:0;min-height:auto}
+    .success-card{box-shadow:none;border:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="logo-area" onclick="window.location.href='{{ url_for('index') }}'">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <div class="logo-text">Flower<span>&</span>Shop</div>
+    </div>
+
+    <div class="header-link">
+        <a href="{{ url_for('index') }}">{{ 'الرئيسية' if lang == 'ar' else 'Home' }}</a>
+        <a href="{{ url_for('index') }}#contact-section">{{ 'تواصل معنا' if lang == 'ar' else 'Contact' }}</a>
+
+        <a href="{{ url_for('profile') }}" class="nav-icon">
+            <i class="fas fa-user"></i>
+        </a>
+
+        <a href="{{ url_for('cart') }}" class="nav-icon">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count">{{ session.get('cart', [])|length }}</span>
+        </a>
+    </div>
+</div>
+
+<div class="success-wrapper">
+    <div class="success-card">
+
+        <div class="success-top">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <h1>{{ 'تم الدفع بنجاح' if lang == 'ar' else 'Payment Successful!' }}</h1>
+            <p>{{ 'تم تأكيد طلبك بنجاح.' if lang == 'ar' else 'Your order has been confirmed.' }}</p>
+        </div>
+
+        <div class="success-body">
+            <div class="order-summary">
+                <h3><i class="fas fa-receipt"></i> {{ 'ملخص الطلب' if lang == 'ar' else 'Order Summary' }}</h3>
+
+                {% if order_items %}
+                    {% for item in order_items %}
+                    <div class="order-item">
+                        <span>{{ item.name }} × {{ item.quantity }}</span>
+                        <strong>{{ "%.2f"|format(item.converted_subtotal|float) }} {{ currency }}</strong>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>{{ 'لا توجد منتجات في الطلب.' if lang == 'ar' else 'No order items found.' }}</p>
+                {% endif %}
+
+                <div class="total-line">
+                    <div class="total-row">
+                        <span>{{ 'المجموع الفرعي' if lang == 'ar' else 'Subtotal' }}</span>
+                        <span>{{ "%.2f"|format(total|float) }} {{ currency }}</span>
+                    </div>
+
+                    {% if discount %}
+                    <div class="total-row discount-row">
+                        <span>{{ 'الخصم' if lang == 'ar' else 'Discount' }} ({{ discount }}%)</span>
+                        <span>- {{ "%.2f"|format(discount_amount|float) }} {{ currency }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="total-row final-row">
+                        <span>{{ 'الإجمالي' if lang == 'ar' else 'Total' }}</span>
+                        <span>
+                            {% if discount %}
+                                {{ "%.2f"|format(final_total|float) }}
+                            {% else %}
+                                {{ "%.2f"|format(total|float) }}
+                            {% endif %}
+                            {{ currency }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ url_for('index') }}" class="btn-main">
+                    <i class="fas fa-store"></i> {{ 'إضافة منتجات أخرى' if lang == 'ar' else 'Add more items' }}
+                </a>
+
+                <a href="{{ url_for('order_status', order_id=order_id) }}" class="btn-outline">
+                    <i class="fas fa-box"></i> {{ 'تتبع الطلب' if lang == 'ar' else 'Track Order' }}
+                </a>
+
+                <a href="{{ url_for('invoice', order_id=order.id) }}" class="btn-outline">
+                    <i class="fas fa-print"></i> {{ 'طباعة الفاتورة' if lang == 'ar' else 'Print Invoice' }}
+                </a>
+            </div>
+
+            <div class="redirect-note">
+                {{ 'سيتم تحويلك للرئيسية خلال' if lang == 'ar' else 'Redirecting to homepage in' }}
+                <span id="countdown">60</span>
+                {{ 'ثانية...' if lang == 'ar' else 'seconds...' }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let seconds = 60;
+const countdown = document.getElementById("countdown");
+
+const timer = setInterval(() => {
+    seconds--;
+    if (countdown) countdown.textContent = seconds;
+
+    if (seconds <= 0) {
+        clearInterval(timer);
+        window.location.href = "{{ url_for('index') }}";
+    }
+}, 1000);
+</script>
+
+</body>
+</html>
