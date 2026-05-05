@@ -1,104 +1,224 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Coupons</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8f4f1;
-            padding: 30px;
-            color: #3a2a24;
-        }
+<meta charset="UTF-8">
+<title>Admin Coupons</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        .box {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            max-width: 800px;
-            margin: auto;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-        }
-
-        h1 {
-            color: #5b2c2c;
-        }
-
-        input {
-            padding: 12px;
-            margin: 8px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-        }
-
-        button {
-            padding: 12px 20px;
-            border-radius: 999px;
-            border: none;
-            background: #b63a3a;
-            color: white;
-            cursor: pointer;
-        }
-
-        .coupon {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fcf8f6;
-            padding: 15px;
-            border-radius: 16px;
-            margin-top: 12px;
-            border: 1px solid #eee2dc;
-        }
-
-        .delete {
-            color: white;
-            background: #c96060;
-            padding: 8px 14px;
-            border-radius: 999px;
-            text-decoration: none;
-        }
-
-        .back {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #b63a3a;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',sans-serif;
+  background:#f8f4f1;
+  color:#3a2a24;
+}
+.admin-layout{display:flex;min-height:100vh}
+.sidebar{
+  width:250px;
+  background:linear-gradient(180deg,#b63a3a,#8e2424);
+  color:white;
+  padding:35px 28px;
+}
+.sidebar h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;
+  margin-bottom:35px;
+}
+.sidebar a{
+  display:block;
+  color:white;
+  text-decoration:none;
+  padding:13px 14px;
+  border-radius:14px;
+  margin-bottom:8px;
+  font-weight:600;
+  font-size:14px;
+}
+.sidebar a:hover,.sidebar a.active{
+  background:rgba(255,255,255,.18);
+}
+.main{
+  flex:1;
+  padding:38px 42px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
+.topbar h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;
+  color:#3a2a24;
+}
+.admin-badge{
+  background:white;
+  padding:10px 18px;
+  border-radius:999px;
+  color:#8e2424;
+  box-shadow:0 8px 24px rgba(0,0,0,.04);
+  font-weight:600;
+}
+.card{
+  background:white;
+  border:1px solid #eee2dc;
+  border-radius:24px;
+  padding:26px;
+  box-shadow:0 8px 24px rgba(0,0,0,.04);
+  margin-bottom:26px;
+}
+.card h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  margin-bottom:18px;
+}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:14px;
+}
+input{
+  padding:14px 16px;
+  border:1px solid #eadfda;
+  border-radius:16px;
+  outline:none;
+  background:#fcf8f6;
+  color:#3a2a24;
+}
+input:focus{
+  border-color:#b63a3a;
+}
+button{
+  border:none;
+  border-radius:999px;
+  padding:14px 24px;
+  background:#b63a3a;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+button:hover{background:#962d2d}
+.table-card{
+  background:white;
+  border:1px solid #eee2dc;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.04);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:18px 22px;
+  text-align:left;
+  border-bottom:1px solid #f0e5df;
+  font-size:14px;
+}
+th{
+  color:#7d625b;
+  background:#fcf8f6;
+  font-weight:700;
+}
+.code{
+  font-weight:800;
+  color:#5b2c2c;
+}
+.discount{
+  display:inline-block;
+  background:#fff1d8;
+  color:#a86d00;
+  padding:7px 13px;
+  border-radius:999px;
+  font-weight:700;
+}
+.delete-btn{
+  background:#c96060;
+  color:white;
+  padding:9px 15px;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+}
+.delete-btn:hover{background:#a33b3b}
+.empty{
+  padding:35px;
+  text-align:center;
+  color:#9b8179;
+}
+@media(max-width:900px){
+  .admin-layout{flex-direction:column}
+  .sidebar{width:100%}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
 </head>
+
 <body>
+<div class="admin-layout">
 
-<div class="box">
-    <a href="{{ url_for('admin_dashboard') }}">← Back to Admin</a>
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+       <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_products') }}">Manage Products</a>
+        <a href="{{ url_for('admin_orders') }}">Manage Orders</a>
+        <a href="{{ url_for('admin_users') }}">Manage Users</a>
+        <a href="{{ url_for('admin_messages') }}" class="active">Manage Messages</a>
+        <a href="{{ url_for('index') }}">Back to Website</a>
+  </aside>
 
-    <h1>Manage Coupons</h1>
+  <main class="main">
+    <div class="topbar">
+      <h1>Manage Coupons</h1>
+      <span class="admin-badge">Welcome, Admin</span>
+    </div>
 
-    <form action="{{ url_for('add_coupon') }}" method="POST">
+    <section class="card">
+      <h2>Add New Coupon</h2>
+
+      <form action="{{ url_for('add_coupon') }}" method="POST" class="form-row">
         <input type="text" name="code" placeholder="Coupon Code" required>
-        <input type="number" name="discount" placeholder="Discount %" required>
+        <input type="number" name="discount" placeholder="Discount %" min="1" max="100" required>
         <button type="submit">Add Coupon</button>
-    </form>
+      </form>
+    </section>
 
-    <hr>
+    <section class="table-card">
+      {% if coupons %}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Coupon Code</th>
+            <th>Discount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-    {% if coupons %}
-        {% for c in coupons %}
-            <div class="coupon">
-                <div>
-                    <strong>{{ c.code }}</strong>
-                    <p>{{ c.discount }}% discount</p>
-                </div>
+        <tbody>
+          {% for c in coupons %}
+          <tr>
+            <td>#{{ c.id }}</td>
+            <td class="code">{{ c.code }}</td>
+            <td><span class="discount">{{ c.discount }}%</span></td>
+            <td>
+              <a href="{{ url_for('delete_coupon', id=c.id) }}" class="delete-btn"
+                 onclick="return confirm('Delete this coupon?')">
+                Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <div class="empty">No coupons yet.</div>
+      {% endif %}
+    </section>
+  </main>
 
-                <a href="{{ url_for('delete_coupon', id=c.id) }}" class="delete">
-                    Delete
-                </a>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No coupons yet.</p>
-    {% endif %}
 </div>
-
 </body>
 </html>
