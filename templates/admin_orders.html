@@ -118,7 +118,7 @@
             color: #1d5f99;
         }
 
-        .completed {
+        .Delivered {
             background: #dff7e3;
             color: #1f7a36;
         }
@@ -204,7 +204,7 @@
             <span class="status
                 {% if order.status == 'Pending' %}pending
                 {% elif order.status == 'Shipped' %}shipped
-                {% elif order.status == 'Completed' %}completed
+                {% elif order.status == 'Delivered' %}Delivered
                 {% elif order.status == 'Cancelled' %}cancelled
                 {% endif %}">
                 {{ order.status }}
@@ -215,7 +215,7 @@
                 <select name="status">
                     <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
                     <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
-                    <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
                     <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
                 </select>
         </td>
