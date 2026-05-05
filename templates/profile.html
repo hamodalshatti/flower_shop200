@@ -509,7 +509,43 @@
       color: #b69b92;
       font-style: italic;
     }
+.logout-btn {
+  margin-top: 18px;
+  width: 100%;
+  background: linear-gradient(135deg, #b63a3a, #7b2b2b);
+  color: white;
+  padding: 13px 18px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.3s ease;
+}
 
+.logout-btn:hover {
+  background: linear-gradient(135deg, #962d2d, #5f1d1d);
+  transform: translateY(-2px);
+}
+
+.track-order-btn {
+  display: inline-block;
+  margin-top: 8px;
+  background: #5b2c2c;
+  color: white;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.track-order-btn:hover {
+  background: #b63a3a;
+  transform: translateY(-2px);
+}
     /* Modal */
     .modal {
       display: none;
@@ -629,6 +665,10 @@
       <button class="menu-item" data-section="address"><i class="fa-solid fa-location-dot"></i> Addresses</button>
       <button class="menu-item" data-section="settings"><i class="fa-solid fa-gear"></i> Settings</button>
     </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+  <i class="fa-solid fa-right-from-bracket"></i>
+  Logout
+</a>
   </aside>
 
   <section class="profile-content">
@@ -774,8 +814,10 @@ function renderAll() {
         <div>
           <span class="status ${ord.status === 'Delivered' ? 'delivered' : 'pending'}">${ord.status}</span>
           <p class="price">${ord.total} JOD</p>
-          <button class="small-outline remove-order" data-id="${ord.id}">Remove</button>
-        </div>
+<a href="/order-status/${ord.id}" class="track-order-btn">
+  <i class="fa-solid fa-truck-fast"></i> Track Order
+</a>
+<button class="small-outline remove-order" data-id="${ord.id}">Remove</button>        </div>
       </div>
     `).join('');
 
