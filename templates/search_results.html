@@ -1,67 +1,312 @@
 <!DOCTYPE html>
 <html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <title>Search Results</title>
 
+<style>
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+        background:
+            radial-gradient(circle at top left, rgba(236, 190, 180, 0.45), transparent 35%),
+            radial-gradient(circle at bottom right, rgba(168, 132, 117, 0.25), transparent 40%),
+            linear-gradient(135deg, #fffaf7, #f8eee9);
+        color: #3b2a25;
+    }
+
+    .search-page {
+        padding: 55px 6% 70px;
+    }
+
+    .search-hero {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+
+    .search-label {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(120, 82, 70, 0.18);
+        color: #8a6155;
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        box-shadow: 0 12px 30px rgba(98, 63, 52, 0.08);
+    }
+
+    .search-title {
+        margin: 18px 0 10px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(38px, 6vw, 72px);
+        font-weight: 700;
+        color: #4a2e28;
+        line-height: 1;
+    }
+
+    .keyword {
+        color: #b47b6f;
+        font-style: italic;
+    }
+
+    .search-subtitle {
+        max-width: 620px;
+        margin: 0 auto;
+        color: #7b625b;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .results-wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+    }
+
+    .luxury-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 28px;
+    }
+
+    .luxury-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(123, 86, 75, 0.15);
+        box-shadow: 0 24px 60px rgba(82, 52, 43, 0.13);
+        transition: 0.35s ease;
+    }
+
+    .luxury-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 32px 80px rgba(82, 52, 43, 0.2);
+    }
+
+    .image-box {
+        height: 290px;
+        padding: 18px;
+        background: linear-gradient(180deg, #fff6f0, #f1dcd4);
+    }
+
+    .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 22px;
+        display: block;
+    }
+
+    .card-content {
+        padding: 22px;
+    }
+
+    .product-name {
+        margin: 0 0 10px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 25px;
+        font-weight: 700;
+        color: #4a302a;
+        line-height: 1.1;
+    }
+
+    .price {
+        margin: 0 0 18px;
+        color: #9c6a5f;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .cart-form {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .qty {
+        width: 64px;
+        height: 42px;
+        border-radius: 14px;
+        border: 1px solid rgba(95, 61, 52, 0.2);
+        background: #fffaf7;
+        text-align: center;
+        font-weight: 600;
+        color: #4a302a;
+        outline: none;
+    }
+
+    .luxury-btn {
+        flex: 1;
+        height: 43px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #7b534b, #b8897c);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 14px 28px rgba(120, 82, 70, 0.25);
+        transition: 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .luxury-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 38px rgba(120, 82, 70, 0.35);
+    }
+
+    .empty-box {
+        max-width: 620px;
+        margin: 40px auto;
+        padding: 55px 30px;
+        text-align: center;
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(123, 86, 75, 0.15);
+        box-shadow: 0 24px 60px rgba(82, 52, 43, 0.12);
+    }
+
+    .empty-box h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        margin: 0 0 10px;
+        color: #4a302a;
+    }
+
+    .empty-box p {
+        color: #7b625b;
+        margin-bottom: 25px;
+    }
+
+    .bottom-action {
+        text-align: center;
+        margin-top: 45px;
+    }
+
+    .back-btn {
+        padding: 14px 34px;
+        width: auto;
+        flex: none;
+    }
+
+    @media (max-width: 600px) {
+        .search-page {
+            padding: 35px 18px 55px;
+        }
+
+        .image-box {
+            height: 250px;
+        }
+
+        .cart-form {
+            flex-direction: column;
+        }
+
+        .qty,
+        .luxury-btn {
+            width: 100%;
+        }
+    }
+</style>
 </head>
 
 <body>
 
-<h1 style="text-align:center;">
-    {{ 'نتائج البحث عن' if lang == 'ar' else 'Search Results for' }} "{{ keyword }}"
-</h1>
+<main class="search-page">
 
-<div class="trending-cards">
+    <section class="search-hero">
+        <span class="search-label">
+            {{ 'نتائج البحث' if lang == 'ar' else 'Luxury Search' }}
+        </span>
 
-{% if products %}
+        <h1 class="search-title">
+            {{ 'نتائج البحث عن' if lang == 'ar' else 'Search Results for' }}
+            <span class="keyword">"{{ keyword }}"</span>
+        </h1>
 
-{% for product in products %}
+        <p class="search-subtitle">
+            {{ 'اكتشف باقات مختارة بعناية تناسب ذوقك وتمنح مناسبتك لمسة فاخرة.' if lang == 'ar' else 'Discover carefully selected floral pieces that match your taste and add a luxurious touch to every moment.' }}
+        </p>
+    </section>
 
-<div class="card">
+    <section class="results-wrap">
 
-    <img class="thumb" src="{{ url_for('static', filename=product.image) }}">
+        {% if products %}
 
-    <div class="card-info">
+        <div class="luxury-grid">
 
-        <div class="card-name">
-            <h3>{{ product.name }}</h3>
-            <p class="price">{{ "%.2f"|format(product.converted_price|float) }} {{ currency }}</p>
+            {% for product in products %}
+
+            <div class="luxury-card">
+
+                <div class="image-box">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                </div>
+
+                <div class="card-content">
+
+                    <h3 class="product-name">{{ product.name }}</h3>
+
+                    <p class="price">
+                        {{ "%.2f"|format(product.converted_price|float) }} {{ currency }}
+                    </p>
+
+                    <form class="cart-form" action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="name" value="{{ product.name }}">
+                        <input type="hidden" name="price" value="{{ product.price }}">
+                        <input type="hidden" name="image" value="{{ product.image }}">
+
+                        <input class="qty" type="number" name="quantity" value="1" min="1">
+
+                        <button class="luxury-btn" type="submit">
+                            {{ 'أضف للسلة' if lang == 'ar' else 'Add to Cart' }}
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
         </div>
 
-        <form action="{{ url_for('add_to_cart') }}" method="POST">
-            <input type="hidden" name="name" value="{{ product.name }}">
-            <input type="hidden" name="price" value="{{ product.price }}">
-            <input type="hidden" name="image" value="{{ product.image }}">
+        {% else %}
 
-            <input type="number" name="quantity" value="1" min="1" style="width:50px">
+        <div class="empty-box">
+            <h2>{{ 'لا توجد نتائج' if lang == 'ar' else 'No Products Found' }}</h2>
+            <p>
+                {{ 'جرّب البحث بكلمة أخرى أو ارجع للمتجر لمشاهدة جميع المنتجات.' if lang == 'ar' else 'Try another keyword or return to the shop to explore all products.' }}
+            </p>
 
-            <button class="btn">Add to Cart</button>
-        </form>
+            <a href="{{ url_for('index') }}" class="luxury-btn back-btn">
+                {{ 'العودة للمتجر' if lang == 'ar' else 'Back to Shop' }}
+            </a>
+        </div>
 
+        {% endif %}
+
+    </section>
+
+    {% if products %}
+    <div class="bottom-action">
+        <a href="{{ url_for('index') }}" class="luxury-btn back-btn">
+            {{ 'العودة للمتجر' if lang == 'ar' else 'Back to Shop' }}
+        </a>
     </div>
+    {% endif %}
 
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<p style="text-align:center;">No products found.</p>
-
-{% endif %}
-
-</div>
-
-<br>
-
-<div style="text-align:center;">
-    <a href="{{ url_for('index') }}" class="btn">Back to Shop</a>
-</div>
+</main>
 
 </body>
 </html>
