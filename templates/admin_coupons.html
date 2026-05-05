@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Coupons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f4f1;
+            padding: 30px;
+            color: #3a2a24;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        h1 {
+            color: #5b2c2c;
+        }
+
+        input {
+            padding: 12px;
+            margin: 8px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: none;
+            background: #b63a3a;
+            color: white;
+            cursor: pointer;
+        }
+
+        .coupon {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fcf8f6;
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 12px;
+            border: 1px solid #eee2dc;
+        }
+
+        .delete {
+            color: white;
+            background: #c96060;
+            padding: 8px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #b63a3a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <a href="{{ url_for('admin') }}" class="back">← Back to Admin</a>
+
+    <h1>Manage Coupons</h1>
+
+    <form action="{{ url_for('add_coupon') }}" method="POST">
+        <input type="text" name="code" placeholder="Coupon Code" required>
+        <input type="number" name="discount" placeholder="Discount %" required>
+        <button type="submit">Add Coupon</button>
+    </form>
+
+    <hr>
+
+    {% if coupons %}
+        {% for c in coupons %}
+            <div class="coupon">
+                <div>
+                    <strong>{{ c.code }}</strong>
+                    <p>{{ c.discount }}% discount</p>
+                </div>
+
+                <a href="{{ url_for('delete_coupon', id=c.id) }}" class="delete">
+                    Delete
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No coupons yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
