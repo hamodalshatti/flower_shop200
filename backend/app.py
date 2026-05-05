@@ -1423,6 +1423,52 @@ def add_favorite_to_cart(product_id):
     session.modified = True
 
     return {"success": True, "cart_count": len(cart)}
+    
+@app.route("/admin/coupons")
+def admin_coupons():
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM coupons")
+    coupons = cursor.fetchall()
+
+    cursor.close()
+    db.close()
+
+    return render_template("admin_coupons.html", coupons=coupons)
+
+@app.route("/admin/coupons/add", methods=["POST"])
+def add_coupon():
+    code = request.form.get("code")
+    discount = request.form.get("discount")
+
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute(
+        "INSERT INTO coupons (code, discount) VALUES (%s, %s)",
+        (code, discount)
+    )
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return redirect(url_for("admin_coupons"))
+
+@app.route("/admin/coupons/delete/<int:id>")
+def delete_coupon(id):
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    cursor.execute("DELETE FROM coupons WHERE id = %s", (id,))
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for("admin_coupons"))
+
 # --------------------------------
 # تشغيل السيرفر
 # --------------------------------
