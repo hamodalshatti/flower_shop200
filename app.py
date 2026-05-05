@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
 from flask import jsonify
 from decimal import Decimal
-
+import os
+from urllib.parse import urlparse
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = "A126109a@@"
 
@@ -31,6 +32,21 @@ def get_country_from_currency(currency):
     return countries.get(currency, "Jordan")
 
 def get_db_connection():
+    mysql_url = os.getenv("MYSQL_PUBLIC_URL")
+
+    if mysql_url:
+        parsed = urlparse(mysql_url)
+
+        return mysql.connector.connect(
+            host=parsed.hostname,
+            user=parsed.username,
+            password=parsed.password,
+            database=parsed.path.lstrip("/"),
+            port=parsed.port,
+            connection_timeout=10,
+            use_pure=True
+        )
+
     return mysql.connector.connect(
         host="127.0.0.1",
         user="root",
