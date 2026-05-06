@@ -714,9 +714,8 @@ def process_payment():
         address,
         payment_method,
         total,
-        "Pending",
-        card_message
-        
+        card_message,
+        "Pending"
     ))
 
     order_id = cursor.lastrowid
