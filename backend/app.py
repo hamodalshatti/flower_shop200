@@ -1085,7 +1085,10 @@ def admin_orders():
     cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("""
-        SELECT orders.*, users.name
+        SELECT 
+            orders.*,
+            users.name AS customer_name,
+            users.email AS customer_email
         FROM orders
         LEFT JOIN users ON orders.user_id = users.id
         ORDER BY orders.id DESC
