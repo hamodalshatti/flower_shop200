@@ -118,7 +118,7 @@
             color: #1d5f99;
         }
 
-        .Delivered {
+        .completed {
             background: #dff7e3;
             color: #1f7a36;
         }
@@ -166,9 +166,9 @@
 
     <div class="sidebar">
         <h2>Admin Panel</h2>
-         <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
         <a href="{{ url_for('admin_products') }}">Manage Products</a>
-        <a href="{{ url_for('admin_orders') }}">Manage Orders</a>
+        <a href="{{ url_for('admin_orders') }}" class="active">Manage Orders</a>
         <a href="{{ url_for('admin_users') }}">Manage Users</a>
         <a href="{{ url_for('admin_messages') }}">Manage Messages</a>
         <a href="{{ url_for('admin_coupons') }}" class="btn">Manage Coupons</a>
@@ -184,7 +184,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Order ID</th>
+                   <th>Order ID</th>
                         <th>Customer</th>
                         <th>Recipient_name</th>
                         <th>card_message</th>
@@ -202,8 +202,8 @@
     <tr>
         <td>#{{ order.id }}</td>
         <td>{{ order.customer_name  or 'Unknown' }}</td>
-        <td>{{ order.card_message or 'NO Message' }}</td>     
-        <td>{{ order.Recipient_name }}</td>
+        <td>{{ order.Recipient_name  }}</td>
+        <td>{{ order.card_messag or 'No Message'  }}</td>
         <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
         <td>
