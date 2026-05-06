@@ -576,6 +576,9 @@
           <input type="checkbox" id="anonymousOption">
           <label for="anonymousOption"><i class="fas fa-eye-slash"></i> Hide my name from the receiver</label>
         </div>
+         <div id="anonymousMessage"style="display:none; color:#c0392b; margin-top:10px; font-size:14px;">
+                  Your name will be hidden from the recipient
+      </div>
       </div>
 
       <!-- Hidden inputs for Flask -->
@@ -824,6 +827,19 @@
 
     syncHiddenFields();
   });
+  const anonymousCheckbox = document.getElementById("anonymousOption");
+
+anonymousCheckbox.addEventListener("change", function () {
+
+    const msg = document.getElementById("anonymousMessage");
+
+    if (this.checked) {
+        msg.style.display = "block";
+    } else {
+        msg.style.display = "none";
+    }
+
+});
 </script>
 
 </body>
