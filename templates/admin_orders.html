@@ -197,8 +197,8 @@
     {% for order in orders %}
     <tr>
         <td>#{{ order.id }}</td>
-        <td>{{ order.full_name if order.full_name else 'Unknown' }}</td>
-        <td>Order from {{ order.email if order.email else 'No Email' }}</td>
+        <td>{{ order.Recipient_name or order.customer_name or 'Unknown' }}</td>
+        <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
         <td>
             <span class="status
