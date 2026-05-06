@@ -186,6 +186,7 @@
                     <tr>
                         <th>Order ID</th>
                         <th>Customer</th>
+                        <th>Recipient_name</th>
                         <th>Email</th>
                         <th>Total</th>
                         <th>Payment</th>
@@ -200,6 +201,7 @@
     <tr>
         <td>#{{ order.id }}</td>
         <td>{{ order.customer_name  or 'Unknown' }}</td>
+        <td>{{ order.Recipient_name }}</td>
         <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
         <td>
