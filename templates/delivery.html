@@ -613,11 +613,12 @@
 </div>
 <script>
   function updateCartBadge() {
-    let cart = JSON.parse(localStorage.getItem('flowerCart')) || [];
-    let totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const badge = document.getElementById('cartBadge');
-    if (badge) badge.innerText = totalItems;
-  }
+
+    if (badge) {
+        badge.innerText = "{{ session.get('cart', [])|length }}";
+    }
+}
 
   function updateCountryInfo() {
     const select = document.getElementById('countrySelect');
