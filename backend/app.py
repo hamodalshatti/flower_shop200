@@ -1172,14 +1172,14 @@ def login():
 @app.route("/check_login", methods=["POST"])
 def check_login():
 
-    email = request.form.get("email")
-    password = request.form.get("password")
+    email = (request.form.get("email") or "").strip()
+    password = (request.form.get("password") or "").strip()
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute(
-        "SELECT * FROM users WHERE email=%s AND password=%s",
+        "SELECT * FROM users WHERE LOWER(email)=LOWER(%s) AND password=%s",
         (email, password)
     )
 
@@ -1443,7 +1443,7 @@ def add_favorite_to_cart(product_id):
     session.modified = True
 
     return {"success": True, "cart_count": len(cart)}
-    
+#الكوبونات
 @app.route("/admin/coupons")
 def admin_coupons():
     db = get_db_connection()
@@ -1488,7 +1488,7 @@ def delete_coupon(id):
     db.close()
 
     return redirect(url_for("admin_coupons"))
-
+#الكوبونات
 # --------------------------------
 # تشغيل السيرفر
 # --------------------------------
