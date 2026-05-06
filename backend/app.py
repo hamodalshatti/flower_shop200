@@ -703,10 +703,11 @@ def process_payment():
             phone,
             address,
             payment_method,
+            card_messag,
             total,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         user_id,
         Recipient_name,
@@ -714,6 +715,7 @@ def process_payment():
         address,
         payment_method,
         total,
+        card_messag,
         "Pending"
     ))
 
