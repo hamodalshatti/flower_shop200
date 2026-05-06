@@ -374,7 +374,7 @@ body{
 
             <div class="action-buttons">
                 <a href="{{ url_for('index') }}" class="btn-main">
-                    <i class="fas fa-store"></i> {{ 'إضافة منتجات أخرى' if lang == 'ar' else 'Add more items' }}
+                    <i class="fas fa-store"></i> {{ 'إضافة منتجات أخرى' if lang == 'ar' else 'make another order' }}
                 </a>
 
                 <a href="{{ url_for('order_status', order_id=order_id) }}" class="btn-outline">
