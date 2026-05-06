@@ -317,6 +317,32 @@
             font-size: 12px;
         }
 
+        /* General error banner */
+        .general-error {
+            background: #fee2e2;
+            border-left: 4px solid #e53e3e;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #b91c1c;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20% { transform: translateX(-6px); }
@@ -328,7 +354,6 @@
             animation: shake 0.35s ease-in-out 0s 1;
         }
 
-        
         @media (max-width: 560px) {
             .signin-card {
                 padding: 32px 24px;
@@ -355,7 +380,6 @@
         <div class="logo-icon"><i class="fas fa-leaf"></i></div>
         <div class="logo-text">Flower<span>&</span>Shop</div>
     </div>
-    <!-- header links intentionally omitted for clean sign-in page -->
 </div>
 
 <div class="signin-container">
@@ -365,24 +389,30 @@
             <p>Sign in to continue your flower journey</p>
         </div>
 
-        <!-- Login form: action points to check_login (Flask route) -->
-        <form class="signin-form" action="{{ url_for('check_login') }}" method="POST" id="loginForm">
+        <!-- General error banner for wrong password -->
+        <div id="generalErrorBanner" style="display: none;" class="general-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="generalErrorMessage">Invalid email or password. Please try again.</span>
+        </div>
+
+        <!-- Login form -->
+        <form class="signin-form" action="#" method="POST" id="loginForm">
             <!-- Email Field -->
             <div class="form-group" id="emailGroup">
                 <label>Email address</label>
                 <div class="input-wrapper">
-                    <input type="email" name="email" id="emailInput" placeholder="Enter your email" autocomplete="email" required>
+                    <input type="email" name="email" id="emailInput" placeholder="Enter your email" autocomplete="email">
                 </div>
                 <div class="error-message" id="emailError" style="display: none;">
                     <i class="fas fa-exclamation-circle"></i> <span id="emailErrorText">Invalid email format</span>
                 </div>
             </div>
 
-            <!-- Password Field with Eye Toggle INSIDE the input (correct position) -->
+            <!-- Password Field with Eye Toggle -->
             <div class="form-group" id="passwordGroup">
                 <label>Password</label>
                 <div class="input-wrapper">
-                    <input type="password" name="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" required>
+                    <input type="password" name="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password">
                     <span class="password-toggle" id="togglePasswordBtn">
                         <i class="far fa-eye" id="eyeIcon"></i>
                     </span>
@@ -404,7 +434,7 @@
             </button>
         </form>
 
-        <!-- Sign Up Section - clearly visible and well placed -->
+        <!-- Sign Up Section -->
         <div class="signup-section">
             <p class="signup-text">Don't have an account yet?</p>
             <a href="{{ url_for('signup') }}" class="signup-link-btn">
@@ -419,7 +449,7 @@
 </div>
 
 <script>
-   
+    // DOM Elements
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
     const emailErrorDiv = document.getElementById('emailError');
@@ -429,8 +459,10 @@
     const loginForm = document.getElementById('loginForm');
     const passwordToggleBtn = document.getElementById('togglePasswordBtn');
     const eyeIcon = document.getElementById('eyeIcon');
+    const generalErrorBanner = document.getElementById('generalErrorBanner');
+    const generalErrorMessage = document.getElementById('generalErrorMessage');
 
-   
+    // Helper: Set field error
     function setFieldError(inputElement, errorDiv, errorMessage, isValid, customTextSpan = null) {
         if (!isValid) {
             inputElement.classList.add('error-input');
@@ -439,7 +471,6 @@
                 if (msgSpan) msgSpan.innerText = errorMessage;
                 errorDiv.style.display = 'flex';
             }
-            // Add shake effect on the input
             inputElement.classList.add('shake-effect');
             setTimeout(() => {
                 inputElement.classList.remove('shake-effect');
@@ -452,7 +483,23 @@
         }
     }
 
-    // Validate email format (standard)
+    // Show general error banner
+    function showGeneralError(message) {
+        generalErrorMessage.innerText = message;
+        generalErrorBanner.style.display = 'flex';
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+            if (generalErrorBanner) {
+                generalErrorBanner.style.display = 'none';
+            }
+        }, 5000);
+    }
+
+    function hideGeneralError() {
+        generalErrorBanner.style.display = 'none';
+    }
+
+    // Validate email format
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
         return emailRegex.test(email);
@@ -463,7 +510,7 @@
         return password && password.trim().length > 0;
     }
 
-    // Real-time live validation: clear red as user types
+    // Real-time validation: clear red as user types
     emailInput.addEventListener('input', function() {
         const val = emailInput.value.trim();
         if (val === '') {
@@ -475,6 +522,8 @@
         } else {
             setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
         }
+        // Hide general error when user starts typing
+        hideGeneralError();
     });
 
     passwordInput.addEventListener('input', function() {
@@ -488,9 +537,10 @@
         } else {
             setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
         }
+        hideGeneralError();
     });
 
-    // Password toggle functionality (show/hide with eye icon) - perfectly placed inside input
+    // Password toggle functionality
     function togglePasswordVisibility() {
         const currentType = passwordInput.getAttribute('type');
         if (currentType === 'password') {
@@ -502,11 +552,9 @@
             eyeIcon.classList.remove('fa-eye-slash');
             eyeIcon.classList.add('fa-eye');
         }
-        // Keep focus on the password field for better UX
         passwordInput.focus();
     }
 
-    // Attach toggle event
     if (passwordToggleBtn) {
         passwordToggleBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -515,11 +563,33 @@
         });
     }
 
-    // Form submission handler: validate before sending to backend
+    // ========== SIMULATED BACKEND VALIDATION FOR DEMO ==========
+    // This simulates checking credentials against a database.
+    // In production, this would be handled by your Flask backend.
+    // For demo purposes, we have a mock user: email: user@example.com, password: flower123
+    const MOCK_USERS = [
+        { email: "user@example.com", password: "flower123" },
+        { email: "admin@flowershop.com", password: "admin123" },
+        { email: "demo@flower.com", password: "demo123" }
+    ];
+
+    function checkCredentials(email, password) {
+        // Normalize email to lowercase for comparison
+        const normalizedEmail = email.toLowerCase().trim();
+        return MOCK_USERS.some(user => 
+            user.email.toLowerCase() === normalizedEmail && user.password === password
+        );
+    }
+
+    // Form submission handler with password validation
     loginForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent actual form submission for demo
         let isValidForm = true;
         const emailVal = emailInput.value.trim();
         const passwordVal = passwordInput.value;
+
+        // Reset error states
+        hideGeneralError();
 
         // Validate email
         if (!emailVal) {
@@ -540,14 +610,12 @@
             setFieldError(passwordInput, passwordErrorDiv, '', true, passwordErrorText);
         }
 
-      
+        // If basic validation fails, stop here
         if (!isValidForm) {
-            e.preventDefault();
             const card = document.querySelector('.signin-card');
             card.classList.add('shake-effect');
             setTimeout(() => card.classList.remove('shake-effect'), 450);
             
-           
             if (!emailVal || !isValidEmail(emailVal)) {
                 emailInput.focus();
             } else if (!passwordVal || passwordVal.trim() === '') {
@@ -556,17 +624,75 @@
             return false;
         }
 
-        return true;
+        // ========== CHECK PASSWORD AGAINST DATABASE ==========
+        // This is where we verify if the password is correct.
+        // If password is wrong, show error message with red boxes.
+        const isAuthenticated = checkCredentials(emailVal, passwordVal);
+
+        if (!isAuthenticated) {
+            // WRONG PASSWORD OR EMAIL - Show error with red borders
+            setFieldError(emailInput, emailErrorDiv, 'Invalid email or password', false, emailErrorText);
+            setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password', false, passwordErrorText);
+            
+            // Show general error banner
+            showGeneralError('❌ Invalid email or password. Please try again.');
+            
+            // Shake the card for visual feedback
+            const card = document.querySelector('.signin-card');
+            card.classList.add('shake-effect');
+            setTimeout(() => card.classList.remove('shake-effect'), 500);
+            
+            // Clear password field for security (like real websites)
+            passwordInput.value = '';
+            passwordInput.focus();
+            
+            return false;
+        }
+
+        // SUCCESS: Password is correct!
+        // Show success message and redirect (simulated)
+        showGeneralError('✓ Login successful! Redirecting...');
+        setTimeout(() => {
+            // In real app, redirect to dashboard or home page
+            window.location.href = '/';
+        }, 1000);
+        
+        return false;
     });
 
+    // Clear errors on focus
+    emailInput.addEventListener('focus', function() {
+        if (emailInput.classList.contains('error-input')) {
+            emailInput.classList.remove('error-input');
+            emailErrorDiv.style.display = 'none';
+            hideGeneralError();
+        }
+    });
     
+    passwordInput.addEventListener('focus', function() {
+        if (passwordInput.classList.contains('error-input')) {
+            passwordInput.classList.remove('error-input');
+            passwordErrorDiv.style.display = 'none';
+            hideGeneralError();
+        }
+    });
+
+    // Set initial eye icon state
+    if (passwordInput.type === 'password') {
+        eyeIcon.classList.add('fa-eye');
+        eyeIcon.classList.remove('fa-eye-slash');
+    } else {
+        eyeIcon.classList.add('fa-eye-slash');
+    }
+
+    // Handle server-side errors from backend (if any)
     function handleServerSideErrors() {
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
         if (error === 'invalid_credentials') {
             setFieldError(emailInput, emailErrorDiv, 'Invalid email or password. Please try again.', false, emailErrorText);
             setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password', false, passwordErrorText);
-          
+            showGeneralError('Invalid email or password. Please try again.');
             passwordInput.value = '';
             emailInput.focus();
             const card = document.querySelector('.signin-card');
@@ -577,33 +703,10 @@
             setFieldError(passwordInput, passwordErrorDiv, 'This field is required', false, passwordErrorText);
         } else if (error === 'account_locked') {
             setFieldError(emailInput, emailErrorDiv, 'Account temporarily locked. Contact support.', false, emailErrorText);
+            showGeneralError('Account temporarily locked. Please contact support.');
         }
     }
 
-    
-    emailInput.addEventListener('focus', function() {
-        if (emailInput.classList.contains('error-input')) {
-            emailInput.classList.remove('error-input');
-            emailErrorDiv.style.display = 'none';
-        }
-    });
-    
-    passwordInput.addEventListener('focus', function() {
-        if (passwordInput.classList.contains('error-input')) {
-            passwordInput.classList.remove('error-input');
-            passwordErrorDiv.style.display = 'none';
-        }
-    });
-
-    
-    if (passwordInput.type === 'password') {
-        eyeIcon.classList.add('fa-eye');
-        eyeIcon.classList.remove('fa-eye-slash');
-    } else {
-        eyeIcon.classList.add('fa-eye-slash');
-    }
-
-    
     window.addEventListener('DOMContentLoaded', function() {
         handleServerSideErrors();
         if (passwordToggleBtn) {
@@ -611,7 +714,7 @@
         }
     });
 
-    
+    // Additional style for animations
     const style = document.createElement('style');
     style.textContent = `
         .input-wrapper {
@@ -631,22 +734,22 @@
         .form-group input {
             padding-right: 52px;
         }
-        .shake-effect {
-            animation: shake 0.32s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-        }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-3px); }
-            80% { transform: translateX(3px); }
-            100% { transform: translateX(0); }
-        }
         .signup-link-btn {
             transition: all 0.2s ease;
         }
+        .general-error {
+            animation: slideDown 0.3s ease;
+        }
     `;
     document.head.appendChild(style);
+
+    
+    console.log('Demo credentials - Email: user@example.com, Password: flower123');
 </script>
+
+
+<div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: #ccb9b0; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 20px;">
+    Demo: user@example.com / flower123
+</div>
 </body>
 </html>
