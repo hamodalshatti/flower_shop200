@@ -1190,7 +1190,10 @@ def check_login():
 
     if user:
         session["user_id"] = user["id"]
+        session["user_name"] = user["name"]
+
         return redirect(url_for("index"))
+
     else:
         return render_template("login.html", error="Email or password is incorrect")
 
