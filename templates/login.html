@@ -435,7 +435,9 @@
                 <label class="remember-me">
                     <input type="checkbox" name="remember" id="rememberCheckbox"> Remember me
                 </label>
-                <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+               <a href="{{ url_for('forgot_pass') }}" class="forgot-password">
+    Forgot password?
+</a>
             </div>
 
             <button type="submit" class="btn signin-btn" id="submitBtn">
