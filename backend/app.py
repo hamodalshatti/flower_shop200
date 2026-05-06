@@ -703,12 +703,11 @@ def process_payment():
             phone,
             address,
             payment_method,
-            card_message,
             total,
+            card_messag,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, (
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s) """, (
         user_id,
         Recipient_name,
         phone,
@@ -738,6 +737,7 @@ def process_payment():
     db.close()
 
     session.pop("cart", None)
+    session.modified = True
 
     return redirect(url_for("payment_success", order_id=order_id))
 
