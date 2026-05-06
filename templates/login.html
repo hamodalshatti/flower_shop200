@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
-
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Sign In | Flower Shop</title>
+    
+    <!-- Google Fonts for consistent styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<title>Sign In - Flower Shop</title>
-<style>  * {
+    
+    <style>
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -24,14 +21,12 @@
             font-family: 'Inter', sans-serif;
             color: #2c241f;
             scroll-behavior: smooth;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
+        /* Header styling matching the elegant flower shop design */
         .header {
             display: flex;
             justify-content: space-between;
@@ -51,6 +46,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .logo-area:hover {
+            opacity: 0.85;
         }
 
         .logo-icon {
@@ -79,150 +81,572 @@
             font-weight: 700;
         }
 
-        .header-link {
+        /* Sign-in container (centered card) */
+        .signin-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 24px;
+            margin: 20px auto;
+        }
+
+        .signin-card {
+            max-width: 520px;
+            width: 100%;
+            background: white;
+            border-radius: 48px;
+            padding: 48px 44px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.12);
+            border: 1px solid #f0e4dc;
+            transition: all 0.2s ease;
+        }
+
+        .signin-header {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+        .signin-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #3e2a27;
+            margin-bottom: 10px;
+        }
+
+        .signin-header p {
+            color: #7f6a60;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* Form group with relative container for toggle positioning */
+        .form-group {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #2c241f;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 48px 14px 18px;
+            border-radius: 60px;
+            border: 1.5px solid #eedfd7;
+            background: #fffdfb;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            border-color: #9e2a2f;
+            box-shadow: 0 0 0 3px rgba(158,42,47,0.08);
+        }
+
+        /* Error state: red border + subtle background */
+        .form-group input.error-input {
+            border-color: #e53e3e;
+            background-color: #fff8f8;
+        }
+
+        /* Password toggle button inside input - perfectly aligned */
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #9e2a2f;
+            background: transparent;
+            border-radius: 50%;
+            transition: 0.2s;
+            user-select: none;
             display: flex;
             align-items: center;
-            gap: 22px;
-            flex-wrap: wrap;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            z-index: 2;
         }
 
-        .header-link a {
+        .password-toggle:hover {
+            color: #7b2125;
+            background: #fef0ec;
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        /* Error message styling */
+        .error-message {
+            font-size: 0.7rem;
+            margin-top: 6px;
+            margin-left: 14px;
+            color: #e53e3e;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        /* form options row */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #4a3b34;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #9e2a2f;
+        }
+
+        .forgot-password {
+            font-size: 0.85rem;
+            color: #9e2a2f;
             text-decoration: none;
             font-weight: 500;
-            color: #3e2a27;
             transition: 0.2s;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+            color: #7b2125;
+        }
+
+        /* Sign in button */
+        .btn.signin-btn {
+            background: #9e2a2f;
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
             font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 2px 6px rgba(158,42,47,0.2);
+            margin-top: 8px;
         }
 
-        .header-link a:hover {
+        .btn.signin-btn:hover {
+            background: #7b2125;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(158,42,47,0.25);
+        }
+
+        /* Sign up link section - elegantly styled */
+        .signup-section {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid #f0e2db;
+        }
+
+        .signup-text {
+            color: #5e4b41;
+            font-size: 0.95rem;
+        }
+
+        .signup-link-btn {
+            display: inline-block;
+            background: transparent;
+            border: 1.5px solid #9e2a2f;
             color: #9e2a2f;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 12px;
+            transition: 0.2s;
         }
-        .password-wrapper {
-  position: relative;
-}
 
-.password-wrapper input {
-  width: 100%;
-  padding-right: 45px;
-}
+        .signup-link-btn:hover {
+            background: #9e2a2f;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(158,42,47,0.2);
+        }
 
-.password-toggle {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #b63a3a;
-  font-size: 1rem;
-}
+        .signin-footer {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.7rem;
+            color: #aa9b92;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+        }
 
-.login-error {
-  margin-top: 8px;
-  color: #b63a3a;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-        </style>
+        .signin-footer i {
+            font-size: 12px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+        .shake-effect {
+            animation: shake 0.35s ease-in-out 0s 1;
+        }
+
+        
+        @media (max-width: 560px) {
+            .signin-card {
+                padding: 32px 24px;
+            }
+            .header {
+                margin: 16px 20px;
+                padding: 14px 20px;
+            }
+            .logo-text {
+                font-size: 22px;
+            }
+            .password-toggle {
+                right: 14px;
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="header">
-    <div class="logo-area">
+    <div class="logo-area" onclick="window.location.href='/'">
         <div class="logo-icon"><i class="fas fa-leaf"></i></div>
         <div class="logo-text">Flower<span>&</span>Shop</div>
     </div>
-
-       <!-- هدول ما بدي اياهم بصفحه الlog in 
-
- <div class="header-link">
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('index') }}">Our shop</a>
-        <a href="{{ url_for('contact') }}">Contact</a>
-        <a href="{{ url_for('login') }}" class="btn">Sign in</a>
-    </div> 
-    -->
-
+    <!-- header links intentionally omitted for clean sign-in page -->
 </div>
 
 <div class="signin-container">
-<div class="signin-card">
+    <div class="signin-card">
+        <div class="signin-header">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue your flower journey</p>
+        </div>
 
-<div class="signin-header">
-<h2>Welcome  🌸</h2>
-<p>Sign in to continue your flower journey</p>
+        <!-- Login form: action points to check_login (Flask route) -->
+        <form class="signin-form" action="{{ url_for('check_login') }}" method="POST" id="loginForm">
+            <!-- Email Field -->
+            <div class="form-group" id="emailGroup">
+                <label>Email address</label>
+                <div class="input-wrapper">
+                    <input type="email" name="email" id="emailInput" placeholder="Enter your email" autocomplete="email" required>
+                </div>
+                <div class="error-message" id="emailError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i> <span id="emailErrorText">Invalid email format</span>
+                </div>
+            </div>
+
+            <!-- Password Field with Eye Toggle INSIDE the input (correct position) -->
+            <div class="form-group" id="passwordGroup">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <input type="password" name="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" required>
+                    <span class="password-toggle" id="togglePasswordBtn">
+                        <i class="far fa-eye" id="eyeIcon"></i>
+                    </span>
+                </div>
+                <div class="error-message" id="passwordError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i> <span id="passwordErrorText">Password cannot be empty</span>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember"> Remember me
+                </label>
+                <a href="{{ url_for('forgot_pass') }}" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn signin-btn" id="submitBtn">
+                Sign In <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Sign Up Section - clearly visible and well placed -->
+        <div class="signup-section">
+            <p class="signup-text">Don't have an account yet?</p>
+            <a href="{{ url_for('signup') }}" class="signup-link-btn">
+                Create new account <i class="fas fa-user-plus"></i>
+            </a>
+        </div>
+
+        <div class="signin-footer">
+            <i class="fas fa-lock"></i> <span>Secured by SSL encryption</span>
+        </div>
+    </div>
 </div>
 
-<form class="signin-form" action="{{ url_for('check_login') }}" method="POST">
-
-<div class="form-group">
-<label>Email</label>
-<input type="email" name="email" placeholder="Enter your email" required>
-</div>
-
-<div class="form-group password-group">
-  <label>Password</label>
-
-  <div class="password-wrapper">
-    <input type="password" name="password" id="password" placeholder="Enter your password" required>
-
-    <span class="password-toggle" onclick="togglePassword()">
-      <i class="fa-solid fa-eye" id="eyeIcon"></i>
-    </span>
-  </div>
-
-  {% if error %}
-    <p class="login-error">{{ error }}</p>
-  {% endif %}
-</div>
-
-<div class="form-options">
-
-<label class="remember-me">
-<input type="checkbox">
-Remember me
-</label>
-
-<a href="{{ url_for('forgot_pass') }}" class="forgot-password">
-Forgot password?
-</a>
-
-</div>
-
-<button type="submit" class="btn signin-btn">
-Sign In →
-</button>
-
-</form>
-
-<div class="signup-link">
-<p>Don't have an account?
-<a href="{{ url_for('signup') }}">Sign up</a>
-</p>
-</div>
-
-<div class="signin-footer">
-<p>🔐 Secured by SSL encryption</p>
-</div>
-
-</div>
-</div>
 <script>
-function togglePassword() {
-  const input = document.getElementById("password");
-  const icon = document.getElementById("eyeIcon");
+   
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const emailErrorDiv = document.getElementById('emailError');
+    const passwordErrorDiv = document.getElementById('passwordError');
+    const emailErrorText = document.getElementById('emailErrorText');
+    const passwordErrorText = document.getElementById('passwordErrorText');
+    const loginForm = document.getElementById('loginForm');
+    const passwordToggleBtn = document.getElementById('togglePasswordBtn');
+    const eyeIcon = document.getElementById('eyeIcon');
 
-  if (input.type === "password") {
-    input.type = "text";
-    icon.classList.remove("fa-eye");
-    icon.classList.add("fa-eye-slash");
-  } else {
-    input.type = "password";
-    icon.classList.remove("fa-eye-slash");
-    icon.classList.add("fa-eye");
-  }
-}
+   
+    function setFieldError(inputElement, errorDiv, errorMessage, isValid, customTextSpan = null) {
+        if (!isValid) {
+            inputElement.classList.add('error-input');
+            if (errorDiv) {
+                const msgSpan = customTextSpan || errorDiv.querySelector('span');
+                if (msgSpan) msgSpan.innerText = errorMessage;
+                errorDiv.style.display = 'flex';
+            }
+            // Add shake effect on the input
+            inputElement.classList.add('shake-effect');
+            setTimeout(() => {
+                inputElement.classList.remove('shake-effect');
+            }, 300);
+        } else {
+            inputElement.classList.remove('error-input');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }
+    }
+
+    // Validate email format (standard)
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Validate password (non-empty)
+    function isValidPassword(password) {
+        return password && password.trim().length > 0;
+    }
+
+    // Real-time live validation: clear red as user types
+    emailInput.addEventListener('input', function() {
+        const val = emailInput.value.trim();
+        if (val === '') {
+            emailInput.classList.remove('error-input');
+            emailErrorDiv.style.display = 'none';
+        } else if (isValidEmail(val)) {
+            emailInput.classList.remove('error-input');
+            emailErrorDiv.style.display = 'none';
+        } else {
+            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
+        }
+    });
+
+    passwordInput.addEventListener('input', function() {
+        const pass = passwordInput.value;
+        if (pass.trim() === '') {
+            passwordInput.classList.remove('error-input');
+            passwordErrorDiv.style.display = 'none';
+        } else if (isValidPassword(pass)) {
+            passwordInput.classList.remove('error-input');
+            passwordErrorDiv.style.display = 'none';
+        } else {
+            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
+        }
+    });
+
+    // Password toggle functionality (show/hide with eye icon) - perfectly placed inside input
+    function togglePasswordVisibility() {
+        const currentType = passwordInput.getAttribute('type');
+        if (currentType === 'password') {
+            passwordInput.setAttribute('type', 'text');
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.setAttribute('type', 'password');
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+        // Keep focus on the password field for better UX
+        passwordInput.focus();
+    }
+
+    // Attach toggle event
+    if (passwordToggleBtn) {
+        passwordToggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            togglePasswordVisibility();
+        });
+    }
+
+    // Form submission handler: validate before sending to backend
+    loginForm.addEventListener('submit', function(e) {
+        let isValidForm = true;
+        const emailVal = emailInput.value.trim();
+        const passwordVal = passwordInput.value;
+
+        // Validate email
+        if (!emailVal) {
+            setFieldError(emailInput, emailErrorDiv, 'Email address is required', false, emailErrorText);
+            isValidForm = false;
+        } else if (!isValidEmail(emailVal)) {
+            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address', false, emailErrorText);
+            isValidForm = false;
+        } else {
+            setFieldError(emailInput, emailErrorDiv, '', true, emailErrorText);
+        }
+
+        // Validate password
+        if (!passwordVal || passwordVal.trim() === '') {
+            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
+            isValidForm = false;
+        } else {
+            setFieldError(passwordInput, passwordErrorDiv, '', true, passwordErrorText);
+        }
+
+      
+        if (!isValidForm) {
+            e.preventDefault();
+            const card = document.querySelector('.signin-card');
+            card.classList.add('shake-effect');
+            setTimeout(() => card.classList.remove('shake-effect'), 450);
+            
+           
+            if (!emailVal || !isValidEmail(emailVal)) {
+                emailInput.focus();
+            } else if (!passwordVal || passwordVal.trim() === '') {
+                passwordInput.focus();
+            }
+            return false;
+        }
+
+        return true;
+    });
+
+    
+    function handleServerSideErrors() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error === 'invalid_credentials') {
+            setFieldError(emailInput, emailErrorDiv, 'Invalid email or password. Please try again.', false, emailErrorText);
+            setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password', false, passwordErrorText);
+          
+            passwordInput.value = '';
+            emailInput.focus();
+            const card = document.querySelector('.signin-card');
+            card.classList.add('shake-effect');
+            setTimeout(() => card.classList.remove('shake-effect'), 500);
+        } else if (error === 'empty_fields') {
+            setFieldError(emailInput, emailErrorDiv, 'Email and password are required', false, emailErrorText);
+            setFieldError(passwordInput, passwordErrorDiv, 'This field is required', false, passwordErrorText);
+        } else if (error === 'account_locked') {
+            setFieldError(emailInput, emailErrorDiv, 'Account temporarily locked. Contact support.', false, emailErrorText);
+        }
+    }
+
+    
+    emailInput.addEventListener('focus', function() {
+        if (emailInput.classList.contains('error-input')) {
+            emailInput.classList.remove('error-input');
+            emailErrorDiv.style.display = 'none';
+        }
+    });
+    
+    passwordInput.addEventListener('focus', function() {
+        if (passwordInput.classList.contains('error-input')) {
+            passwordInput.classList.remove('error-input');
+            passwordErrorDiv.style.display = 'none';
+        }
+    });
+
+    
+    if (passwordInput.type === 'password') {
+        eyeIcon.classList.add('fa-eye');
+        eyeIcon.classList.remove('fa-eye-slash');
+    } else {
+        eyeIcon.classList.add('fa-eye-slash');
+    }
+
+    
+    window.addEventListener('DOMContentLoaded', function() {
+        handleServerSideErrors();
+        if (passwordToggleBtn) {
+            passwordToggleBtn.setAttribute('title', 'Show/Hide password');
+        }
+    });
+
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        .input-wrapper {
+            position: relative;
+            display: block;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        .form-group input {
+            padding-right: 52px;
+        }
+        .shake-effect {
+            animation: shake 0.32s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+            100% { transform: translateX(0); }
+        }
+        .signup-link-btn {
+            transition: all 0.2s ease;
+        }
+    `;
+    document.head.appendChild(style);
 </script>
-
 </body>
 </html>
