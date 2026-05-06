@@ -141,11 +141,12 @@
 
     <div class="sidebar">
         <h2>Admin Panel</h2>
-        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+     <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
         <a href="{{ url_for('admin_products') }}">Manage Products</a>
         <a href="{{ url_for('admin_orders') }}">Manage Orders</a>
-        <a href="{{ url_for('admin_users') }}" class="active">Manage Users</a>
+        <a href="{{ url_for('admin_users') }}">Manage Users</a>
         <a href="{{ url_for('admin_messages') }}">Manage Messages</a>
+        <a href="{{ url_for('admin_coupons') }}" class="btn">Manage Coupons</a>
         <a href="{{ url_for('index') }}">Back to Website</a>
     </div>
 
