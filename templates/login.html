@@ -28,7 +28,7 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 20px 32px;
             background: #ffffffdd;
@@ -37,8 +37,6 @@
             margin: 20px 40px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.02);
             border: 1px solid #f0e4dc;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
         .logo-area {
@@ -391,67 +389,67 @@
 <div class="signin-container">
     <div class="signin-card">
         <div class="signin-header">
-            <h2>Welcome back</h2>
-            <p>Sign in to continue your flower journey</p>
+            <h2>مرحباً بعودتك</h2>
+            <p>سجل الدخول لمواصلة رحلة الزهور الخاصة بك</p>
         </div>
 
         <!-- رسائل الحالة -->
         <div id="generalErrorBanner" style="display: none;" class="general-error">
             <i class="fas fa-exclamation-triangle"></i>
-            <span id="generalErrorMessage">Invalid email or password. Please try again.</span>
+            <span id="generalErrorMessage">بريد إلكتروني أو كلمة مرور غير صحيحة. يرجى المحاولة مرة أخرى.</span>
         </div>
 
         <div id="generalSuccessBanner" style="display: none;" class="general-success">
             <i class="fas fa-check-circle"></i>
-            <span id="generalSuccessMessage">Login successful! Redirecting...</span>
+            <span id="generalSuccessMessage">تم تسجيل الدخول بنجاح! جاري التحويل...</span>
         </div>
 
         <!-- نموذج تسجيل الدخول -->
         <form class="signin-form" action="#" method="POST" id="loginForm">
             <div class="form-group" id="emailGroup">
-                <label>Email address</label>
+                <label>البريد الإلكتروني</label>
                 <div class="input-wrapper">
-                    <input type="email" name="email" id="emailInput" placeholder="Enter your email" autocomplete="email">
+                    <input type="email" name="email" id="emailInput" placeholder="أدخل بريدك الإلكتروني" autocomplete="email">
                 </div>
                 <div class="error-message" id="emailError" style="display: none;">
-                    <i class="fas fa-exclamation-circle"></i> <span id="emailErrorText">Invalid email format</span>
+                    <i class="fas fa-exclamation-circle"></i> <span id="emailErrorText">صيغة البريد الإلكتروني غير صحيحة</span>
                 </div>
             </div>
 
             <div class="form-group" id="passwordGroup">
-                <label>Password</label>
+                <label>كلمة المرور</label>
                 <div class="input-wrapper">
-                    <input type="password" name="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password">
+                    <input type="password" name="password" id="passwordInput" placeholder="أدخل كلمة المرور" autocomplete="current-password">
                     <span class="password-toggle" id="togglePasswordBtn">
                         <i class="far fa-eye" id="eyeIcon"></i>
                     </span>
                 </div>
                 <div class="error-message" id="passwordError" style="display: none;">
-                    <i class="fas fa-exclamation-circle"></i> <span id="passwordErrorText">Password cannot be empty</span>
+                    <i class="fas fa-exclamation-circle"></i> <span id="passwordErrorText">كلمة المرور لا يمكن أن تكون فارغة</span>
                 </div>
             </div>
 
             <div class="form-options">
                 <label class="remember-me">
-                    <input type="checkbox" name="remember" id="rememberCheckbox"> Remember me
+                    <input type="checkbox" name="remember" id="rememberCheckbox"> تذكرني
                 </label>
-                <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+                <a href="#" class="forgot-password" id="forgotPasswordLink">نسيت كلمة المرور؟</a>
             </div>
 
             <button type="submit" class="btn signin-btn" id="submitBtn">
-                Sign In <i class="fas fa-arrow-right"></i>
+                تسجيل الدخول <i class="fas fa-arrow-right"></i>
             </button>
         </form>
 
         <div class="signup-section">
-            <p class="signup-text">Don't have an account yet?</p>
+            <p class="signup-text">ليس لديك حساب بعد؟</p>
             <a href="#" class="signup-link-btn" id="signupLinkBtn">
-                Create new account <i class="fas fa-user-plus"></i>
+                إنشاء حساب جديد <i class="fas fa-user-plus"></i>
             </a>
         </div>
 
         <div class="signin-footer">
-            <i class="fas fa-lock"></i> <span>Secured by SSL encryption</span>
+            <i class="fas fa-lock"></i> <span>محمي بتقنية التشفير SSL</span>
         </div>
     </div>
 </div>
@@ -474,11 +472,12 @@
     const submitBtn = document.getElementById('submitBtn');
     const rememberCheckbox = document.getElementById('rememberCheckbox');
 
-    // المستخدمين التجريبيين (محاكاة قاعدة البيانات)
-    const MOCK_USERS = [
-        { email: "user@example.com", password: "flower123" },
-        { email: "admin@flowershop.com", password: "admin123" },
-        { email: "demo@flower.com", password: "demo123" }
+    // المستخدمين التجريبيين المسجلين في النظام
+    const REGISTERED_USERS = [
+        { email: "user@example.com", password: "flower123", name: "أحمد" },
+        { email: "admin@flowershop.com", password: "admin123", name: "مدير المتجر" },
+        { email: "sarah@flowershop.com", password: "sarah123", name: "سارة" },
+        { email: "demo@flower.com", password: "demo123", name: "زائر تجريبي" }
     ];
 
     // تحميل البيانات المحفوظة
@@ -542,6 +541,8 @@
                 if (msgSpan) msgSpan.innerText = errorMessage;
                 errorDiv.style.display = 'flex';
             }
+            inputElement.classList.add('shake-effect');
+            setTimeout(() => inputElement.classList.remove('shake-effect'), 300);
         } else {
             inputElement.classList.remove('error-input');
             if (errorDiv) {
@@ -564,36 +565,19 @@
         return emailRegex.test(email);
     }
 
-    // التحقق من كلمة المرور (غير فارغة)
-    function isValidPassword(password) {
-        return password && password.trim().length > 0;
-    }
-
-    // التحقق من صحة البيانات (محاكاة قاعدة البيانات) - تم التصحيح
-    function checkCredentials(email, password) {
+    // التحقق من صحة بيانات الدخول
+    function authenticateUser(email, password) {
         const normalizedEmail = email.toLowerCase().trim();
-        const normalizedPassword = password; // لا نستخدم trim() هنا لأننا نريد التحقق بالضبط
         
-        console.log(`Checking: ${normalizedEmail} / ${normalizedPassword}`); // للتصحيح
-        
-        const found = MOCK_USERS.some(user => 
-            user.email.toLowerCase() === normalizedEmail && 
-            user.password === normalizedPassword
+        const user = REGISTERED_USERS.find(u => 
+            u.email.toLowerCase() === normalizedEmail && 
+            u.password === password
         );
         
-        console.log(`Found: ${found}`); // للتصحيح
-        return found;
+        return user || null;
     }
 
-    // التحقق المباشر (لإظهار البيانات التجريبية)
-    function showDemoCredentials() {
-        console.log('📧 Demo credentials:');
-        MOCK_USERS.forEach((user, index) => {
-            console.log(`  ${index + 1}. Email: ${user.email}, Password: ${user.password}`);
-        });
-    }
-
-    // تأثير الاهتزاز
+    // تأثير الاهتزاز للبطاقة
     function shakeCard() {
         const card = document.querySelector('.signin-card');
         card.classList.add('shake-effect');
@@ -604,29 +588,31 @@
     function setLoadingState(isLoading) {
         if (isLoading) {
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
         } else {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Sign In <i class="fas fa-arrow-right"></i>';
+            submitBtn.innerHTML = 'تسجيل الدخول <i class="fas fa-arrow-right"></i>';
         }
     }
 
-    // معالجة التحقق من الصحة قبل الإرسال
+    // معالجة التحقق من صحة النموذج
     function validateForm(emailVal, passwordVal) {
         let isValid = true;
         
+        // التحقق من البريد الإلكتروني
         if (!emailVal) {
-            setFieldError(emailInput, emailErrorDiv, 'Email address is required', false, emailErrorText);
+            setFieldError(emailInput, emailErrorDiv, 'البريد الإلكتروني مطلوب', false, emailErrorText);
             isValid = false;
         } else if (!isValidEmail(emailVal)) {
-            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
+            setFieldError(emailInput, emailErrorDiv, 'يرجى إدخال بريد إلكتروني صالح (مثل name@domain.com)', false, emailErrorText);
             isValid = false;
         } else {
             setFieldError(emailInput, emailErrorDiv, '', true, emailErrorText);
         }
         
+        // التحقق من كلمة المرور
         if (!passwordVal || passwordVal.trim() === '') {
-            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
+            setFieldError(passwordInput, passwordErrorDiv, 'كلمة المرور مطلوبة', false, passwordErrorText);
             isValid = false;
         } else {
             setFieldError(passwordInput, passwordErrorDiv, '', true, passwordErrorText);
@@ -635,7 +621,7 @@
         return isValid;
     }
 
-    // الأحداث المباشرة (real-time validation)
+    // التحقق المباشر أثناء الكتابة
     emailInput.addEventListener('input', function() {
         hideGeneralMessages();
         const val = emailInput.value.trim();
@@ -646,7 +632,7 @@
             emailInput.classList.remove('error-input');
             emailErrorDiv.style.display = 'none';
         } else {
-            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address', false, emailErrorText);
+            setFieldError(emailInput, emailErrorDiv, 'صيغة البريد الإلكتروني غير صحيحة', false, emailErrorText);
         }
     });
 
@@ -656,11 +642,9 @@
         if (pass.trim() === '') {
             passwordInput.classList.remove('error-input');
             passwordErrorDiv.style.display = 'none';
-        } else if (isValidPassword(pass)) {
+        } else {
             passwordInput.classList.remove('error-input');
             passwordErrorDiv.style.display = 'none';
-        } else {
-            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
         }
     });
 
@@ -687,65 +671,7 @@
         });
     }
 
-    // معالج تقديم النموذج - الجزء الأهم (تم التصحيح)
-    loginForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const emailVal = emailInput.value.trim();
-        const passwordVal = passwordInput.value; // نأخذ القيمة كما هي بدون trim
-        
-        hideGeneralMessages();
-        clearFieldErrors();
-        
-        // التحقق من صحة الحقول
-        if (!validateForm(emailVal, passwordVal)) {
-            shakeCard();
-            const emptyField = !emailVal || !isValidEmail(emailVal) ? emailInput : passwordInput;
-            emptyField.focus();
-            return false;
-        }
-        
-        setLoadingState(true);
-        
-        // محاكاة طلب السيرفر (تأخير 500ms)
-        setTimeout(() => {
-            // التحقق من صحة البيانات
-            const isAuthenticated = checkCredentials(emailVal, passwordVal);
-            
-            if (!isAuthenticated) {
-                // ❌ بيانات غير صحيحة - إظهار الأخطاء مع الاحتفاظ بكلمة المرور
-                setFieldError(emailInput, emailErrorDiv, 'Invalid email or password combination', false, emailErrorText);
-                setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password for this account', false, passwordErrorText);
-                
-                showGeneralError('❌ Invalid email or password. Please try again.');
-                shakeCard();
-                
-                // ✅ لا نقوم بمسح حقل كلمة المرور، فقط نحدد النص لتسهيل التعديل
-                passwordInput.select();
-                setLoadingState(false);
-                
-            } else {
-                // ✅ بيانات صحيحة - نجاح تسجيل الدخول
-                saveCredentials(emailVal, passwordVal, rememberCheckbox.checked);
-                
-                showGeneralSuccess('✓ Login successful! Redirecting to dashboard...');
-                
-                // تعطيل النموذج أثناء إعادة التوجيه
-                setLoadingState(true);
-                
-                // محاكاة إعادة التوجيه
-                setTimeout(() => {
-                    // في التطبيق الحقيقي: window.location.href = '/dashboard';
-                    alert(`✅ Welcome back, ${emailVal}!\n\n(هنا سيتم توجيهك إلى لوحة التحكم في التطبيق الحقيقي)`);
-                    window.location.href = '/';
-                }, 1500);
-            }
-        }, 500);
-        
-        return false;
-    });
-
-    
+    // إزالة الأخطاء عند التركيز
     emailInput.addEventListener('focus', function() {
         if (emailInput.classList.contains('error-input')) {
             emailInput.classList.remove('error-input');
@@ -762,7 +688,77 @@
         }
     });
 
-    // حالة أيقونة العين الأولية
+    // معالج تقديم النموذج
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const emailVal = emailInput.value.trim();
+        const passwordVal = passwordInput.value;
+        
+        hideGeneralMessages();
+        clearFieldErrors();
+        
+        // التحقق من صحة الحقول
+        if (!validateForm(emailVal, passwordVal)) {
+            shakeCard();
+            return false;
+        }
+        
+        setLoadingState(true);
+        
+        // محاكاة تأخير الشبكة
+        setTimeout(() => {
+            const user = authenticateUser(emailVal, passwordVal);
+            
+            if (!user) {
+                // فشل تسجيل الدخول
+                setFieldError(emailInput, emailErrorDiv, 'البريد الإلكتروني أو كلمة المرور غير صحيحة', false, emailErrorText);
+                setFieldError(passwordInput, passwordErrorDiv, 'بيانات الدخول غير صحيحة', false, passwordErrorText);
+                showGeneralError('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.');
+                shakeCard();
+                setLoadingState(false);
+                
+                // لا نقوم بمسح الحقول، فقط نحددها
+                emailInput.select();
+            } else {
+                // نجاح تسجيل الدخول
+                saveCredentials(emailVal, passwordVal, rememberCheckbox.checked);
+                
+                // تخزين معلومات المستخدم في sessionStorage
+                sessionStorage.setItem('currentUser', JSON.stringify({
+                    email: user.email,
+                    name: user.name,
+                    loggedIn: true
+                }));
+                
+                showGeneralSuccess(`✓ مرحباً بك، ${user.name}! جاري تحويلك إلى المتجر...`);
+                
+                // تعطيل النموذج أثناء إعادة التوجيه
+                submitBtn.disabled = true;
+                
+                // إعادة التوجيه بعد نجاح تسجيل الدخول
+                setTimeout(() => {
+                    // في التطبيق الحقيقي: window.location.href = '/dashboard' أو '/'
+                    window.location.href = '/';
+                }, 1500);
+            }
+        }, 800);
+        
+        return false;
+    });
+
+    // روابط إضافية
+    document.getElementById('forgotPasswordLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/forgot-password';
+    });
+    
+    document.getElementById('signupLinkBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/signup';
+    });
+
+    // تهيئة الحالة الأولية لأيقونة العين
     if (passwordInput.type === 'password') {
         eyeIcon.classList.add('fa-eye');
         eyeIcon.classList.remove('fa-eye-slash');
@@ -770,30 +766,25 @@
         eyeIcon.classList.add('fa-eye-slash');
     }
 
-   
-    document.getElementById('forgotPasswordLink')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('🔐 Password reset link would be sent to your email.\n\nDemo: Use "flower123" for user@example.com');
-    });
-    
-    document.getElementById('signupLinkBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('📝 Create new account page.\n\nDemo credentials:\nuser@example.com / flower123');
-    });
-
-    
+    // تحميل البيانات المحفوظة عند بدء التشغيل
     window.addEventListener('DOMContentLoaded', function() {
         loadSavedCredentials();
-        showDemoCredentials();
+        
+        // عرض الحسابات التجريبية في وحدة التحكم
+        console.log('📧 الحسابات التجريبية المتاحة:');
+        REGISTERED_USERS.forEach((user, index) => {
+            console.log(`  ${index + 1}. البريد: ${user.email} | كلمة المرور: ${user.password}`);
+        });
     });
 </script>
 
-
-<div style="position: fixed; bottom: 10px; right: 10px; font-size: 11px; color: #ccb9b0; background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: monospace; direction: ltr; z-index: 1000;">
-    <i class="fas fa-flask" style="margin-right: 6px;"></i>
-    <strong>Demo Accounts:</strong><br>
-    user@example.com / flower123<br>
-    admin@flowershop.com / admin123
+<!-- شريط المعلومات التجريبية -->
+<div style="position: fixed; bottom: 10px; right: 10px; font-size: 11px; color: #ccb9b0; background: rgba(255,255,255,0.95); padding: 8px 14px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: monospace; direction: ltr; z-index: 1000;">
+    <i class="fas fa-flask" style="margin-right: 6px; color: #9e2a2f;"></i>
+    <strong style="color: #3e2a27;">حسابات تجريبية:</strong><br>
+    📧 user@example.com / flower123<br>
+    📧 admin@flowershop.com / admin123
 </div>
+
 </body>
 </html>
