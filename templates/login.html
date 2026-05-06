@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Sign In | Flower Shop</title>
+    <title>تسجيل الدخول | محل زهور</title>
     
-    <!-- Google Fonts for consistent styling -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
@@ -26,7 +26,6 @@
             flex-direction: column;
         }
 
-        /* Header styling matching the elegant flower shop design */
         .header {
             display: flex;
             justify-content: space-between;
@@ -81,7 +80,6 @@
             font-weight: 700;
         }
 
-        /* Sign-in container (centered card) */
         .signin-container {
             flex: 1;
             display: flex;
@@ -121,7 +119,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* Form group with relative container for toggle positioning */
         .form-group {
             margin-bottom: 28px;
             position: relative;
@@ -157,13 +154,11 @@
             box-shadow: 0 0 0 3px rgba(158,42,47,0.08);
         }
 
-        /* Error state: red border + subtle background */
         .form-group input.error-input {
             border-color: #e53e3e;
             background-color: #fff8f8;
         }
 
-        /* Password toggle button inside input - perfectly aligned */
         .password-toggle {
             position: absolute;
             right: 16px;
@@ -187,10 +182,8 @@
         .password-toggle:hover {
             color: #7b2125;
             background: #fef0ec;
-            transform: translateY(-50%) scale(1.02);
         }
 
-        /* Error message styling */
         .error-message {
             font-size: 0.7rem;
             margin-top: 6px;
@@ -202,7 +195,6 @@
             font-weight: 500;
         }
 
-        /* form options row */
         .form-options {
             display: flex;
             justify-content: space-between;
@@ -241,7 +233,6 @@
             color: #7b2125;
         }
 
-        /* Sign in button */
         .btn.signin-btn {
             background: #9e2a2f;
             width: 100%;
@@ -268,7 +259,12 @@
             box-shadow: 0 8px 18px rgba(158,42,47,0.25);
         }
 
-        /* Sign up link section - elegantly styled */
+        .btn.signin-btn:disabled {
+            background: #ccb9b0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .signup-section {
             text-align: center;
             margin-top: 28px;
@@ -313,11 +309,6 @@
             align-items: center;
         }
 
-        .signin-footer i {
-            font-size: 12px;
-        }
-
-        /* General error banner */
         .general-error {
             background: #fee2e2;
             border-left: 4px solid #e53e3e;
@@ -329,6 +320,20 @@
             gap: 10px;
             font-size: 0.85rem;
             color: #b91c1c;
+            animation: slideDown 0.3s ease;
+        }
+
+        .general-success {
+            background: #e6f4ea;
+            border-left: 4px solid #2e7d32;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #1e5a22;
             animation: slideDown 0.3s ease;
         }
 
@@ -350,6 +355,7 @@
             60% { transform: translateX(-3px); }
             80% { transform: translateX(3px); }
         }
+        
         .shake-effect {
             animation: shake 0.35s ease-in-out 0s 1;
         }
@@ -389,15 +395,19 @@
             <p>Sign in to continue your flower journey</p>
         </div>
 
-        <!-- General error banner for wrong password -->
+        <!-- رسائل الحالة -->
         <div id="generalErrorBanner" style="display: none;" class="general-error">
             <i class="fas fa-exclamation-triangle"></i>
             <span id="generalErrorMessage">Invalid email or password. Please try again.</span>
         </div>
 
-        <!-- Login form -->
+        <div id="generalSuccessBanner" style="display: none;" class="general-success">
+            <i class="fas fa-check-circle"></i>
+            <span id="generalSuccessMessage">Login successful! Redirecting...</span>
+        </div>
+
+        <!-- نموذج تسجيل الدخول -->
         <form class="signin-form" action="#" method="POST" id="loginForm">
-            <!-- Email Field -->
             <div class="form-group" id="emailGroup">
                 <label>Email address</label>
                 <div class="input-wrapper">
@@ -408,7 +418,6 @@
                 </div>
             </div>
 
-            <!-- Password Field with Eye Toggle -->
             <div class="form-group" id="passwordGroup">
                 <label>Password</label>
                 <div class="input-wrapper">
@@ -424,9 +433,9 @@
 
             <div class="form-options">
                 <label class="remember-me">
-                    <input type="checkbox" name="remember"> Remember me
+                    <input type="checkbox" name="remember" id="rememberCheckbox"> Remember me
                 </label>
-                <a href="{{ url_for('forgot_pass') }}" class="forgot-password">Forgot password?</a>
+                <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn signin-btn" id="submitBtn">
@@ -434,10 +443,9 @@
             </button>
         </form>
 
-        <!-- Sign Up Section -->
         <div class="signup-section">
             <p class="signup-text">Don't have an account yet?</p>
-            <a href="{{ url_for('signup') }}" class="signup-link-btn">
+            <a href="#" class="signup-link-btn" id="signupLinkBtn">
                 Create new account <i class="fas fa-user-plus"></i>
             </a>
         </div>
@@ -449,7 +457,7 @@
 </div>
 
 <script>
-    // DOM Elements
+    // عناصر DOM
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
     const emailErrorDiv = document.getElementById('emailError');
@@ -461,8 +469,71 @@
     const eyeIcon = document.getElementById('eyeIcon');
     const generalErrorBanner = document.getElementById('generalErrorBanner');
     const generalErrorMessage = document.getElementById('generalErrorMessage');
+    const generalSuccessBanner = document.getElementById('generalSuccessBanner');
+    const generalSuccessMessage = document.getElementById('generalSuccessMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const rememberCheckbox = document.getElementById('rememberCheckbox');
 
-    // Helper: Set field error
+    // المستخدمين التجريبيين (محاكاة قاعدة البيانات)
+    const MOCK_USERS = [
+        { email: "user@example.com", password: "flower123" },
+        { email: "admin@flowershop.com", password: "admin123" },
+        { email: "demo@flower.com", password: "demo123" }
+    ];
+
+    // تحميل البيانات المحفوظة
+    function loadSavedCredentials() {
+        const savedEmail = localStorage.getItem('savedEmail');
+        const savedPassword = localStorage.getItem('savedPassword');
+        const rememberMe = localStorage.getItem('rememberMe') === 'true';
+        
+        if (rememberMe && savedEmail) {
+            emailInput.value = savedEmail;
+            if (savedPassword) {
+                passwordInput.value = savedPassword;
+            }
+            rememberCheckbox.checked = true;
+        }
+    }
+
+    // حفظ بيانات تسجيل الدخول
+    function saveCredentials(email, password, remember) {
+        if (remember) {
+            localStorage.setItem('savedEmail', email);
+            localStorage.setItem('savedPassword', password);
+            localStorage.setItem('rememberMe', 'true');
+        } else {
+            localStorage.removeItem('savedEmail');
+            localStorage.removeItem('savedPassword');
+            localStorage.setItem('rememberMe', 'false');
+        }
+    }
+
+    // إظهار رسالة خطأ عامة
+    function showGeneralError(message) {
+        generalSuccessBanner.style.display = 'none';
+        generalErrorMessage.innerText = message;
+        generalErrorBanner.style.display = 'flex';
+        setTimeout(() => {
+            if (generalErrorBanner) {
+                generalErrorBanner.style.display = 'none';
+            }
+        }, 5000);
+    }
+
+    // إظهار رسالة نجاح عامة
+    function showGeneralSuccess(message) {
+        generalErrorBanner.style.display = 'none';
+        generalSuccessMessage.innerText = message;
+        generalSuccessBanner.style.display = 'flex';
+    }
+
+    function hideGeneralMessages() {
+        generalErrorBanner.style.display = 'none';
+        generalSuccessBanner.style.display = 'none';
+    }
+
+    // تعيين حالة الخطأ للحقل
     function setFieldError(inputElement, errorDiv, errorMessage, isValid, customTextSpan = null) {
         if (!isValid) {
             inputElement.classList.add('error-input');
@@ -471,10 +542,6 @@
                 if (msgSpan) msgSpan.innerText = errorMessage;
                 errorDiv.style.display = 'flex';
             }
-            inputElement.classList.add('shake-effect');
-            setTimeout(() => {
-                inputElement.classList.remove('shake-effect');
-            }, 300);
         } else {
             inputElement.classList.remove('error-input');
             if (errorDiv) {
@@ -483,35 +550,94 @@
         }
     }
 
-    // Show general error banner
-    function showGeneralError(message) {
-        generalErrorMessage.innerText = message;
-        generalErrorBanner.style.display = 'flex';
-        // Auto hide after 5 seconds
-        setTimeout(() => {
-            if (generalErrorBanner) {
-                generalErrorBanner.style.display = 'none';
-            }
-        }, 5000);
+    // إزالة أخطاء الحقول
+    function clearFieldErrors() {
+        emailInput.classList.remove('error-input');
+        passwordInput.classList.remove('error-input');
+        emailErrorDiv.style.display = 'none';
+        passwordErrorDiv.style.display = 'none';
     }
 
-    function hideGeneralError() {
-        generalErrorBanner.style.display = 'none';
-    }
-
-    // Validate email format
+    // التحقق من صيغة الإيميل
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
         return emailRegex.test(email);
     }
 
-    // Validate password (non-empty)
+    // التحقق من كلمة المرور (غير فارغة)
     function isValidPassword(password) {
         return password && password.trim().length > 0;
     }
 
-    // Real-time validation: clear red as user types
+    // التحقق من صحة البيانات (محاكاة قاعدة البيانات) - تم التصحيح
+    function checkCredentials(email, password) {
+        const normalizedEmail = email.toLowerCase().trim();
+        const normalizedPassword = password; // لا نستخدم trim() هنا لأننا نريد التحقق بالضبط
+        
+        console.log(`Checking: ${normalizedEmail} / ${normalizedPassword}`); // للتصحيح
+        
+        const found = MOCK_USERS.some(user => 
+            user.email.toLowerCase() === normalizedEmail && 
+            user.password === normalizedPassword
+        );
+        
+        console.log(`Found: ${found}`); // للتصحيح
+        return found;
+    }
+
+    // التحقق المباشر (لإظهار البيانات التجريبية)
+    function showDemoCredentials() {
+        console.log('📧 Demo credentials:');
+        MOCK_USERS.forEach((user, index) => {
+            console.log(`  ${index + 1}. Email: ${user.email}, Password: ${user.password}`);
+        });
+    }
+
+    // تأثير الاهتزاز
+    function shakeCard() {
+        const card = document.querySelector('.signin-card');
+        card.classList.add('shake-effect');
+        setTimeout(() => card.classList.remove('shake-effect'), 500);
+    }
+
+    // تعطيل/تفعيل زر الإرسال
+    function setLoadingState(isLoading) {
+        if (isLoading) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Sign In <i class="fas fa-arrow-right"></i>';
+        }
+    }
+
+    // معالجة التحقق من الصحة قبل الإرسال
+    function validateForm(emailVal, passwordVal) {
+        let isValid = true;
+        
+        if (!emailVal) {
+            setFieldError(emailInput, emailErrorDiv, 'Email address is required', false, emailErrorText);
+            isValid = false;
+        } else if (!isValidEmail(emailVal)) {
+            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
+            isValid = false;
+        } else {
+            setFieldError(emailInput, emailErrorDiv, '', true, emailErrorText);
+        }
+        
+        if (!passwordVal || passwordVal.trim() === '') {
+            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
+            isValid = false;
+        } else {
+            setFieldError(passwordInput, passwordErrorDiv, '', true, passwordErrorText);
+        }
+        
+        return isValid;
+    }
+
+    // الأحداث المباشرة (real-time validation)
     emailInput.addEventListener('input', function() {
+        hideGeneralMessages();
         const val = emailInput.value.trim();
         if (val === '') {
             emailInput.classList.remove('error-input');
@@ -520,13 +646,12 @@
             emailInput.classList.remove('error-input');
             emailErrorDiv.style.display = 'none';
         } else {
-            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
+            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address', false, emailErrorText);
         }
-        // Hide general error when user starts typing
-        hideGeneralError();
     });
 
     passwordInput.addEventListener('input', function() {
+        hideGeneralMessages();
         const pass = passwordInput.value;
         if (pass.trim() === '') {
             passwordInput.classList.remove('error-input');
@@ -537,10 +662,9 @@
         } else {
             setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
         }
-        hideGeneralError();
     });
 
-    // Password toggle functionality
+    // تبديل إظهار/إخفاء كلمة المرور
     function togglePasswordVisibility() {
         const currentType = passwordInput.getAttribute('type');
         if (currentType === 'password') {
@@ -563,109 +687,70 @@
         });
     }
 
-    // ========== SIMULATED BACKEND VALIDATION FOR DEMO ==========
-    // This simulates checking credentials against a database.
-    // In production, this would be handled by your Flask backend.
-    // For demo purposes, we have a mock user: email: user@example.com, password: flower123
-    const MOCK_USERS = [
-        { email: "user@example.com", password: "flower123" },
-        { email: "admin@flowershop.com", password: "admin123" },
-        { email: "demo@flower.com", password: "demo123" }
-    ];
-
-    function checkCredentials(email, password) {
-        // Normalize email to lowercase for comparison
-        const normalizedEmail = email.toLowerCase().trim();
-        return MOCK_USERS.some(user => 
-            user.email.toLowerCase() === normalizedEmail && user.password === password
-        );
-    }
-
-    // Form submission handler with password validation
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent actual form submission for demo
-        let isValidForm = true;
+    // معالج تقديم النموذج - الجزء الأهم (تم التصحيح)
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
         const emailVal = emailInput.value.trim();
-        const passwordVal = passwordInput.value;
-
-        // Reset error states
-        hideGeneralError();
-
-        // Validate email
-        if (!emailVal) {
-            setFieldError(emailInput, emailErrorDiv, 'Email address is required', false, emailErrorText);
-            isValidForm = false;
-        } else if (!isValidEmail(emailVal)) {
-            setFieldError(emailInput, emailErrorDiv, 'Please enter a valid email address', false, emailErrorText);
-            isValidForm = false;
-        } else {
-            setFieldError(emailInput, emailErrorDiv, '', true, emailErrorText);
-        }
-
-        // Validate password
-        if (!passwordVal || passwordVal.trim() === '') {
-            setFieldError(passwordInput, passwordErrorDiv, 'Password cannot be empty', false, passwordErrorText);
-            isValidForm = false;
-        } else {
-            setFieldError(passwordInput, passwordErrorDiv, '', true, passwordErrorText);
-        }
-
-        // If basic validation fails, stop here
-        if (!isValidForm) {
-            const card = document.querySelector('.signin-card');
-            card.classList.add('shake-effect');
-            setTimeout(() => card.classList.remove('shake-effect'), 450);
-            
-            if (!emailVal || !isValidEmail(emailVal)) {
-                emailInput.focus();
-            } else if (!passwordVal || passwordVal.trim() === '') {
-                passwordInput.focus();
-            }
+        const passwordVal = passwordInput.value; // نأخذ القيمة كما هي بدون trim
+        
+        hideGeneralMessages();
+        clearFieldErrors();
+        
+        // التحقق من صحة الحقول
+        if (!validateForm(emailVal, passwordVal)) {
+            shakeCard();
+            const emptyField = !emailVal || !isValidEmail(emailVal) ? emailInput : passwordInput;
+            emptyField.focus();
             return false;
         }
-
-        // ========== CHECK PASSWORD AGAINST DATABASE ==========
-        // This is where we verify if the password is correct.
-        // If password is wrong, show error message with red boxes.
-        const isAuthenticated = checkCredentials(emailVal, passwordVal);
-
-        if (!isAuthenticated) {
-            // WRONG PASSWORD OR EMAIL - Show error with red borders
-            setFieldError(emailInput, emailErrorDiv, 'Invalid email or password', false, emailErrorText);
-            setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password', false, passwordErrorText);
-            
-            // Show general error banner
-            showGeneralError('❌ Invalid email or password. Please try again.');
-            
-            // Shake the card for visual feedback
-            const card = document.querySelector('.signin-card');
-            card.classList.add('shake-effect');
-            setTimeout(() => card.classList.remove('shake-effect'), 500);
-            
-            // Clear password field for security (like real websites)
-            passwordInput.value = '';
-            passwordInput.focus();
-            
-            return false;
-        }
-
-        // SUCCESS: Password is correct!
-        // Show success message and redirect (simulated)
-        showGeneralError('✓ Login successful! Redirecting...');
+        
+        setLoadingState(true);
+        
+        // محاكاة طلب السيرفر (تأخير 500ms)
         setTimeout(() => {
-            // In real app, redirect to dashboard or home page
-            window.location.href = '/';
-        }, 1000);
+            // التحقق من صحة البيانات
+            const isAuthenticated = checkCredentials(emailVal, passwordVal);
+            
+            if (!isAuthenticated) {
+                // ❌ بيانات غير صحيحة - إظهار الأخطاء مع الاحتفاظ بكلمة المرور
+                setFieldError(emailInput, emailErrorDiv, 'Invalid email or password combination', false, emailErrorText);
+                setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password for this account', false, passwordErrorText);
+                
+                showGeneralError('❌ Invalid email or password. Please try again.');
+                shakeCard();
+                
+                // ✅ لا نقوم بمسح حقل كلمة المرور، فقط نحدد النص لتسهيل التعديل
+                passwordInput.select();
+                setLoadingState(false);
+                
+            } else {
+                // ✅ بيانات صحيحة - نجاح تسجيل الدخول
+                saveCredentials(emailVal, passwordVal, rememberCheckbox.checked);
+                
+                showGeneralSuccess('✓ Login successful! Redirecting to dashboard...');
+                
+                // تعطيل النموذج أثناء إعادة التوجيه
+                setLoadingState(true);
+                
+                // محاكاة إعادة التوجيه
+                setTimeout(() => {
+                    // في التطبيق الحقيقي: window.location.href = '/dashboard';
+                    alert(`✅ Welcome back, ${emailVal}!\n\n(هنا سيتم توجيهك إلى لوحة التحكم في التطبيق الحقيقي)`);
+                    window.location.href = '/';
+                }, 1500);
+            }
+        }, 500);
         
         return false;
     });
 
-    // Clear errors on focus
+    
     emailInput.addEventListener('focus', function() {
         if (emailInput.classList.contains('error-input')) {
             emailInput.classList.remove('error-input');
             emailErrorDiv.style.display = 'none';
-            hideGeneralError();
+            hideGeneralMessages();
         }
     });
     
@@ -673,11 +758,11 @@
         if (passwordInput.classList.contains('error-input')) {
             passwordInput.classList.remove('error-input');
             passwordErrorDiv.style.display = 'none';
-            hideGeneralError();
+            hideGeneralMessages();
         }
     });
 
-    // Set initial eye icon state
+    // حالة أيقونة العين الأولية
     if (passwordInput.type === 'password') {
         eyeIcon.classList.add('fa-eye');
         eyeIcon.classList.remove('fa-eye-slash');
@@ -685,71 +770,30 @@
         eyeIcon.classList.add('fa-eye-slash');
     }
 
-    // Handle server-side errors from backend (if any)
-    function handleServerSideErrors() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const error = urlParams.get('error');
-        if (error === 'invalid_credentials') {
-            setFieldError(emailInput, emailErrorDiv, 'Invalid email or password. Please try again.', false, emailErrorText);
-            setFieldError(passwordInput, passwordErrorDiv, 'Incorrect password', false, passwordErrorText);
-            showGeneralError('Invalid email or password. Please try again.');
-            passwordInput.value = '';
-            emailInput.focus();
-            const card = document.querySelector('.signin-card');
-            card.classList.add('shake-effect');
-            setTimeout(() => card.classList.remove('shake-effect'), 500);
-        } else if (error === 'empty_fields') {
-            setFieldError(emailInput, emailErrorDiv, 'Email and password are required', false, emailErrorText);
-            setFieldError(passwordInput, passwordErrorDiv, 'This field is required', false, passwordErrorText);
-        } else if (error === 'account_locked') {
-            setFieldError(emailInput, emailErrorDiv, 'Account temporarily locked. Contact support.', false, emailErrorText);
-            showGeneralError('Account temporarily locked. Please contact support.');
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-        handleServerSideErrors();
-        if (passwordToggleBtn) {
-            passwordToggleBtn.setAttribute('title', 'Show/Hide password');
-        }
+   
+    document.getElementById('forgotPasswordLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('🔐 Password reset link would be sent to your email.\n\nDemo: Use "flower123" for user@example.com');
+    });
+    
+    document.getElementById('signupLinkBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('📝 Create new account page.\n\nDemo credentials:\nuser@example.com / flower123');
     });
 
-    // Additional style for animations
-    const style = document.createElement('style');
-    style.textContent = `
-        .input-wrapper {
-            position: relative;
-            display: block;
-        }
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            outline: none;
-        }
-        .form-group input {
-            padding-right: 52px;
-        }
-        .signup-link-btn {
-            transition: all 0.2s ease;
-        }
-        .general-error {
-            animation: slideDown 0.3s ease;
-        }
-    `;
-    document.head.appendChild(style);
-
     
-    console.log('Demo credentials - Email: user@example.com, Password: flower123');
+    window.addEventListener('DOMContentLoaded', function() {
+        loadSavedCredentials();
+        showDemoCredentials();
+    });
 </script>
 
 
-<div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: #ccb9b0; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 20px;">
-    Demo: user@example.com / flower123
+<div style="position: fixed; bottom: 10px; right: 10px; font-size: 11px; color: #ccb9b0; background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: monospace; direction: ltr; z-index: 1000;">
+    <i class="fas fa-flask" style="margin-right: 6px;"></i>
+    <strong>Demo Accounts:</strong><br>
+    user@example.com / flower123<br>
+    admin@flowershop.com / admin123
 </div>
 </body>
 </html>
