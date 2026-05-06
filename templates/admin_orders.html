@@ -185,7 +185,7 @@
                 <thead>
                     <tr>
                         <th>Order ID</th>
-                        <th>Recipient_name</th>
+                        <th>Customer</th>
                         <th>Email</th>
                         <th>Total</th>
                         <th>Payment</th>
@@ -218,6 +218,8 @@
                 {% if order.status == 'Pending' %}pending
                 {% elif order.status == 'Shipped' %}shipped
                 {% elif order.status == 'Delivered' %}Delivered
+                 {% elif order.status == 'Confirmed' %}Confirmed
+                {% elif order.status == 'Processing' %}Processing
                 {% elif order.status == 'Cancelled' %}cancelled
                 {% endif %}">
                 {{ order.status }}
@@ -229,6 +231,8 @@
                     <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
                     <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
                     <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                    <option value="Confirmed" {% if order.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                    <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
                     <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
                 </select>
         </td>
