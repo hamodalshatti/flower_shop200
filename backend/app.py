@@ -676,7 +676,7 @@ def process_payment():
     }
     phone_code = country_phone_codes.get(country,"")
     country_name = request.form.get("country_name")
-    card_message = request.form.get("card_message")
+    card_message = session.get("card_message")
     gift = request.form.get("gift")
     anonymous = request.form.get("anonymous")
     notify = request.form.get("notify")
