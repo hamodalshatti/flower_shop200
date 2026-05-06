@@ -1201,15 +1201,32 @@ def check_login():
 @app.route("/create_user", methods=["POST"])
 def create_user():
 
-    name = request.form.get("firstName") + " " + request.form.get("lastName")
-    email = request.form.get("email")
-    Phone = request.form.get("Phone")
-    password = request.form.get("password")
+    first_name = (request.form.get("firstName") or "").strip()
+    last_name = (request.form.get("lastName") or "").strip()
+
+    name = first_name + " " + last_name
+
+    email = (request.form.get("email") or "").strip()
+    Phone = (request.form.get("Phone") or "").strip()
+    password = (request.form.get("password") or "").strip()
 
     db = get_db_connection()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
-    query = "INSERT INTO users (name, email, password, Phone) VALUES (%s, %s, %s, %s)"
+    # check existing email
+    cursor.execute("SELECT id FROM users WHERE email=%s", (email,))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        cursor.close()
+        db.close()
+        return redirect(url_for("signup", error="email_exists"))
+
+    query = """
+        INSERT INTO users (name, email, password, Phone)
+        VALUES (%s, %s, %s, %s)
+    """
+
     cursor.execute(query, (name, email, password, Phone))
 
     db.commit()
