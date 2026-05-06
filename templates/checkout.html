@@ -487,9 +487,11 @@
                     <p>🎁 This order is a gift</p>
                     {% endif %}
 
-                    {% if session.anonymous %}
-                    <p>🙈 Sender name hidden</p>
-                    {% endif %}
+                     {% if session.get("anonymous") == "1" %}
+                   <p>🙈 Sender name hidden</p>
+                       {% else %}
+                   <p>👤 Sender: {{ session.get("user_name", "Customer") }}</p>
+                       {% endif %}
                 </div>
 
                 <div style="margin-top: 18px;">
