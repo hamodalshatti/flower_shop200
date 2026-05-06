@@ -188,6 +188,7 @@
                         <th>Customer</th>
                         <th>Email</th>
                         <th>Total</th>
+                        <th>Payment</th>
                         <th>Status</th>
                         <th>Change Status</th>
                         <th>Action</th>
@@ -201,6 +202,17 @@
         <td>{{ order.Recipient_name or order.customer_name or 'Unknown' }}</td>
         <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
+        <td>
+    {% if order.payment_method == "cash" %}
+        💵 Cash
+    {% elif order.payment_method == "card" %}
+        💳 Credit Card
+    {% elif order.payment_method == "paypal" %}
+        🅿️ PayPal
+    {% else %}
+        Unknown
+    {% endif %}
+</td>
         <td>
             <span class="status
                 {% if order.status == 'Pending' %}pending
