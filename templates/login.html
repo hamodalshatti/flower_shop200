@@ -443,12 +443,13 @@
             </button>
         </form>
 
-        <div class="signup-section">
-            <p class="signup-text">Don't have an account yet?</p>
-            <a href="#" class="signup-link-btn" id="signupLinkBtn">
-                Create new account <i class="fas fa-user-plus"></i>
-            </a>
-        </div>
+     <div class="signup-section">
+    <p class="signup-text">Don't have an account yet?</p>
+
+    <a href="{{ url_for('signup') }}" class="signup-link-btn">
+        Create new account <i class="fas fa-user-plus"></i>
+    </a>
+</div>
 
         <div class="signin-footer">
             <i class="fas fa-lock"></i> <span>Secured by SSL encryption</span>
@@ -707,6 +708,15 @@ loginForm.addEventListener('submit', function(e) {
     saveCredentials(emailVal, passwordVal, rememberCheckbox.checked);
 });
 
+
+    
+    emailInput.addEventListener('focus', function() {
+        if (emailInput.classList.contains('error-input')) {
+            emailInput.classList.remove('error-input');
+            emailErrorDiv.style.display = 'none';
+            hideGeneralMessages();
+        }
+    });
     
     passwordInput.addEventListener('focus', function() {
         if (passwordInput.classList.contains('error-input')) {
@@ -730,10 +740,10 @@ loginForm.addEventListener('submit', function(e) {
         alert('🔐 Password reset link would be sent to your email.\n\nDemo: Use "flower123" for user@example.com');
     });
     
-    document.getElementById('signupLinkBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('📝 Create new account page.\n\nDemo credentials:\nuser@example.com / flower123');
-    });
+    //document.getElementById('signupLinkBtn')?.addEventListener('click', (e) => {
+      //  e.preventDefault();
+        //alert('📝 Create new account page.\n\nDemo credentials:\nuser@example.com / flower123');
+    //});
 
     
     window.addEventListener('DOMContentLoaded', function() {
