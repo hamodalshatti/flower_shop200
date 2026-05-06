@@ -1,62 +1,633 @@
 <!DOCTYPE html>
-<html lang="{{ 'ar' if lang == 'ar' else 'en' }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Forgot Password | Flower Shop</title>
+    
+    <!-- Google Fonts for consistent styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        body {
+            background: #fefaf7;
+            font-family: 'Inter', sans-serif;
+            color: #2c241f;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    <title>Forgot Password - Flower Shop</title>
+        /* Header styling - exactly matching the second code (flower shop main page) */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            margin: 20px 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0e4dc;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .logo-area:hover {
+            opacity: 0.85;
+        }
+
+        .logo-icon {
+            background: #9e2a2f;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 6px 14px rgba(158,42,47,0.2);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: -0.5px;
+            color: #3e2a27;
+        }
+
+        .logo-text span {
+            color: #9e2a2f;
+            font-weight: 700;
+        }
+
+        .header-link {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .header-link a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3e2a27;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .header-link a:hover {
+            color: #9e2a2f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #9e2a2f;
+            color: #9e2a2f;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            background: #9e2a2f;
+            color: white;
+        }
+
+        /* Forgot Password Container - matching the card style from main page */
+        .forgot-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 24px;
+            margin: 20px auto;
+        }
+
+        .forgot-card {
+            max-width: 520px;
+            width: 100%;
+            background: white;
+            border-radius: 48px;
+            padding: 48px 44px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.12);
+            border: 1px solid #f0e4dc;
+            transition: all 0.2s ease;
+        }
+
+        .forgot-header {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+        .forgot-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #3e2a27;
+            margin-bottom: 12px;
+        }
+
+        .forgot-header p {
+            color: #7f6a60;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #2c241f;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #9e2a2f;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 60px;
+            border: 1.5px solid #eedfd7;
+            background: #fffdfb;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            border-color: #9e2a2f;
+            box-shadow: 0 0 0 3px rgba(158,42,47,0.08);
+        }
+
+        /* Error state */
+        .form-group input.error-input {
+            border-color: #e53e3e;
+            background-color: #fff8f8;
+        }
+
+        .error-message {
+            font-size: 0.7rem;
+            margin-top: 6px;
+            margin-left: 14px;
+            color: #e53e3e;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        /* Success message */
+        .success-message {
+            background: #e6f7e6;
+            border-left: 4px solid #2e7d32;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #1b5e20;
+            animation: slideDown 0.3s ease;
+        }
+
+        .error-banner {
+            background: #fee2e2;
+            border-left: 4px solid #e53e3e;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #b91c1c;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Send Button - matching the btn style from main page */
+        .send-btn {
+            background: #9e2a2f;
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 2px 6px rgba(158,42,47,0.2);
+        }
+
+        .send-btn:hover {
+            background: #7b2125;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(158,42,47,0.25);
+        }
+
+        .send-btn:disabled {
+            background: #ccb9b0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Back to Sign In Link */
+        .back-link {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid #f0e2db;
+        }
+
+        .back-link p {
+            color: #5e4b41;
+            font-size: 0.9rem;
+        }
+
+        .back-link a {
+            color: #9e2a2f;
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 5px;
+            transition: 0.2s;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+            color: #7b2125;
+        }
+
+        /* Footer note */
+        .footer-note {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.7rem;
+            color: #aa9b92;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .footer-note i {
+            font-size: 12px;
+            color: #9e2a2f;
+        }
+
+        /* Shake animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+        .shake-effect {
+            animation: shake 0.35s ease-in-out 0s 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 560px) {
+            .forgot-card {
+                padding: 32px 24px;
+            }
+            .header {
+                margin: 16px 20px;
+                padding: 14px 20px;
+            }
+            .logo-text {
+                font-size: 22px;
+            }
+            .header-link {
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
+    <!-- Header - Only logo and Sign In button (Home & Contact removed) -->
     <div class="header">
-        <img src="{{ url_for('static', filename='image/123.png') }}" width="200" height="100" alt="Flower Shop Logo">
-
+        <div class="logo-area" onclick="window.location.href='{{ url_for('products') }}'">
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <div class="logo-text">FLower<span>&</span>SHop</div>
+        </div>
         <div class="header-link">
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('products') }}">Our shop</a>
-            <a href="{{ url_for('contact') }}">Contact</a>
-            <a href="{{ url_for('login') }}" class="btn">Sign in</a>
+            <a href="{{ url_for('login') }}" class="btn-outline">Sign In</a>
         </div>
     </div>
 
-    <div class="signin-container">
-        <div class="signin-card" style="max-width: 500px;">
-            <div class="signin-header">
+    <div class="forgot-container">
+        <div class="forgot-card">
+            <div class="forgot-header">
                 <h2>Forgot Password?</h2>
-                <p>Don't worry! Enter your email and we'll send you reset instructions.</p>
+                <p>Don't worry! Enter your email address and we'll send you instructions to reset your password.</p>
             </div>
 
-            <form class="signin-form" action="{{ url_for('forgot_pass') }}" method="POST">
-                <div class="form-group">
-                    <label for="email">
-                        <span class="label-icon">📧</span> Email Address
-                    </label>
-                    <input type="email" id="email" name="email" placeholder="Enter your registered email" required>
+            <!-- Success/Error Messages -->
+            <div id="successMessage" class="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText">Reset link sent! Please check your email.</span>
+            </div>
+            <div id="errorBanner" class="error-banner" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText">Email not found. Please try again.</span>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <form class="forgot-form" action="#" method="POST" id="forgotForm">
+                <div class="form-group" id="emailGroup">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="Enter your registered email" autocomplete="email">
+                    </div>
+                    <div class="error-message" id="emailError" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span id="emailErrorText">Valid email is required</span>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn signin-btn">
-                    <span class="btn-text">Send Reset Link</span>
-                    <span class="btn-icon">✉️</span>
+                <button type="submit" class="send-btn" id="submitBtn">
+                    <span>Send Reset Link</span>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
             </form>
 
-            <div class="signup-link" style="border-top: none; margin-top: 15px;">
-                <p>Remember your password? <a href="{{ url_for('login') }}">Back to Sign in</a></p>
+            <div class="back-link">
+                <p>Remember your password? <a href="{{ url_for('login') }}">Back to Sign In</a></p>
             </div>
 
-            <div class="signin-footer">
-                <p>🌺 We'll send you a link to reset your password</p>
+            <div class="footer-note">
+                <i class="fas fa-lock"></i>
+                <span>We'll send you a secure link to reset your password</span>
             </div>
         </div>
     </div>
 
-</body>
+    <script>
+        // DOM Elements
+        const emailInput = document.getElementById('email');
+        const emailGroup = document.getElementById('emailGroup');
+        const emailError = document.getElementById('emailError');
+        const emailErrorText = document.getElementById('emailErrorText');
+        const forgotForm = document.getElementById('forgotForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorBanner = document.getElementById('errorBanner');
+        const successText = document.getElementById('successText');
+        const errorText = document.getElementById('errorText');
 
+        // Helper: Set field error
+        function setFieldError(inputElement, errorDiv, message, isValid, customTextSpan = null) {
+            if (!isValid) {
+                inputElement.classList.add('error-input');
+                if (errorDiv) {
+                    const msgSpan = customTextSpan || errorDiv.querySelector('span');
+                    if (msgSpan) msgSpan.innerText = message;
+                    errorDiv.style.display = 'flex';
+                }
+                inputElement.classList.add('shake-effect');
+                setTimeout(() => {
+                    inputElement.classList.remove('shake-effect');
+                }, 300);
+            } else {
+                inputElement.classList.remove('error-input');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }
+        }
+
+        // Hide all messages
+        function hideMessages() {
+            successMessage.style.display = 'none';
+            errorBanner.style.display = 'none';
+        }
+
+        // Show success message
+        function showSuccess(msg) {
+            successText.innerText = msg;
+            successMessage.style.display = 'flex';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show error message
+        function showError(msg) {
+            errorText.innerText = msg;
+            errorBanner.style.display = 'flex';
+            setTimeout(() => {
+                errorBanner.style.display = 'none';
+            }, 5000);
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Real-time validation
+        emailInput.addEventListener('input', function() {
+            const val = emailInput.value.trim();
+            hideMessages();
+            if (val === '') {
+                emailInput.classList.remove('error-input');
+                emailError.style.display = 'none';
+            } else if (isValidEmail(val)) {
+                emailInput.classList.remove('error-input');
+                emailError.style.display = 'none';
+            } else {
+                setFieldError(emailInput, emailError, 'Please enter a valid email address (e.g., name@domain.com)', false, emailErrorText);
+            }
+        });
+
+        // Clear error on focus
+        emailInput.addEventListener('focus', function() {
+            if (emailInput.classList.contains('error-input')) {
+                emailInput.classList.remove('error-input');
+                emailError.style.display = 'none';
+            }
+            hideMessages();
+        });
+
+        // ========== MOCK DATABASE OF REGISTERED EMAILS ==========
+        // For demo purposes - simulates checking if email exists in system
+        const REGISTERED_EMAILS = [
+            "user@example.com",
+            "admin@flowershop.com",
+            "demo@flower.com",
+            "sarah@flowershop.com",
+            "john@example.com"
+        ];
+
+        function isEmailRegistered(email) {
+            return REGISTERED_EMAILS.includes(email.toLowerCase().trim());
+        }
+
+        // Simulate sending reset email
+        function sendResetEmail(email) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(true);
+                }, 800);
+            });
+        }
+
+        // Form submission handler
+        forgotForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const emailVal = emailInput.value.trim();
+            let isValid = true;
+
+            // Hide previous messages
+            hideMessages();
+
+            // Validate email
+            if (!emailVal) {
+                setFieldError(emailInput, emailError, 'Email address is required', false, emailErrorText);
+                isValid = false;
+            } else if (!isValidEmail(emailVal)) {
+                setFieldError(emailInput, emailError, 'Please enter a valid email address', false, emailErrorText);
+                isValid = false;
+            } else {
+                setFieldError(emailInput, emailError, '', true, emailErrorText);
+            }
+
+            if (!isValid) {
+                const card = document.querySelector('.forgot-card');
+                card.classList.add('shake-effect');
+                setTimeout(() => card.classList.remove('shake-effect'), 450);
+                emailInput.focus();
+                return false;
+            }
+
+            // Check if email exists in the system
+            const emailExists = isEmailRegistered(emailVal);
+
+            if (!emailExists) {
+                // EMAIL NOT FOUND - Show error
+                setFieldError(emailInput, emailError, 'No account found with this email address', false, emailErrorText);
+                showError('No account found with this email address. Please check and try again.');
+                const card = document.querySelector('.forgot-card');
+                card.classList.add('shake-effect');
+                setTimeout(() => card.classList.remove('shake-effect'), 500);
+                emailInput.focus();
+                return false;
+            }
+
+            // Email exists - Send reset link (simulated)
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-pulse"></i>';
+
+            await sendResetEmail(emailVal);
+
+            // Success!
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Send Reset Link</span> <i class="fas fa-arrow-right"></i>';
+            
+            showSuccess(`Reset link sent to ${emailVal}. Please check your inbox.`);
+            
+            // Clear the email field
+            emailInput.value = '';
+            
+            // Remove any error styling
+            emailInput.classList.remove('error-input');
+            emailError.style.display = 'none';
+
+            // Log for demo
+            console.log(`Password reset link sent to: ${emailVal}`);
+        });
+
+        // Handle server-side errors from backend (if any query params)
+        function handleServerSideErrors() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            const success = urlParams.get('success');
+            
+            if (error === 'email_not_found') {
+                setFieldError(emailInput, emailError, 'No account found with this email address', false, emailErrorText);
+                showError('No account found with this email address. Please check and try again.');
+                const card = document.querySelector('.forgot-card');
+                card.classList.add('shake-effect');
+                setTimeout(() => card.classList.remove('shake-effect'), 500);
+            } else if (error === 'invalid_email') {
+                setFieldError(emailInput, emailError, 'Please enter a valid email address', false, emailErrorText);
+                showError('Invalid email format. Please try again.');
+            } else if (success === 'sent') {
+                showSuccess('Password reset link has been sent to your email address.');
+                emailInput.value = '';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            handleServerSideErrors();
+        });
+
+        // Demo credentials hint (subtle, for testing)
+        const demoHint = document.createElement('div');
+        demoHint.style.cssText = 'position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: #ccb9b0; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 20px; font-family: monospace;';
+        demoHint.innerHTML = 'Demo emails: user@example.com, admin@flowershop.com, demo@flower.com';
+        document.body.appendChild(demoHint);
+    </script>
+</body>
 </html>
