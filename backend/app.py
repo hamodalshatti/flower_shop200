@@ -703,7 +703,7 @@ def process_payment():
             phone,
             address,
             payment_method,
-            card_messag,
+            card_message,
             total,
             status
         )
@@ -715,7 +715,7 @@ def process_payment():
         address,
         payment_method,
         total,
-        card_messag,
+        card_message,
         "Pending"
     ))
 
