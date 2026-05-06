@@ -203,7 +203,7 @@
         <td>#{{ order.id }}</td>
         <td>{{ order.customer_name  or 'Unknown' }}</td>
         <td>{{ order.Recipient_name  }}</td>
-        <td>{{ order.card_messag  }}</td>
+        <td>{{ order.card_messag or'NO message'  }}</td>
         <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
         <td>
