@@ -199,7 +199,7 @@
     {% for order in orders %}
     <tr>
         <td>#{{ order.id }}</td>
-        <td>{{ order.Recipient_name  or 'Unknown' }}</td>
+        <td>{{ order.customer_name  or 'Unknown' }}</td>
         <td>{{ order.customer_email or order.phone or 'No Email' }}</td>
         <td>{{ order.total }} JOD</td>
         <td>
