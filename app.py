@@ -227,6 +227,8 @@ def add_order():
     db.commit()   # 🔥 مهم
     cursor.close()
     db.close()    # 🔥 مهم
+    session.pop("cart",None)
+    session.modified = True
 
     return redirect(url_for('profile'))
 
@@ -676,7 +678,7 @@ def process_payment():
     }
     phone_code = country_phone_codes.get(country,"")
     country_name = request.form.get("country_name")
-    card_message = request.form.get("card_message")
+    card_message = session.get("card_message", "")
     gift = request.form.get("gift")
     anonymous = request.form.get("anonymous")
     notify = request.form.get("notify")
@@ -696,6 +698,9 @@ def process_payment():
     db = get_db_connection()
     cursor = db.cursor(buffered=True)
 
+    print("CARD MESSAGE=",card_message)
+    print("STATUS = Pending")
+
     cursor.execute("""
         INSERT INTO orders (
             user_id,
@@ -704,17 +709,20 @@ def process_payment():
             address,
             payment_method,
             total,
+            card_message,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """, (
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (
         user_id,
         Recipient_name,
         phone,
         address,
         payment_method,
         total,
+        card_message,
         "Pending"
+        
     ))
 
     order_id = cursor.lastrowid
@@ -736,6 +744,7 @@ def process_payment():
     db.close()
 
     session.pop("cart", None)
+    session.modified = True
 
     return redirect(url_for("payment_success", order_id=order_id))
 
@@ -1085,7 +1094,10 @@ def admin_orders():
     cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute("""
-        SELECT orders.*, users.name
+        SELECT 
+            orders.*,
+            users.name AS customer_name,
+            users.email AS customer_email
         FROM orders
         LEFT JOIN users ON orders.user_id = users.id
         ORDER BY orders.id DESC
@@ -1169,14 +1181,14 @@ def login():
 @app.route("/check_login", methods=["POST"])
 def check_login():
 
-    email = request.form.get("email")
-    password = request.form.get("password")
+    email = (request.form.get("email") or "").strip()
+    password = (request.form.get("password") or "").strip()
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
 
     cursor.execute(
-        "SELECT * FROM users WHERE email=%s AND password=%s",
+        "SELECT * FROM users WHERE LOWER(email)=LOWER(%s) AND password=%s",
         (email, password)
     )
 
@@ -1187,10 +1199,12 @@ def check_login():
 
     if user:
         session["user_id"] = user["id"]
+        session["user_name"] = user["name"]
+
         return redirect(url_for("index"))
+
     else:
         return render_template("login.html", error="Email or password is incorrect")
-
 
 # --------------------------------
 # إنشاء مستخدم جديد
@@ -1198,15 +1212,32 @@ def check_login():
 @app.route("/create_user", methods=["POST"])
 def create_user():
 
-    name = request.form.get("firstName") + " " + request.form.get("lastName")
-    email = request.form.get("email")
-    Phone = request.form.get("Phone")
-    password = request.form.get("password")
+    first_name = (request.form.get("firstName") or "").strip()
+    last_name = (request.form.get("lastName") or "").strip()
+
+    name = first_name + " " + last_name
+
+    email = (request.form.get("email") or "").strip()
+    Phone = (request.form.get("Phone") or "").strip()
+    password = (request.form.get("password") or "").strip()
 
     db = get_db_connection()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True, buffered=True)
 
-    query = "INSERT INTO users (name, email, password, Phone) VALUES (%s, %s, %s, %s)"
+    # check existing email
+    cursor.execute("SELECT id FROM users WHERE email=%s", (email,))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        cursor.close()
+        db.close()
+        return redirect(url_for("signup", error="email_exists"))
+
+    query = """
+        INSERT INTO users (name, email, password, Phone)
+        VALUES (%s, %s, %s, %s)
+    """
+
     cursor.execute(query, (name, email, password, Phone))
 
     db.commit()
