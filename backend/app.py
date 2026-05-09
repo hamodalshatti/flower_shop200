@@ -580,6 +580,7 @@ def checkout():
         currency=currency
     )
 
+
 @app.route('/change_password', methods=['POST'])
 def change_password():
     user_id = session.get('user_id')
@@ -676,7 +677,7 @@ def process_payment():
     }
     phone_code = country_phone_codes.get(country,"")
     country_name = request.form.get("country_name")
-    card_message = session.get("card_message")
+    card_message = session.get("card_message", "")
     gift = request.form.get("gift")
     anonymous = request.form.get("anonymous")
     notify = request.form.get("notify")
@@ -696,6 +697,9 @@ def process_payment():
     db = get_db_connection()
     cursor = db.cursor(buffered=True)
 
+    print("CARD MESSAGE=",card_message)
+    print("STATUS = Pending")
+
     cursor.execute("""
         INSERT INTO orders (
             user_id,
@@ -707,7 +711,8 @@ def process_payment():
             card_message,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s) """, (
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (
         user_id,
         Recipient_name,
         phone,
@@ -716,6 +721,7 @@ def process_payment():
         total,
         card_message,
         "Pending"
+        
     ))
 
     order_id = cursor.lastrowid
@@ -740,7 +746,6 @@ def process_payment():
     session.modified = True
 
     return redirect(url_for("payment_success", order_id=order_id))
-
 @app.route("/payment_success/<int:order_id>")
 def payment_success(order_id):
     if "user_id" not in session:
